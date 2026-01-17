@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Component Props Tutorial - Step by Step</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .step {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .step h2 {
+            color: #42b983;
+            border-bottom: 2px solid #42b983;
+            padding-bottom: 10px;
+        }
+        .explanation {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #42b983;
+        }
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+        .demo-app {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin: 20px 0;
+        }
+        .tip {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        .warning {
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #dc3545;
+            margin: 15px 0;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: inline-block;
+            min-width: 250px;
+            vertical-align: top;
+        }
+        .card h3 {
+            color: #42b983;
+            margin-top: 0;
+        }
+        .card button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .card button:hover {
+            background: #35a372;
+        }
+        .price {
+            font-size: 1.5em;
+            color: #42b983;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .products-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔗 Component Props - Step by Step Tutorial</h1>
+    <p style="font-size: 1.1em; color: #666;">Learn how to pass data to components using props! This makes your components reusable with different data.</p>
+
+    <!-- STEP 1 -->
+    <div class="step">
+        <h2>Step 1: Understanding the Problem</h2>
+        <div class="explanation">
+            <p><strong>Problem:</strong> In Lesson 6, each ProductCard component had the same hardcoded data. We want to display different products!</p>
+            <p><strong>Solution:</strong> Use <strong>props</strong> to pass data from parent to child component.</p>
+        </div>
+        
+        <div class="explanation">
+            <p><strong>Props vs Data:</strong></p>
+            <ul>
+                <li>✅ <strong>Props</strong> - Data passed FROM parent TO child (one-way, read-only)</li>
+                <li>✅ <strong>Data</strong> - Data owned BY the component itself (can be modified)</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Analogy:</strong> Think of props like function parameters. You pass different values each time you call the function (use the component).
+        </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step">
+        <h2>Step 2: Define Props in Component</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Tell the component what props it will receive.</p>
+            <p><strong>Key concept:</strong> Define props in the <code>props</code> option as an array or object.</p>
+        </div>
+        
+        <div class="code-block">
+app.component('ProductCard', {
+    props: ['name', 'price', 'description'],
+    template: `...`,
+    // ...
+});
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>props: ['name', 'price', 'description']</code> - Array of prop names</li>
+                <li>Each prop name becomes available in the template and methods</li>
+                <li>Access props like data: <code>{{ name }}</code> in template, <code>this.name</code> in methods</li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Important:</strong> Props are <strong>read-only</strong>! Don't try to modify them in the child component. They flow down from parent to child only.
+        </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step">
+        <h2>Step 3: Use Props in Template</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Use the props in the component template instead of hardcoded data.</p>
+            <p><strong>Key concept:</strong> Access props the same way you access data - with <code>{{ }}</code> in templates.</p>
+        </div>
+        
+        <div class="code-block">
+app.component('ProductCard', {
+    props: ['name', 'price', 'description'],
+    template: `
+        &lt;div class="card"&gt;
+            &lt;h3&gt;{{ name }}&lt;/h3&gt;
+            &lt;p class="price"&gt;${{ price.toFixed(2) }}&lt;/p&gt;
+            &lt;p&gt;{{ description }}&lt;/p&gt;
+            &lt;button @click="buy"&gt;Buy Now&lt;/button&gt;
+        &lt;/div&gt;
+    `,
+    methods: {
+        buy() {
+            alert(`Added ${this.name} to cart!`);
+        }
+    }
+});
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li>Use <code>{{ name }}</code> instead of <code>{{ product.name }}</code></li>
+                <li>Use <code>{{ price }}</code> instead of <code>{{ product.price }}</code></li>
+                <li>In methods, use <code>this.name</code> instead of <code>this.product.name</code></li>
+                <li>No need for <code>data()</code> anymore - props replace it!</li>
+            </ul>
+        </div>
+
+        <div class="demo-app">
+            <h3>Live Demo (component defined, but no props passed yet):</h3>
+            <div id="demo1">
+                <product-card></product-card>
+            </div>
+            <p><small>Note: Component won't show data yet - we need to pass props!</small></p>
+        </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step">
+        <h2>Step 4: Pass Props from Parent</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Pass data to the component using props in the parent template.</p>
+            <p><strong>Key concept:</strong> Use <code>prop-name="value"</code> to pass props. Use <code>:</code> for dynamic values!</p>
+        </div>
+        
+        <div class="code-block">
+&lt;!-- Static props (strings) --&gt;
+&lt;product-card 
+    name="Vue.js Book" 
+    price="29.99" 
+    description="Learn Vue.js!"&gt;
+&lt;/product-card&gt;
+
+&lt;!-- Dynamic props (from parent data) --&gt;
+&lt;product-card 
+    :name="product.name" 
+    :price="product.price" 
+    :description="product.description"&gt;
+&lt;/product-card&gt;
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>name="Vue.js Book"</code> - Passes the string "Vue.js Book"</li>
+                <li><code>:name="product.name"</code> - Passes the value of <code>product.name</code> (dynamic)</li>
+                <li><code>:</code> is shorthand for <code>v-bind:</code></li>
+                <li>Always use <code>:</code> for numbers, booleans, and variables!</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Remember:</strong>
+            <ul>
+                <li><code>name="value"</code> → Always passes string "value"</li>
+                <li><code>:name="value"</code> → Passes the actual value (number, boolean, variable, etc.)</li>
+                <li>For numbers: <code>:price="29.99"</code> (not <code>price="29.99"</code> which would be a string!)</li>
+            </ul>
+        </div>
+
+        <div class="demo-app">
+            <h3>Live Demo (with props):</h3>
+            <div id="demo2">
+                <product-card 
+                    :name="product1.name" 
+                    :price="product1.price" 
+                    :description="product1.description">
+                </product-card>
+                <product-card 
+                    :name="product2.name" 
+                    :price="product2.price" 
+                    :description="product2.description">
+                </product-card>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step">
+        <h2>Step 5: Using Props with v-for</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Use <code>v-for</code> to render multiple components with different props.</p>
+            <p><strong>Key concept:</strong> Loop through an array and pass each item's properties as props.</p>
+        </div>
+        
+        <div class="code-block">
+// Parent component data
+data() {
+    return {
+        products: [
+            { id: 1, name: 'Vue.js Book', price: 29.99, description: 'Learn Vue.js!' },
+            { id: 2, name: 'React Guide', price: 34.99, description: 'Master React' },
+            { id: 3, name: 'Angular Tutorial', price: 39.99, description: 'Complete course' }
+        ]
+    }
+}
+
+// In template
+&lt;product-card 
+    v-for="product in products" 
+    :key="product.id"
+    :name="product.name" 
+    :price="product.price" 
+    :description="product.description"&gt;
+&lt;/product-card&gt;
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>v-for="product in products"</code> - Loops through products array</li>
+                <li><code>:key="product.id"</code> - Required for v-for (unique identifier)</li>
+                <li><code>:name="product.name"</code> - Passes each product's name as prop</li>
+                <li>Each iteration creates a new component instance with different props</li>
+            </ul>
+        </div>
+
+        <div class="demo-app">
+            <h3>Live Demo (multiple products with v-for):</h3>
+            <div id="demo3">
+                <div class="products-container">
+                    <product-card 
+                        v-for="product in products" 
+                        :key="product.id"
+                        :name="product.name" 
+                        :price="product.price" 
+                        :description="product.description">
+                    </product-card>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step">
+        <h2>Step 6: Complete Working Example</h2>
+        <p>Here's the complete code for using props:</p>
+        
+        <div class="code-block">
+&lt;script&gt;
+    const { createApp } = Vue;
+    
+    const app = createApp({
+        data() {
+            return {
+                products: [
+                    { id: 1, name: 'Vue.js Book', price: 29.99, description: 'Learn Vue.js!' },
+                    { id: 2, name: 'React Guide', price: 34.99, description: 'Master React' },
+                    { id: 3, name: 'Angular Tutorial', price: 39.99, description: 'Complete course' }
+                ]
+            }
+        }
+    });
+    
+    // Component with props
+    app.component('ProductCard', {
+        props: ['name', 'price', 'description'],
+        template: `
+            &lt;div class="card"&gt;
+                &lt;h3&gt;{{ name }}&lt;/h3&gt;
+                &lt;p class="price"&gt;${{ price.toFixed(2) }}&lt;/p&gt;
+                &lt;p&gt;{{ description }}&lt;/p&gt;
+                &lt;button @click="buy"&gt;Buy Now&lt;/button&gt;
+            &lt;/div&gt;
+        `,
+        methods: {
+            buy() {
+                alert(`Added ${this.name} to cart!`);
+            }
+        }
+    });
+    
+    app.mount('#app');
+&lt;/script&gt;
+
+&lt;!-- In HTML --&gt;
+&lt;div id="app"&gt;
+    &lt;product-card 
+        v-for="product in products" 
+        :key="product.id"
+        :name="product.name" 
+        :price="product.price" 
+        :description="product.description"&gt;
+    &lt;/product-card&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- KEY CONCEPTS -->
+    <div class="step">
+        <h2>🎓 Key Concepts Summary</h2>
+        <div class="explanation">
+            <h3>Defining Props:</h3>
+            <ul>
+                <li>✅ <code>props: ['name', 'price']</code> - Array syntax (simple)</li>
+                <li>✅ Define in component definition</li>
+                <li>✅ Access like data: <code>{{ name }}</code> in template, <code>this.name</code> in methods</li>
+            </ul>
+            
+            <h3>Passing Props:</h3>
+            <ul>
+                <li>✅ <code>name="value"</code> - Static string</li>
+                <li>✅ <code>:name="value"</code> - Dynamic value (variable, number, boolean)</li>
+                <li>✅ <code>:name="product.name"</code> - From parent data</li>
+            </ul>
+            
+            <h3>Important Rules:</h3>
+            <ul>
+                <li>⚠️ Props are <strong>read-only</strong> - don't modify them!</li>
+                <li>⚠️ Props flow <strong>down</strong> (parent → child) only</li>
+                <li>⚠️ Always use <code>:</code> for numbers, booleans, and variables</li>
+                <li>⚠️ Use <code>:key</code> when using <code>v-for</code> with components</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Remember:</strong> Props make components reusable! One component definition, many different instances with different data.
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        window.addEventListener('load', function() {
+            const { createApp } = Vue;
+            
+            // Demo 1: Component without props (won't show data)
+            const demo1El = document.getElementById('demo1');
+            if (demo1El) {
+                const app1 = createApp({});
+                app1.component('ProductCard', {
+                    props: ['name', 'price', 'description'],
+                    template: `
+                        <div class="card">
+                            <h3>{{ name || 'No name' }}</h3>
+                            <p class="price">${{ (price || 0).toFixed(2) }}</p>
+                            <p>{{ description || 'No description' }}</p>
+                            <button disabled style="opacity: 0.5;">Buy Now</button>
+                        </div>
+                    `
+                });
+                app1.mount('#demo1');
+            }
+            
+            // Demo 2: With props
+            const demo2El = document.getElementById('demo2');
+            if (demo2El) {
+                const app2 = createApp({
+                    data() {
+                        return {
+                            product1: {
+                                name: 'Vue.js Book',
+                                price: 29.99,
+                                description: 'Learn Vue.js the easy way!'
+                            },
+                            product2: {
+                                name: 'React Guide',
+                                price: 34.99,
+                                description: 'Master React development'
+                            }
+                        }
+                    }
+                });
+                app2.component('ProductCard', {
+                    props: ['name', 'price', 'description'],
+                    template: `
+                        <div class="card">
+                            <h3>{{ name }}</h3>
+                            <p class="price">${{ price.toFixed(2) }}</p>
+                            <p>{{ description }}</p>
+                            <button @click="buy">Buy Now</button>
+                        </div>
+                    `,
+                    methods: {
+                        buy() {
+                            alert(`Added ${this.name} to cart!`);
+                        }
+                    }
+                });
+                app2.mount('#demo2');
+            }
+            
+            // Demo 3: With v-for
+            const demo3El = document.getElementById('demo3');
+            if (demo3El) {
+                const app3 = createApp({
+                    data() {
+                        return {
+                            products: [
+                                { id: 1, name: 'Vue.js Book', price: 29.99, description: 'Learn Vue.js the easy way!' },
+                                { id: 2, name: 'React Guide', price: 34.99, description: 'Master React development' },
+                                { id: 3, name: 'Angular Tutorial', price: 39.99, description: 'Complete Angular course' }
+                            ]
+                        }
+                    }
+                });
+                app3.component('ProductCard', {
+                    props: ['name', 'price', 'description'],
+                    template: `
+                        <div class="card">
+                            <h3>{{ name }}</h3>
+                            <p class="price">${{ price.toFixed(2) }}</p>
+                            <p>{{ description }}</p>
+                            <button @click="buy">Buy Now</button>
+                        </div>
+                    `,
+                    methods: {
+                        buy() {
+                            alert(`Added ${this.name} to cart!`);
+                        }
+                    }
+                });
+                app3.mount('#demo3');
+            }
+        });
+    </script>
+</body>
+</html>
+

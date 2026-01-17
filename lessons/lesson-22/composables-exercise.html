@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Composables Exercise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .exercise-box {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .requirements {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #ff9800;
+            margin: 20px 0;
+        }
+        .hint {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+        .code-block {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            border: 1px solid #ddd;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        .nav-link {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background: #e3f2fd;
+            color: #1976d2;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .nav-link:hover {
+            background: #bbdefb;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-link">
+        <a href="index.html">← Back to Lesson 22</a>
+    </div>
+
+    <div class="exercise-box">
+        <h1>✏️ Exercise: Create Reusable Composables</h1>
+        
+        <div class="requirements">
+            <h2>📋 Requirements</h2>
+            <p><strong>Your Task:</strong> Create reusable composable functions and use them in components.</p>
+            
+            <h3>Part 1: Create useCounter Composable</h3>
+            <ol>
+                <li>Create a <code>useCounter</code> function that:
+                    <ul>
+                        <li>Takes an <code>initialValue</code> parameter (default 0)</li>
+                        <li>Returns <code>count</code> (ref)</li>
+                        <li>Returns <code>increment()</code> method</li>
+                        <li>Returns <code>decrement()</code> method</li>
+                        <li>Returns <code>reset()</code> method</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <h3>Part 2: Create useToggle Composable</h3>
+            <ol>
+                <li>Create a <code>useToggle</code> function that:
+                    <ul>
+                        <li>Takes an <code>initialValue</code> parameter (default false)</li>
+                        <li>Returns <code>isOpen</code> (ref)</li>
+                        <li>Returns <code>toggle()</code> method</li>
+                        <li>Returns <code>open()</code> method</li>
+                        <li>Returns <code>close()</code> method</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <h3>Part 3: Use Both Composables</h3>
+            <ol>
+                <li>Use <code>useCounter</code> in a component</li>
+                <li>Use <code>useToggle</code> in the same component</li>
+                <li>Display both in the template</li>
+                <li>Test that they work independently</li>
+            </ol>
+            
+            <h3>Part 4: Use Composable Multiple Times</h3>
+            <ol>
+                <li>Use <code>useCounter</code> twice in the same component</li>
+                <li>Give them different initial values</li>
+                <li>Verify they have independent state</li>
+            </ol>
+        </div>
+        
+        <div class="hint">
+            <h3>💡 Hints</h3>
+            <ul>
+                <li>Composables are just functions that return reactive state and methods</li>
+                <li>Use <code>ref()</code> for reactive state</li>
+                <li>Return an object with all the state and methods</li>
+                <li>Use destructuring to get values: <code>const { count, increment } = useCounter()</code></li>
+                <li>Rename when using multiple times: <code>const { count: count1 } = useCounter()</code></li>
+            </ul>
+        </div>
+        
+        <div class="exercise-box">
+            <h2>🎯 Your Solution Area</h2>
+            <p>Create your composables and use them below:</p>
+            
+            <div id="app">
+                     <div style="padding: 20px; border: 2px solid #42b983; border-radius: 5px; margin: 10px 0;">
+                        <h3>Counter Composable</h3>
+                        <p>Count: {{ count }}</p>
+                        <button @click="increment">+</button>
+                        <button @click="decrement">-</button>
+                        <button @click="reset">Reset</button>
+                    </div>
+                    
+                    <div style="padding: 20px; border: 2px solid #42b983; border-radius: 5px; margin: 10px 0;">
+                        <h3>Toggle Composable</h3>
+                        <p>Status: <strong>{{ isOpen ? 'Open' : 'Closed' }}</strong></p>
+                        <button @click="toggle">Toggle</button>
+                        <button @click="open">Open</button>
+                        <button @click="close">Close</button>
+                    </div>
+             </div>
+            </div>
+        </div>
+        
+        <div class="code-block">// Starter code structure
+const { createApp, ref } = Vue;
+
+// TODO: Create useCounter composable
+function useCounter(initialValue = 0) {
+    // Your code here
+    return {
+        // Return count, increment, decrement, reset
+    }
+}
+
+// TODO: Create useToggle composable
+function useToggle(initialValue = false) {
+    // Your code here
+    return {
+        // Return isOpen, toggle, open, close
+    }
+}
+
+// TODO: Use composables in component
+const app = createApp({
+    setup() {
+        // Use useCounter
+        // Use useToggle
+        // Use useCounter again with different name
+        
+        return {
+            // Return everything
+        }
+    }
+});
+
+app.mount('#app');</div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp, ref } = Vue;
+
+        function useCounter(initialValue = 0) {
+            const count = ref(initialValue);
+
+            const increment = () => {
+                count.value++;
+            };
+
+            const decrement = () => {
+                count.value--;
+            };
+
+            const reset = () => {
+                count.value = initialValue;
+            };
+
+            return {
+                count,
+                increment,
+                decrement,
+                reset
+            };
+        }
+
+        function useToggle(initialValue = false) {
+            const isOpen = ref(initialValue);
+            const toggle = () =>  {
+                isOpen.value = !isOpen.value;
+            }
+            const open = () => {
+                isOpen.value = true;
+            }
+            const close = () =>  {
+                isOpen.value = false;
+            }
+
+            return {
+                isOpen,
+                toggle,
+                open,
+                close
+            }
+        }
+
+        const app = createApp({
+            setup() {
+                const { count, increment, decrement, reset} = useCounter(0);
+
+                const { isOpen, toggle, open, close} = useToggle(false);
+
+                return {
+                    count,
+                    increment,
+                    decrement,
+                    reset,
+                    isOpen,
+                    toggle,
+                    open,
+                    close
+                }
+            }
+        });
+
+        
+
+        app.mount('#app');
+                // YOUR CODE HERE
+        // 1. Create useCounter composable
+        // 2. Create useToggle composable
+        // 3. Use both in a component
+        // 4. Test they work independently
+        
+    </script>
+</body>
+</html>
+
+
+

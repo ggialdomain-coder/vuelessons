@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue Router Tutorial - Step by Step</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .step {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .step h2 {
+            color: #42b983;
+            border-bottom: 2px solid #42b983;
+            padding-bottom: 10px;
+        }
+        .explanation {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #42b983;
+        }
+        .code-block {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            word-wrap: break-word;
+            border: 1px solid #ddd;
+        }
+        .demo-app {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin: 20px 0;
+        }
+        .tip {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        nav {
+            background: #42b983;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 8px 15px;
+            border-radius: 3px;
+        }
+        nav a:hover, nav a.router-link-active {
+            background: rgba(255,255,255,0.2);
+        }
+        .page-content {
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            min-height: 200px;
+            background: white;
+            margin: 20px 0;
+        }
+        .nav-link {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background: #e3f2fd;
+            color: #1976d2;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .nav-link:hover {
+            background: #bbdefb;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-link">
+        <a href="index.html">← Back to Lesson 17</a>
+    </div>
+
+    <h1>📖 Building a Multi-Page App with Vue Router</h1>
+    <p style="background: #e3f2fd; padding: 15px; border-radius: 5px; margin: 20px 0;">
+        <strong>Goal:</strong> Build a complete multi-page application with Home, Products, About, and Contact pages using Vue Router.
+    </p>
+    
+    <div class="step">
+        <h2>Step 1: Include Vue Router</h2>
+        <div class="explanation">
+            <p>First, include both Vue 3 and Vue Router 4 from CDN in your HTML.</p>
+        </div>
+        
+        <div class="code-block">&lt;!-- Include Vue 3 --&gt;
+&lt;script src="https://unpkg.com/vue@3/dist/vue.global.js"&gt;&lt;/script&gt;
+
+&lt;!-- Include Vue Router 4 --&gt;
+&lt;script src="https://unpkg.com/vue-router@4/dist/vue-router.global.js"&gt;&lt;/script&gt;</div>
+        
+        <div class="tip">
+            <strong>💡 Note:</strong> Make sure Vue Router is loaded after Vue, as it depends on Vue.
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 2: Create the Home Component</h2>
+        <div class="explanation">
+            <p>Create the Home component with a welcome message and brief intro.</p>
+        </div>
+        
+        <div class="code-block">const Home = {
+    template: '<div>' +
+        '<h2>🏠 Welcome</h2>' +
+        '<p>Welcome to our website! This is the home page.</p>' +
+        '<p>Use the navigation menu to explore different pages.</p>' +
+    '</div>'
+};</div>
+    </div>
+
+    <div class="step">
+        <h2>Step 3: Create the Products Component</h2>
+        <div class="explanation">
+            <p>Create the Products component that displays a list of at least 3 products.</p>
+        </div>
+        
+        <div class="code-block">const Products = {
+    template: '<div>' +
+        '<h2>🛍️ Products</h2>' +
+        '<ul>' +
+            '<li>Laptop - $999</li>' +
+            '<li>Mouse - $25</li>' +
+            '<li>Keyboard - $75</li>' +
+            '<li>Monitor - $200</li>' +
+        '</ul>' +
+    '</div>'
+};</div>
+        
+        <div class="tip">
+            <strong>💡 Tip:</strong> You can also use <code>data()</code> and <code>v-for</code> to display products dynamically!
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 4: Create the About Component</h2>
+        <div class="explanation">
+            <p>Create the About component with information about your app or company.</p>
+        </div>
+        
+        <div class="code-block">const About = {
+    template: '<div>' +
+        '<h2>📖 About Us</h2>' +
+        '<p>We are a company dedicated to providing quality products and services.</p>' +
+        '<p>Our mission is to make technology accessible to everyone.</p>' +
+    '</div>'
+};</div>
+    </div>
+
+    <div class="step">
+        <h2>Step 5: Create the Contact Component</h2>
+        <div class="explanation">
+            <p>Create the Contact component with contact information or a contact form.</p>
+        </div>
+        
+        <div class="code-block">const Contact = {
+    template: '<div>' +
+        '<h2>📧 Contact Us</h2>' +
+        '<p>Email: contact@example.com</p>' +
+        '<p>Phone: (555) 123-4567</p>' +
+        '<p>Address: 123 Main St, City, State 12345</p>' +
+    '</div>'
+};</div>
+    </div>
+
+    <div class="step">
+        <h2>Step 6: Define Routes</h2>
+        <div class="explanation">
+            <p>Map URL paths to your components. Each route connects a path to a component.</p>
+        </div>
+        
+        <div class="code-block">const routes = [
+    { path: '/', component: Home },
+    { path: '/products', component: Products },
+    { path: '/about', component: About },
+    { path: '/contact', component: Contact }
+];</div>
+        
+        <div class="tip">
+            <strong>💡 Key Points:</strong>
+            <ul>
+                <li><code>path: '/'</code> - The home/root route</li>
+                <li>Each path maps to a component</li>
+                <li>Paths are case-sensitive</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 7: Create the Router</h2>
+        <div class="explanation">
+            <p>Create the router instance with hash history mode (works without server configuration).</p>
+        </div>
+        
+        <div class="code-block">const { createRouter, createWebHashHistory } = VueRouter;
+
+const router = createRouter({
+    history: createWebHashHistory(),  // Uses # in URL (e.g., /#/products)
+    routes
+});</div>
+        
+        <div class="tip">
+            <strong>💡 Hash History:</strong> URLs will look like <code>/#/products</code> instead of <code>/products</code>. This works everywhere without server configuration, perfect for learning!
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 8: Create and Configure the App</h2>
+        <div class="explanation">
+            <p>Create the Vue app and register the router with it.</p>
+        </div>
+        
+        <div class="code-block">const { createApp } = Vue;
+
+const app = createApp({});
+app.use(router);  // Register the router
+app.mount('#app');  // Mount to the #app element</div>
+        
+        <div class="tip">
+            <strong>💡 Important:</strong> You must call <code>app.use(router)</code> before <code>app.mount()</code>!
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 9: Add Navigation Menu</h2>
+        <div class="explanation">
+            <p>Create a navigation menu using <code>&lt;router-link&gt;</code> components. These create navigation links that don't reload the page.</p>
+        </div>
+        
+        <div class="code-block">&lt;div id="app"&gt;
+    &lt;nav&gt;
+        &lt;router-link to="/"&gt;Home&lt;/router-link&gt;
+        &lt;router-link to="/products"&gt;Products&lt;/router-link&gt;
+        &lt;router-link to="/about"&gt;About&lt;/router-link&gt;
+        &lt;router-link to="/contact"&gt;Contact&lt;/router-link&gt;
+    &lt;/nav&gt;
+    
+    &lt;!-- Route components display here --&gt;
+    &lt;router-view&gt;&lt;/router-view&gt;
+&lt;/div&gt;</div>
+        
+        <div class="tip">
+            <strong>💡 Key Components:</strong>
+            <ul>
+                <li><code>&lt;router-link to="/path"&gt;</code> - Creates a navigation link</li>
+                <li><code>&lt;router-view&gt;&lt;/router-view&gt;</code> - Displays the current route component</li>
+                <li>Active links automatically get the <code>router-link-active</code> class for styling</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 10: Style the Navigation</h2>
+        <div class="explanation">
+            <p>Add CSS to style your navigation menu and highlight active links.</p>
+        </div>
+        
+        <div class="code-block">nav {
+    background: #42b983;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    padding: 8px 15px;
+    border-radius: 3px;
+}
+
+nav a:hover, nav a.router-link-active {
+    background: rgba(255,255,255,0.2);
+}</div>
+        
+        <div class="tip">
+            <strong>💡 Active Link:</strong> Vue Router automatically adds the <code>router-link-active</code> class to the active link, so you can style it differently!
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 11: Live Demo - Complete Multi-Page App</h2>
+        <div class="demo-app">
+            <h3>Try It Out!</h3>
+            <p>Click the navigation links to switch between pages!</p>
+            <div id="demo">
+                <nav>
+                    <router-link to="/">Home</router-link>
+                    <router-link to="/products">Products</router-link>
+                    <router-link to="/about">About</router-link>
+                    <router-link to="/contact">Contact</router-link>
+                </nav>
+                
+                <div class="page-content">
+                    <router-view></router-view>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 12: Bonus - Add a Back Button</h2>
+        <div class="explanation">
+            <p>Add a "Back" button that uses <code>$router.go(-1)</code> to go back in browser history.</p>
+        </div>
+        
+        <div class="code-block">// In a component
+methods: {
+    goBack() {
+        this.$router.go(-1);  // Go back one page in history
+    }
+}</div>
+        
+        <div class="code-block">&lt;!-- In template --&gt;
+&lt;button @click="goBack"&gt;Back&lt;/button&gt;</div>
+    </div>
+
+    <div class="step">
+        <h2>Step 13: Bonus - Show Current Route Path</h2>
+        <div class="explanation">
+            <p>Display the current route path in each component using <code>$route.path</code>.</p>
+        </div>
+        
+        <div class="code-block">const Home = {
+    template: '<div>' +
+        '<h2>🏠 Welcome</h2>' +
+        '<p>Current route: {{ $route.path }}</p>' +
+        '<p>Welcome to our website!</p>' +
+    '</div>'
+};</div>
+        
+        <div class="tip">
+            <strong>💡 Access Route Info:</strong> Use <code>$route.path</code> to get the current path, or <code>$route</code> for full route information.
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 14: Bonus - Add 404/NotFound Component</h2>
+        <div class="explanation">
+            <p>Create a NotFound component for unknown routes and add it as a catch-all route.</p>
+        </div>
+        
+        <div class="code-block">const NotFound = {
+    template: '<div>' +
+        '<h2>404 - Page Not Found</h2>' +
+        '<p>The page you are looking for does not exist.</p>' +
+        '<router-link to="/">Go Home</router-link>' +
+    '</div>'
+};
+
+// Add as last route (catch-all)
+const routes = [
+    { path: '/', component: Home },
+    { path: '/products', component: Products },
+    { path: '/about', component: About },
+    { path: '/contact', component: Contact },
+    { path: '/:pathMatch(.*)*', component: NotFound }  // Catch-all route
+];</div>
+        
+        <div class="tip">
+            <strong>💡 Catch-All Route:</strong> The path <code>/:pathMatch(.*)*</code> matches any route that doesn't match the previous routes. Always put it last!
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 15: Complete Code Structure</h2>
+        <div class="explanation">
+            <p>Here's the complete structure of your multi-page app:</p>
+        </div>
+        
+        <div class="code-block">// 1. Include scripts (in HTML head/body)
+&lt;script src="https://unpkg.com/vue@3/dist/vue.global.js"&gt;&lt;/script&gt;
+&lt;script src="https://unpkg.com/vue-router@4/dist/vue-router.global.js"&gt;&lt;/script&gt;
+
+// 2. Create components
+const Home = { template: '...' };
+const Products = { template: '...' };
+const About = { template: '...' };
+const Contact = { template: '...' };
+
+// 3. Define routes
+const routes = [
+    { path: '/', component: Home },
+    { path: '/products', component: Products },
+    { path: '/about', component: About },
+    { path: '/contact', component: Contact }
+];
+
+// 4. Create router
+const router = createRouter({
+    history: createWebHashHistory(),
+    routes
+});
+
+// 5. Create and mount app
+const app = createApp({});
+app.use(router);
+app.mount('#app');</div>
+    </div>
+
+    <div class="step">
+        <h2>🎓 Key Concepts You Learned</h2>
+        <div class="explanation">
+            <ol>
+                <li><strong>Vue Router:</strong> Official routing library for creating multi-page apps</li>
+                <li><strong>Components:</strong> Each "page" is a Vue component</li>
+                <li><strong>Routes:</strong> Map URL paths to components</li>
+                <li><strong>router-link:</strong> Navigation links that don't reload the page</li>
+                <li><strong>router-view:</strong> Displays the current route component</li>
+                <li><strong>Hash History:</strong> Uses # in URLs (works without server config)</li>
+                <li><strong>$route:</strong> Access current route information</li>
+                <li><strong>$router:</strong> Programmatic navigation methods</li>
+            </ol>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue-router@4/dist/vue-router.global.js"></script>
+    <script>
+        const { createApp } = Vue;
+        const { createRouter, createWebHashHistory } = VueRouter;
+        
+        const Home = {
+            template: '<div><h2>🏠 Welcome</h2><p>Welcome to our website! This is the home page.</p><p>Use the navigation menu to explore different pages.</p></div>'
+        };
+        
+        const Products = {
+            template: '<div><h2>🛍️ Products</h2><ul><li>Laptop - $999</li><li>Mouse - $25</li><li>Keyboard - $75</li><li>Monitor - $200</li></ul></div>'
+        };
+        
+        const About = {
+            template: '<div><h2>📖 About Us</h2><p>We are a company dedicated to providing quality products and services.</p><p>Our mission is to make technology accessible to everyone.</p></div>'
+        };
+        
+        const Contact = {
+            template: '<div><h2>📧 Contact Us</h2><p>Email: contact@example.com</p><p>Phone: (555) 123-4567</p><p>Address: 123 Main St, City, State 12345</p></div>'
+        };
+        
+        const routes = [
+            { path: '/', component: Home },
+            { path: '/products', component: Products },
+            { path: '/about', component: About },
+            { path: '/contact', component: Contact }
+        ];
+        
+        const router = createRouter({
+            history: createWebHashHistory(),
+            routes
+        });
+        
+        const app = createApp({});
+        app.use(router);
+        app.mount('#demo');
+    </script>
+</body>
+</html>

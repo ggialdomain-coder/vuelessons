@@ -1,0 +1,31 @@
+# Django Ecommerce Backend Requirements
+# Python 3.8+ required
+
+# Core Django
+Django==5.0.1
+djangorestframework==3.14.0
+
+# Authentication
+djangorestframework-simplejwt==5.3.0
+
+# CORS (to allow frontend to connect)
+django-cors-headers==4.3.1
+
+# Database (SQLite by default, PostgreSQL for production)
+# psycopg2-binary==2.9.9  # Uncomment for PostgreSQL
+
+# Image handling
+Pillow==10.2.0
+
+# Environment variables
+python-dotenv==1.0.0
+
+# Required for JWT
+setuptools>=65.0.0
+
+# Production WSGI server
+gunicorn==21.2.0
+
+# Static files in production
+whitenoise==6.6.0
+

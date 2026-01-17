@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lifecycle Hooks Exercise - Timer Component</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f6f9fc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        h1 {
+            color: #42b983;
+            text-align: center;
+        }
+        .hints {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .hints h3 {
+            margin-top: 0;
+            color: #ff9800;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        .timer-display {
+            font-size: 2em;
+            color: #42b983;
+            font-weight: bold;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⏱️ Timer Component with Lifecycle Hooks Exercise</h1>
+        <p style="text-align: center; color: #666;">Build a Timer component that uses lifecycle hooks! The timer should start when mounted and stop when unmounted.</p>
+        
+        <div class="hints">
+            <h3>📋 Requirements:</h3>
+            <ol>
+                <li>Create a Timer component that counts up from 0</li>
+                <li>Use <code>mounted()</code> hook to start a timer using <code>setInterval()</code></li>
+                <li>Use <code>unmounted()</code> hook to clear the timer using <code>clearInterval()</code></li>
+                <li>Display the elapsed time in seconds</li>
+                <li>Add a button in the parent to toggle the timer on/off (use <code>v-if</code>)</li>
+            </ol>
+            
+            <h3>💡 Hints:</h3>
+            <ul>
+                <li>Store <code>seconds</code> and <code>intervalId</code> in component data</li>
+                <li>In <code>mounted()</code>: <code>this.intervalId = setInterval(() => { this.seconds++; }, 1000);</code></li>
+                <li>In <code>unmounted()</code>: <code>if (this.intervalId) { clearInterval(this.intervalId); }</code></li>
+                <li>Use <code>v-if="showTimer"</code> to show/hide timer (this triggers mounted/unmounted)</li>
+                <li>setInterval runs every 1000ms (1 second)</li>
+                <li>Always check if intervalId exists before clearing it</li>
+            </ul>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- YOUR CODE STARTS HERE -->
+        <!-- ============================================ -->
+        
+        <div id="app">
+            <h2 style="color: #42b983; text-align: center;">Timer Component</h2>
+            
+            <!-- 
+            TODO: Add button to toggle timer
+            Use v-if to show/hide the Timer component
+            When v-if changes from true to false, unmounted() is called
+            When v-if changes from false to true, mounted() is called
+            -->
+            <button @click="showTimer = !showTimer">
+                {{ showTimer ? 'Stop Timer' : 'Start Timer' }}
+            </button>
+            
+            <!-- TODO: Add Timer component here with v-if -->
+            <!-- 
+            <timer v-if="showTimer"></timer>
+            -->
+            <timer v-if="showTimer"></timer>
+            
+        </div>
+        
+        <!-- ============================================ -->
+        <!-- YOUR CODE ENDS HERE -->
+        <!-- ============================================ -->
+    </div>
+
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        // Create the Vue app
+        const app = createApp({
+            data() {
+                return {
+                    showTimer: true
+                }
+            }
+        });
+
+        app.component('Timer', {
+            template: `
+                <div>
+                    <h3>Timer: {{ seconds }} seconds</h3>
+                </div>
+            `,
+            data() {
+                return {
+                    seconds: 0,
+                    IntervalId: null,
+                }
+            },
+            mounted() {
+                console.log('Timer mounted - starting timer');
+                this.IntervalId = setInterval(() => {
+                        this.seconds++;
+                    }, 1000);
+
+            },
+            unmounted(){
+                console.log('Timer unmounted - stopping timer');
+                if (this.IntervalId) {
+                    clearInterval(this.IntervalId);
+                }
+            }
+        });
+        
+        // ============================================
+        // STEP 1: Create Timer Component
+        // ============================================
+        // 
+        // Use app.component('Timer', { ... }) to register the component
+        // 
+        // The component needs:
+        // 1. template - Display seconds: {{ seconds }} seconds
+        //
+        // 2. data() - Function that returns:
+        //    {
+        //      seconds: 0,
+        //      intervalId: null
+        //    }
+        //
+        // 3. mounted() - Hook that runs when component is added to DOM:
+        //    mounted() {
+        //      this.intervalId = setInterval(() => {
+        //        this.seconds++;
+        //      }, 1000);
+        //    }
+        //
+        // 4. unmounted() - Hook that runs when component is removed:
+        //    unmounted() {
+        //      if (this.intervalId) {
+        //        clearInterval(this.intervalId);
+        //      }
+        //    }
+        //
+        // Example structure:
+        // app.component('Timer', {
+        //     template: `
+        //         <div class="timer-display">
+        //             Timer: {{ seconds }} seconds
+        //         </div>
+        //     `,
+        //     data() {
+        //         return {
+        //             seconds: 0,
+        //             intervalId: null
+        //         }
+        //     },
+        //     mounted() {
+        //         console.log('Timer mounted - starting');
+        //         this.intervalId = setInterval(() => {
+        //             this.seconds++;
+        //         }, 1000);
+        //     },
+        //     unmounted() {
+        //         console.log('Timer unmounted - stopping');
+        //         if (this.intervalId) {
+        //             clearInterval(this.intervalId);
+        //         }
+        //     }
+        // });
+        
+        // TODO: Write your Timer component with lifecycle hooks here
+        
+        
+        // Mount the app
+        app.mount('#app');
+    </script>
+</body>
+</html>
+

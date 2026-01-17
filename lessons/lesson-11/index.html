@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 11: Forms & v-model</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .theory {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .exercise {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        .demo-box {
+            border: 2px solid #42b983;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .link-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .link-box a {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link-box a:hover {
+            text-decoration: underline;
+        }
+        input, select, textarea {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Lesson 11: Forms & v-model</h1>
+    
+    <div class="link-box">
+        <p><strong>📖 Tutorial:</strong> <a href="forms-tutorial.html">Step-by-step Forms Tutorial</a></p>
+        <p><strong>✏️ Exercise:</strong> <a href="forms-exercise.html">Build a Registration Form</a></p>
+    </div>
+    
+    <div class="theory">
+        <h2>🎓 Theory: Forms & v-model</h2>
+        
+        <h3>v-model with Forms:</h3>
+        <p><code>v-model</code> creates two-way data binding with form inputs. It automatically syncs the input value with component data.</p>
+        
+        <h3>Input Types:</h3>
+        <pre><code>// Text input
+&lt;input v-model="name" type="text"&gt;
+
+// Number input
+&lt;input v-model.number="age" type="number"&gt;
+
+// Checkbox
+&lt;input v-model="agreed" type="checkbox"&gt;
+
+// Radio buttons
+&lt;input v-model="gender" type="radio" value="male"&gt;
+&lt;input v-model="gender" type="radio" value="female"&gt;
+
+// Select dropdown
+&lt;select v-model="country"&gt;
+    &lt;option value="us"&gt;USA&lt;/option&gt;
+    &lt;option value="uk"&gt;UK&lt;/option&gt;
+&lt;/select&gt;
+
+// Textarea
+&lt;textarea v-model="message"&gt;&lt;/textarea&gt;</code></pre>
+        
+        <h3>v-model Modifiers:</h3>
+        <ul>
+            <li><code>.number</code> - Converts value to number: <code>v-model.number="age"</code></li>
+            <li><code>.trim</code> - Removes whitespace: <code>v-model.trim="name"</code></li>
+            <li><code>.lazy</code> - Updates on change event (not input): <code>v-model.lazy="email"</code></li>
+        </ul>
+        
+        <h3>Form Submission:</h3>
+        <pre><code>&lt;form @submit.prevent="handleSubmit"&gt;
+    &lt;input v-model="name"&gt;
+    &lt;button type="submit"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;
+
+methods: {
+    handleSubmit() {
+        // Handle form submission
+        console.log('Form submitted:', this.name);
+    }
+}</code></pre>
+        
+        <h3>Form Validation:</h3>
+        <ul>
+            <li>Use computed properties to check if form is valid</li>
+            <li>Show error messages conditionally with <code>v-if</code></li>
+            <li>Disable submit button when form is invalid</li>
+        </ul>
+    </div>
+
+    <div class="practice">
+        <h2>💻 Practice: Forms & v-model</h2>
+        
+        <div id="app">
+            <div class="demo-box">
+                <h3>1. Text Input</h3>
+                <input v-model="name" type="text" placeholder="Enter your name">
+                <p>Your name: <strong>{{ name }}</strong></p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>2. Checkbox</h3>
+                <label>
+                    <input v-model="agreed" type="checkbox">
+                    I agree to the terms
+                </label>
+                <p>Agreed: <strong>{{ agreed }}</strong></p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>3. Radio Buttons</h3>
+                <label>
+                    <input v-model="gender" type="radio" value="male">
+                    Male
+                </label>
+                <label>
+                    <input v-model="gender" type="radio" value="female">
+                    Female
+                </label>
+                <p>Selected: <strong>{{ gender }}</strong></p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>4. Select Dropdown</h3>
+                <select v-model="country">
+                    <option value="">Select a country</option>
+                    <option value="us">USA</option>
+                    <option value="uk">UK</option>
+                    <option value="ca">Canada</option>
+                </select>
+                <p>Country: <strong>{{ country }}</strong></p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>5. Form Submission</h3>
+                <form @submit.prevent="handleSubmit">
+                    <input v-model="email" type="email" placeholder="Email">
+                    <button type="submit">Submit</button>
+                </form>
+                <p v-if="submitted">Form submitted! Email: {{ email }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>✏️ Exercise</h2>
+        <p><strong>Task:</strong> Create a registration form:</p>
+        <ol>
+            <li>Create form fields: name, email, password, age, country (select), and terms checkbox</li>
+            <li>Use <code>v-model</code> to bind each input to data</li>
+            <li>Add form validation (check if fields are filled, email format, password length)</li>
+            <li>Show error messages for invalid fields</li>
+            <li>Handle form submission with <code>@submit.prevent</code></li>
+            <li>Display submitted data when form is valid</li>
+        </ol>
+        <p><strong>Hint:</strong> Use computed property to check if form is valid, and <code>v-if</code> to show errors!</p>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        const app = createApp({
+            data() {
+                return {
+                    name: '',
+                    agreed: false,
+                    gender: '',
+                    country: '',
+                    email: '',
+                    submitted: false
+                }
+            },
+            methods: {
+                handleSubmit() {
+                    this.submitted = true;
+                    alert('Form submitted!');
+                }
+            }
+        });
+        
+        app.mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

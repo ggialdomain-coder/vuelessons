@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 1: Introduction to Vue</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f6f9fc;
+            line-height: 1.6;
+        }
+        .exercise-area {
+            background: #fff3e0;
+            padding: 24px;
+            border-radius: 6px;
+            margin: 24px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 8px 0;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        h1 {
+            color: #42b983;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .instructions {
+            margin-bottom: 2em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lesson 1: Introduction to Vue</h1>
+    <div class="instructions">
+        <p>Welcome to your first Vue.js exercise! Try the task below as your hands-on introduction.</p>
+    </div>
+    <div class="exercise-area">
+        <h2>Exercise</h2>
+        <p>Complete the Vue app below with these steps:</p>
+        <ol>
+            <li>Add an <code>age</code> variable with your age</li>
+            <li>Add a <code>hobby</code> variable with your favorite hobby</li>
+            <li>Display both in the template</li>
+            <li>Add a button that changes the greeting when clicked</li>
+        </ol>
+        <div id="app">
+            <h3>{{ greeting }}</h3>
+            <p>My name is: <strong>{{ name }}</strong></p>
+            <p>I'm learning: <strong>{{ learning }}</strong></p>
+            
+            <!-- TODO: Display your age and hobby here -->
+            <p>My age is: {{ age }}</p>
+            <p>My hobby is: {{ hobby }}</p><!-- TODO: Add a button here that changes the greeting -->
+            <button @click="changeGreeting">
+                Change Greeting
+            </button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    greeting: "Hello, Vue!",
+                    name: "Your Name",
+                    learning: "Vue.js",
+                    age: 35,
+                    hobby: "Football"
+                };
+            },
+            // TODO: Add methods here for the button
+            methods: {
+                changeGreeting() {
+                    if (this.greeting === "Hello, Vue!") {
+                        this.greeting = "Change Greeting";
+                    } else {
+                        this.greeting = "Hello, Vue!";
+                    }
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 5: Computed Properties & Watchers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .theory {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .exercise {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .demo-box {
+            border: 2px solid #42b983;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+        }
+        .highlight {
+            background: yellow;
+            padding: 2px 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Lesson 5: Computed Properties & Watchers</h1>
+    
+    <div class="theory">
+        <h2>🎓 Theory: Computed vs Methods vs Watchers</h2>
+        
+        <h3>Computed Properties:</h3>
+        <ul>
+            <li><strong>Cached</strong>: Only recalculates when dependencies change</li>
+            <li><strong>Use for</strong>: Derived data that depends on other data</li>
+            <li><strong>Syntax</strong>: <code>computed: { propertyName() { return ... } }</code></li>
+        </ul>
+        
+        <h3>Methods:</h3>
+        <ul>
+            <li><strong>Not cached</strong>: Runs every time it's called</li>
+            <li><strong>Use for</strong>: Actions, event handlers</li>
+        </ul>
+        
+        <h3>Watchers:</h3>
+        <ul>
+            <li><strong>Reactive</strong>: Runs when watched property changes</li>
+            <li><strong>Use for</strong>: Side effects, async operations, validation</li>
+            <li><strong>Syntax</strong>: <code>watch: { propertyName(newVal, oldVal) { ... } }</code></li>
+        </ul>
+        
+        <h3>When to Use What:</h3>
+        <ul>
+            <li><strong>Computed</strong>: Displaying filtered/sorted lists, calculations</li>
+            <li><strong>Methods</strong>: Event handlers, actions</li>
+            <li><strong>Watchers</strong>: API calls, logging, complex side effects</li>
+        </ul>
+    </div>
+
+    <div class="practice">
+        <h2>💻 Practice: Computed & Watchers</h2>
+        
+        <div id="app">
+            <div class="demo-box">
+                <h3>1. Computed Property (Cached)</h3>
+                <input v-model="firstName" placeholder="First Name">
+                <input v-model="lastName" placeholder="Last Name">
+                <p><strong>Full Name (Computed):</strong> {{ fullName }}</p>
+                <p><small>Computed only recalculates when firstName or lastName changes!</small></p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>2. Computed vs Method</h3>
+                <input v-model="price" type="number" placeholder="Price">
+                <input v-model="quantity" type="number" placeholder="Quantity">
+                <p><strong>Total (Computed):</strong> ${{ total }}</p>
+                <p><strong>Total (Method):</strong> ${{ getTotal() }}</p>
+                <p><small>Open console to see when each is called!</small></p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>3. Computed with Filtering</h3>
+                <input v-model="searchQuery" placeholder="Search items...">
+                <ul>
+                    <li v-for="item in filteredItems" :key="item.id">
+                        {{ item.name }}
+                    </li>
+                </ul>
+                <p>Showing {{ filteredItems.length }} of {{ items.length }} items</p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>4. Watcher - Reacting to Changes</h3>
+                <input v-model="watchedValue" placeholder="Type something...">
+                <p>Current value: <strong>{{ watchedValue }}</strong></p>
+                <p>Previous value: <strong>{{ previousValue }}</strong></p>
+                <p>Change count: <strong>{{ changeCount }}</strong></p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>5. Watcher with Async Operation</h3>
+                <input v-model="username" placeholder="Enter username">
+                <p v-if="loading">Loading...</p>
+                <p v-else-if="userData">{{ userData }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>✏️ Exercise</h2>
+        <p><strong>Task:</strong> Create a shopping cart:</p>
+        <ol>
+            <li>Display a list of products with name, price, and quantity input</li>
+            <li>Use computed property to calculate total price</li>
+            <li>Use computed property to show items count</li>
+            <li>Use watcher to show a message when total exceeds $100</li>
+            <li>Add a discount code input that applies 10% discount when code is "SAVE10"</li>
+        </ol>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        createApp({
+            data() {
+                return {
+                    firstName: 'John',
+                    lastName: 'Doe',
+                    price: 10,
+                    quantity: 2,
+                    searchQuery: '',
+                    items: [
+                        { id: 1, name: 'Apple' },
+                        { id: 2, name: 'Banana' },
+                        { id: 3, name: 'Cherry' },
+                        { id: 4, name: 'Date' },
+                        { id: 5, name: 'Elderberry' }
+                    ],
+                    watchedValue: '',
+                    previousValue: '',
+                    changeCount: 0,
+                    username: '',
+                    loading: false,
+                    userData: ''
+                }
+            },
+            computed: {
+                fullName() {
+                    console.log('Computed: fullName recalculated');
+                    return `${this.firstName} ${this.lastName}`.trim();
+                },
+                total() {
+                    console.log('Computed: total recalculated');
+                    return (this.price * this.quantity).toFixed(2);
+                },
+                filteredItems() {
+                    if (!this.searchQuery) {
+                        return this.items;
+                    }
+                    return this.items.filter(item => 
+                        item.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+                    );
+                }
+            },
+            methods: {
+                getTotal() {
+                    console.log('Method: getTotal called');
+                    return (this.price * this.quantity).toFixed(2);
+                }
+            },
+            watch: {
+                watchedValue(newVal, oldVal) {
+                    this.previousValue = oldVal;
+                    this.changeCount++;
+                    console.log(`Value changed from "${oldVal}" to "${newVal}"`);
+                },
+                username(newVal) {
+                    if (newVal.length < 3) {
+                        this.userData = '';
+                        return;
+                    }
+                    
+                    this.loading = true;
+                    this.userData = '';
+                    
+                    // Simulate API call
+                    setTimeout(() => {
+                        this.userData = `User data for: ${newVal}`;
+                        this.loading = false;
+                    }, 1000);
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

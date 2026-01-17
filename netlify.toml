@@ -1,0 +1,18 @@
+# Netlify configuration for Vue Lessons + ShopVue ecommerce
+
+[build]
+  command = "echo 'Static site - no build needed'"
+  publish = "."
+
+# Proxy /api and /media to Django backend on Render
+[[redirects]]
+  from = "/api/*"
+  to = "https://shopvue-api.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/media/*"
+  to = "https://shopvue-api.onrender.com/media/:splat"
+  status = 200
+  force = true

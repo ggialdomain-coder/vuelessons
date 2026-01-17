@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lists & Keys Exercise - Todo List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f6f9fc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        h1 {
+            color: #42b983;
+            text-align: center;
+        }
+        .hints {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .hints h3 {
+            margin-top: 0;
+            color: #ff9800;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        .todo-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .todo-form input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .todo-form button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .todo-form button:hover {
+            background: #35a372;
+        }
+        .todo-list {
+            list-style: none;
+            padding: 0;
+        }
+        .todo-item {
+            background: #f9f9f9;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 2px solid #ddd;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .todo-item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+        .todo-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        .todo-item span {
+            flex: 1;
+            font-size: 16px;
+        }
+        .todo-item button {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .todo-item button:hover {
+            background: #cc0000;
+        }
+        .stats {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Todo List Exercise</h1>
+        <p style="text-align: center; color: #666;">Build a todo list application using v-for and keys! Practice managing lists in Vue.</p>
+        
+        <div class="hints">
+            <h3>📋 Requirements:</h3>
+            <ol>
+                <li>Create a <code>todos</code> array in data with initial todos (each todo has: <code>id</code>, <code>text</code>, <code>completed</code>)</li>
+                <li>Use <code>v-for="todo in todos"</code> to render the todo list</li>
+                <li>Always use <code>:key="todo.id"</code> with v-for (this is critical!)</li>
+                <li>Add an input field and button to add new todos</li>
+                <li>Create a method to add todos: <code>addTodo()</code> - generate unique ID for each new todo</li>
+                <li>Create a method to delete todos: <code>deleteTodo(id)</code></li>
+                <li>Create a method to toggle completion: <code>toggleTodo(id)</code></li>
+                <li>Use <code>v-model</code> to bind checkbox to <code>todo.completed</code></li>
+                <li>Add <code>:class="{ completed: todo.completed }"</code> to style completed todos</li>
+                <li>Display count of completed todos using computed property: <code>completedCount</code></li>
+            </ol>
+            
+            <h3>💡 Hints:</h3>
+            <ul>
+                <li>Initial todos: <code>todos: [{ id: 1, text: 'Learn Vue', completed: false }, { id: 2, text: 'Build apps', completed: false }]</code></li>
+                <li>For new todos, use <code>Date.now()</code> or <code>Math.random()</code> to generate unique IDs</li>
+                <li>To add todo: <code>this.todos.push({ id: Date.now(), text: this.newTodo, completed: false })</code></li>
+                <li>To delete: <code>this.todos = this.todos.filter(todo => todo.id !== id)</code></li>
+                <li>To toggle: <code>const todo = this.todos.find(t => t.id === id); todo.completed = !todo.completed</code></li>
+                <li>Always use <code>:key="todo.id"</code> - never forget this!</li>
+                <li>Computed property: <code>completedCount() { return this.todos.filter(t => t.completed).length }</code></li>
+            </ul>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- YOUR CODE STARTS HERE -->
+        <!-- ============================================ -->
+        
+        <div id="app">
+            <h2 style="color: #42b983; text-align: center;">My Todo List</h2>
+           
+            <div class="todo-form">
+                <input type="text" v-model="newTodo" placeholder="Add new todo">
+                <button @click="addTodo">Add</button>
+         
+            </div>
+             
+            <ul class="todo-list">
+                <li
+                v-for="todo in todos"
+                :key="todo.id"
+                :class="{ completed: todo.completed }"
+                class="todo-item">
+                <input type="checkbox" v-model="todo.completed">
+                <span>{{ todo.text}}</span> 
+                <button @click="deleteTodo(todo.id)">Delete</button>
+            </li>
+             </ul>
+            
+           
+            <div class="stats">
+            Completed: {{ completedCount}} / Total: {{ todos.length}}
+             </div>
+            
+        </div>
+        
+        <!-- ============================================ -->
+        <!-- YOUR CODE ENDS HERE -->
+        <!-- ============================================ -->
+    </div>
+
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        // Create the Vue app
+        const app = createApp({
+            data() {
+                return {
+                    todos: [
+                        { id: 1, text: 'Learn Vue', completed: false},
+                        { id: 2, text: 'Build Apps', completed: false}
+                    ],
+                    newTodo: ''
+                }
+            },
+            computed: {
+                completedCount() {
+                    return this.todos.filter(todo => todo.completed).length;
+                }
+          
+            },
+            methods: {
+                addTodo() {
+                    if (this.newTodo.trim()) {
+                        this.todos.push({
+                            id: Date.now(),
+                            text: this.newTodo,
+                            completed: false
+                        });
+                        this.newTodo = '';
+                    }
+                },      
+                deleteTodo(id) {
+                    this.todos = this.todos.filter(todo => todo.id !== id)
+                },
+                toggleTodo(id) {
+                    const todo = this.todos.find(t => t.id === id);
+                    if (todo) {
+                        todo.completed = !todo.completed;
+                    }
+                }
+                 
+     
+            }
+        });
+        
+        // Mount the app
+        app.mount('#app');
+    </script>
+</body>
+</html>
+

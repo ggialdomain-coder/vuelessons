@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Components Exercise - Tab System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f6f9fc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        h1 {
+            color: #42b983;
+            text-align: center;
+        }
+        .hints {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .hints h3 {
+            margin-top: 0;
+            color: #ff9800;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+        .tab-button {
+            background: #f0f0f0;
+            color: #333;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .tab-button:hover {
+            background: #e0e0e0;
+        }
+        .tab-button.active {
+            background: #42b983;
+            color: white;
+        }
+        .tab-content {
+            padding: 30px;
+            border: 2px solid #42b983;
+            border-radius: 5px;
+            min-height: 200px;
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📑 Tab System Exercise</h1>
+        <p style="text-align: center; color: #666;">Build a tab component system using dynamic components! Switch between different tabs dynamically.</p>
+        
+        <div class="hints">
+            <h3>📋 Requirements:</h3>
+            <ol>
+                <li>Create three tab components: <code>HomeTab</code>, <code>ProductsTab</code>, <code>ContactTab</code></li>
+                <li>Each component should display different content (home info, products list, contact form)</li>
+                <li>Use <code>&lt;component :is="activeTab"&gt;&lt;/component&gt;</code> to dynamically switch between tabs</li>
+                <li>Create tab buttons array in data: <code>tabs: ['HomeTab', 'ProductsTab', 'ContactTab']</code></li>
+                <li>Add <code>activeTab</code> data property to track current tab</li>
+                <li>Use <code>v-for</code> to render tab buttons</li>
+                <li>Highlight active tab button with <code>:class="{ active: activeTab === tab }"</code></li>
+                <li>Add click handler to switch tabs: <code>@click="activeTab = tab"</code></li>
+            </ol>
+            
+            <h3>💡 Hints:</h3>
+            <ul>
+                <li>Register components in <code>components</code> option</li>
+                <li>Use <code>&lt;component :is="activeTab"&gt;&lt;/component&gt;</code> to render active component</li>
+                <li>Tab buttons: <code>&lt;button v-for="tab in tabs" :class="{ active: activeTab === tab }" @click="activeTab = tab"&gt;{{ tab }}&lt;/button&gt;</code></li>
+                <li>Each tab component should have a <code>template</code> with unique content</li>
+                <li>Set default active tab: <code>activeTab: 'HomeTab'</code></li>
+            </ul>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- YOUR CODE STARTS HERE -->
+        <!-- ============================================ -->
+        
+        <div id="app">
+            <h2 style="color: #42b983; text-align: center;">Tab System</h2>
+            
+            <!-- TODO: Create tab buttons -->
+            <!-- 
+            Steps:
+            1. Create tabs array in data: ['HomeTab', 'ProductsTab', 'ContactTab']
+            2. Create activeTab data property: 'HomeTab'
+            3. Use v-for to render tab buttons
+            4. Add :class to highlight active tab
+            5. Add @click to switch tabs
+            -->
+            
+            <div class="tabs">
+                <button
+                v-for="tab in tabs"
+                :key="tab"
+                :class="{ active: activeTab === tab }"
+                @click="activeTab = tab"
+                class="tab-button">
+                    {{ tab }}
+                </button>
+            </div>
+            
+            <!-- TODO: Dynamic component -->
+            <!-- 
+            Use <component :is="activeTab"></component> to render the active tab
+            -->
+            <div class="tab-content">
+               <component :is="activeTab"></component>
+            </div>
+            
+        </div>
+        
+        <!-- ============================================ -->
+        <!-- YOUR CODE ENDS HERE -->
+        <!-- ============================================ -->
+    </div>
+
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        const HomeTab = {
+                    template: `
+                    <div>
+                        <h3>Home</h3>
+                        <p>Welcome to our website!</p>
+                        <p>This is the home page where you can find information about our company.</p>
+                        <p>We offer great products and excellent customer service.</p>
+                    </div>
+                    `
+        };
+        
+        const ProductsTab ={
+            template: `
+                <div>
+                    <h3>Products</h3>
+                    <ul>
+                        <li>Product 1</li>
+                        <li>Product 2</li>
+                        <li>Product 3</li>
+                    </ul>
+                </div>
+            `
+        };
+
+        const ContactTab = {
+            template: `
+                <div>
+                    <h3>Contact</h3>
+                    <p>Get in touch with us!</p>
+                    <p>Email: contact@example.com</p>
+                    <p>Phone: 123-456-7890</p>
+                    <p>Address: 123 Main St, City, Country</p>
+                </div>
+            `
+        };
+        // TODO: Create tab components
+        // HomeTab - Display home information
+        // ProductsTab - Display products list
+        // ContactTab - Display contact information
+        
+        // Example structure:
+        // const HomeTab = {
+        //     template: '<div><h3>Home</h3><p>Welcome to our website!</p></div>'
+        // };
+        
+        // Create the Vue app
+        const app = createApp({
+            data() {
+                return {
+                    tabs: ['HomeTab', 'ProductsTab', 'ContactTab'],
+                    activeTab: 'HomeTab',
+                    // TODO: Add tabs array
+                    // tabs: ['HomeTab', 'ProductsTab', 'ContactTab'],
+                    
+                    // TODO: Add activeTab property
+                    // activeTab: 'HomeTab'
+                }
+            },
+            components: {
+                HomeTab,
+                ProductsTab,
+                ContactTab
+                // TODO: Register components here
+                // HomeTab,
+                // ProductsTab,
+                // ContactTab
+            }
+        });
+        
+        // Mount the app
+        app.mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+

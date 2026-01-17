@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Composition API Exercise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .exercise-box {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .requirements {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #ff9800;
+            margin: 20px 0;
+        }
+        .hint {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+        .code-block {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            border: 1px solid #ddd;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        .nav-link {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background: #e3f2fd;
+            color: #1976d2;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .nav-link:hover {
+            background: #bbdefb;
+        }
+        input {
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-link">
+        <a href="index.html">← Back to Lesson 21</a>
+    </div>
+
+    <div class="exercise-box">
+        <h1>✏️ Exercise: Convert to Composition API</h1>
+        
+        <div class="requirements">
+            <h2>📋 Requirements</h2>
+            <p><strong>Your Task:</strong> Convert an Options API component to Composition API.</p>
+            
+            <h3>Part 1: Create setup() Function</h3>
+            <ol>
+                <li>Replace <code>data()</code> with <code>setup()</code> function</li>
+                <li>Import <code>ref</code> from Vue</li>
+                <li>Convert data properties to <code>ref()</code></li>
+            </ol>
+            
+            <h3>Part 2: Convert Methods</h3>
+            <ol>
+                <li>Move methods from <code>methods:</code> option into <code>setup()</code></li>
+                <li>Convert to regular functions or arrow functions</li>
+                <li>Remove <code>this</code> keyword and use variable names directly</li>
+                <li>Use <code>.value</code> when accessing ref values</li>
+            </ol>
+            
+            <h3>Part 3: Convert Computed Properties</h3>
+            <ol>
+                <li>Import <code>computed</code> from Vue</li>
+                <li>Convert computed properties to <code>computed()</code> function</li>
+                <li>Use arrow function syntax</li>
+            </ol>
+            
+            <h3>Part 4: Return Everything</h3>
+            <ol>
+                <li>Return all refs, methods, and computed properties from <code>setup()</code></li>
+                <li>Test that everything works the same as Options API</li>
+            </ol>
+        </div>
+        
+        <div class="hint">
+            <h3>💡 Hints</h3>
+            <ul>
+                <li>Use <code>const { ref, computed } = Vue</code> to import</li>
+                <li>Remember: <code>ref()</code> for primitives, use <code>.value</code> in JavaScript</li>
+                <li>In template, Vue automatically unwraps refs (no .value needed)</li>
+                <li>Must return everything you want to use in template</li>
+                <li>No <code>this</code> keyword needed!</li>
+            </ul>
+        </div>
+        
+        <div class="exercise-box">
+            <h2>🎯 Your Solution Area</h2>
+            <p>Convert this Options API component to Composition API:</p>
+            
+            <div class="code-block">// Options API (convert this)
+const app = createApp({
+    data() {
+        return {
+            count: 0,
+            message: 'Hello'
+        }
+    },
+    computed: {
+        doubled() {
+            return this.count * 2;
+        }
+    },
+    methods: {
+        increment() {
+            this.count++;
+        },
+        updateMessage(newMsg) {
+            this.message = newMsg;
+        }
+    }
+});</div>
+            
+            <div id="app">
+                <div style="padding: 20px; border: 2px solid #42b983; border-radius: 5px;">
+                    <h3>Your Converted Component</h3>
+                    <p>Count: {{ count }}</p>
+                    <p>Doubled: {{ doubled }}</p>
+                    <p>Message: {{ message }}</p>
+                    <button @click="increment"> Increment </button>
+                    <button @click="updateMessage('New Message')">Update Message</button>
+                </div>
+                <!-- Your converted component here -->
+            </div>
+        </div>
+        
+        <div class="code-block">// Starter code structure
+const { createApp, ref, computed } = Vue;
+
+const app = createApp({
+    setup() {
+        // TODO: Convert data() to ref()
+        
+        // TODO: Convert computed to computed()
+        
+        // TODO: Convert methods to functions
+        
+        // TODO: Return everything
+        return {
+            // Your returns here
+        }
+    }
+});
+
+app.mount('#app');</div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const {createApp, ref, computed} = Vue;
+
+        const app = createApp({
+            setup() {
+                const count = ref(0);
+                const message = ref('Hello');
+
+                const doubled = computed(() => {
+                    return count.value * 2;
+                })
+
+                const increment = () => {
+                    count.value++
+                };
+
+                const updateMessage = (newMsg) => {
+                    message.value = newMsg;
+                };
+
+                return {
+                    count,
+                    message,
+                    doubled,
+                    increment,
+                    updateMessage
+                }
+            },
+        })
+
+        app.mount('#app');
+        // YOUR CODE HERE
+        // Convert the Options API component above to Composition API
+        
+    </script>
+</body>
+</html>
+
+

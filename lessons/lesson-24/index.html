@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 24: Performance Optimization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .theory {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .exercise {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        .demo-box {
+            border: 2px solid #42b983;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .link-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .link-box a {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link-box a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Lesson 24: Performance Optimization</h1>
+    
+    <div class="link-box">
+        <p><strong>📖 Tutorial:</strong> <a href="performance-tutorial.html">Step-by-step Performance Optimization Tutorial</a></p>
+        <p><strong>✏️ Exercise:</strong> <a href="performance-exercise.html">Optimize a Slow Component</a></p>
+    </div>
+    
+    <div class="theory">
+        <h2>🎓 Theory: Performance Optimization</h2>
+        
+        <h3>Why Optimize?</h3>
+        <p>Optimization ensures your Vue app runs smoothly, especially with large lists or complex components.</p>
+        
+        <h3>Key Optimization Techniques:</h3>
+        <ul>
+            <li><strong>v-show vs v-if:</strong> Use v-show for frequent toggles</li>
+            <li><strong>v-memo:</strong> Memoize expensive list items</li>
+            <li><strong>Computed vs Methods:</strong> Use computed for derived data</li>
+            <li><strong>Lazy Loading:</strong> Load components only when needed</li>
+            <li><strong>Virtual Scrolling:</strong> For very long lists</li>
+        </ul>
+        
+        <h3>v-show vs v-if:</h3>
+        <pre><code>// v-if - Removes from DOM (good for rare toggles)
+&lt;div v-if="show"&gt;Content&lt;/div&gt;
+
+// v-show - Hides with CSS (good for frequent toggles)
+&lt;div v-show="show"&gt;Content&lt;/div&gt;</code></pre>
+        
+        <h3>v-memo for Lists:</h3>
+        <pre><code>&lt;div v-for="item in list" :key="item.id" v-memo="[item.id, item.name]"&gt;
+    {{ expensiveComputation(item) }}
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <div class="practice">
+        <h2>💻 Practice: Optimization Techniques</h2>
+        
+        <div id="app">
+            <div class="demo-box">
+                <h3>v-show vs v-if</h3>
+                <button @click="toggle">Toggle</button>
+                <div v-if="show">v-if: Removed from DOM</div>
+                <div v-show="show">v-show: Hidden with CSS</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>✏️ Exercise</h2>
+        <p><strong>Task:</strong> Optimize a component with performance issues:</p>
+        <ol>
+            <li>Identify performance bottlenecks</li>
+            <li>Replace v-if with v-show where appropriate</li>
+            <li>Use computed properties instead of methods in templates</li>
+            <li>Add v-memo to expensive list items</li>
+            <li>Test performance improvements</li>
+        </ol>
+        <p><strong>Hint:</strong> Use browser DevTools to measure performance before and after optimization!</p>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp, ref } = Vue;
+        
+        const app = createApp({
+            setup() {
+                const show = ref(true);
+                const toggle = () => {
+                    show.value = !show.value;
+                };
+                return { show, toggle };
+            }
+        });
+        
+        app.mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+

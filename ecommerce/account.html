@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ShopVue - My Account">
+    <title>ShopVue - My Account</title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/css/main.css?v=14">
+</head>
+<body>
+    <!-- Vue App Mount Point -->
+    <div id="app">
+        <!-- Header Component -->
+        <header-component 
+            :cart-count="cartCount"
+            :current-page="currentPage"
+            :logo-image="logoImage"
+            :is-logged-in="isLoggedIn"
+            :user-email="userEmail"
+            :delivery-address="deliveryAddress"
+            @navigate="handleNavigate"
+            @search="handleSearch"
+            @login="handleLogin"
+            @logout="handleLogout"
+            @open-account="openAccountSidebar"
+            @change-address="handleChangeAddress"
+        ></header-component>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <h1 class="page-title">My Account</h1>
+                <p class="page-subtitle">Manage your account information and preferences</p>
+            </section>
+
+            <!-- Account Section -->
+            <section class="account-section">
+                <div v-if="!isLoggedIn" class="account-not-logged-in">
+                    <h2>Please Login</h2>
+                    <p>You need to be logged in to view your account details.</p>
+                    <button @click="handleNavigate('auth')" class="btn-primary">
+                        Go to Login
+                    </button>
+                </div>
+
+                <div v-else class="account-container">
+                    <!-- Account Sidebar -->
+                    <aside class="account-page-sidebar">
+                        <div class="account-profile-card">
+                            <div class="profile-avatar">
+                                <div class="avatar-circle">
+                                    <span>{{ userInitials }}</span>
+                                </div>
+                            </div>
+                            <h3 class="profile-name">{{ userData.fullName || 'User' }}</h3>
+                            <p class="profile-email">{{ userData.email }}</p>
+                            <div class="profile-stats">
+                                <div class="stat-item">
+                                    <span class="stat-value">{{ orderCount }}</span>
+                                    <span class="stat-label">Orders</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-value">{{ cartItemCount }}</span>
+                                    <span class="stat-label">Cart Items</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Account Navigation -->
+                        <nav class="account-nav">
+                            <a href="#" @click.prevent="activeTab = 'details'" :class="{ active: activeTab === 'details' }" class="nav-item">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                <span>Account Details</span>
+                            </a>
+                            <a href="#" @click.prevent="activeTab = 'orders'" :class="{ active: activeTab === 'orders' }" class="nav-item">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                                </svg>
+                                <span>My Orders</span>
+                            </a>
+                            <a href="#" @click.prevent="activeTab = 'addresses'" :class="{ active: activeTab === 'addresses' }" class="nav-item">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                <span>Addresses</span>
+                            </a>
+                            <a href="#" @click.prevent="activeTab = 'settings'" :class="{ active: activeTab === 'settings' }" class="nav-item">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                    <path d="M12 1v6m0 6v6m9-9h-6m-6 0H3m15.364 6.364l-4.243-4.243m-4.242 0L5.636 18.364m12.728-12.728l-4.243 4.243m-4.242 0L5.636 5.636"></path>
+                                </svg>
+                                <span>Settings</span>
+                            </a>
+                        </nav>
+                    </aside>
+
+                    <!-- Account Content -->
+                    <div class="account-content">
+                        <!-- Account Details Tab -->
+                        <div v-if="activeTab === 'details'" class="account-tab-content">
+                            <div class="content-header">
+                                <h2>Account Details</h2>
+                                <p>View and manage your personal information</p>
+                            </div>
+
+                            <div class="account-details-card">
+                                <div class="detail-section">
+                                    <h3 class="section-title">Personal Information</h3>
+                                    <div class="detail-grid">
+                                        <div class="detail-item">
+                                            <label>Full Name</label>
+                                            <div class="detail-value">{{ userData.fullName || 'Not provided' }}</div>
+                                        </div>
+                                        <div class="detail-item">
+                                            <label>Email Address</label>
+                                            <div class="detail-value">{{ userData.email }}</div>
+                                        </div>
+                                        <div class="detail-item">
+                                            <label>Phone Number</label>
+                                            <div class="detail-value">{{ userData.phone || 'Not provided' }}</div>
+                                        </div>
+                                        <div class="detail-item">
+                                            <label>Account Created</label>
+                                            <div class="detail-value">{{ formatDate(userData.createdAt) }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="detail-section">
+                                    <h3 class="section-title">Account Status</h3>
+                                    <div class="status-badge verified">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                        </svg>
+                                        <span>Email Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- My Orders Tab -->
+                        <div v-if="activeTab === 'orders'" class="account-tab-content">
+                            <div class="content-header">
+                                <h2>My Orders</h2>
+                                <p>View your order history</p>
+                            </div>
+
+                            <div class="orders-card">
+                                <div v-if="orders.length === 0" class="empty-state">
+                                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                                    </svg>
+                                    <h3>No Orders Yet</h3>
+                                    <p>You haven't placed any orders yet. Start shopping to see your orders here!</p>
+                                    <button @click="handleNavigate('products')" class="btn-primary">
+                                        Start Shopping
+                                    </button>
+                                </div>
+
+                                <div v-else class="orders-list">
+                                    <div v-for="order in orders" :key="order.id" class="order-item">
+                                        <div class="order-header">
+                                            <div class="order-info">
+                                                <h4>Order #{{ order.id }}</h4>
+                                                <p class="order-date">{{ formatDate(order.timestamp) }}</p>
+                                            </div>
+                                            <div class="order-status">
+                                                <span class="status-badge" :class="order.status">{{ order.status }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="order-details">
+                                            <div class="order-items-count">
+                                                {{ order.items.length }} item(s)
+                                            </div>
+                                            <div class="order-total">
+                                                Total: {{ formatPrice(order.total) }} KWD
+                                            </div>
+                                        </div>
+                                        <button @click="viewOrder(order)" class="btn-view-order">
+                                            View Details
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Addresses Tab -->
+                        <div v-if="activeTab === 'addresses'" class="account-tab-content">
+                            <div class="content-header">
+                                <h2>My Addresses</h2>
+                                <p>Manage your delivery addresses</p>
+                            </div>
+
+                            <div class="addresses-card">
+                                <div v-if="addresses.length === 0" class="empty-state">
+                                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    <h3>No Addresses Saved</h3>
+                                    <p>Add a delivery address to make checkout faster!</p>
+                                    <button @click="addNewAddress" class="btn-primary">
+                                        Add Address
+                                    </button>
+                                </div>
+
+                                <div v-else class="addresses-list">
+                                    <div v-for="(address, index) in addresses" :key="index" class="address-item">
+                                        <div class="address-content">
+                                            <h4>{{ address.fullName }}</h4>
+                                            <p>{{ address.address }}</p>
+                                            <p>{{ address.city }}, {{ address.state }} {{ address.zipCode }}</p>
+                                            <p>{{ address.phone }}</p>
+                                        </div>
+                                        <div class="address-actions">
+                                            <button @click="editAddress(address, index)" class="btn-edit">Edit</button>
+                                            <button @click="deleteAddress(index)" class="btn-delete">Delete</button>
+                                        </div>
+                                    </div>
+                                    <button @click="addNewAddress" class="btn-add-address">
+                                        + Add New Address
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Settings Tab -->
+                        <div v-if="activeTab === 'settings'" class="account-tab-content">
+                            <div class="content-header">
+                                <h2>Account Settings</h2>
+                                <p>Manage your account preferences</p>
+                            </div>
+
+                            <div class="settings-card">
+                                <div class="setting-section">
+                                    <h3 class="section-title">Password</h3>
+                                    <p class="section-description">Change your account password</p>
+                                    <button @click="changePassword" class="btn-secondary">
+                                        Change Password
+                                    </button>
+                                </div>
+
+                                <div class="setting-section">
+                                    <h3 class="section-title">Notifications</h3>
+                                    <p class="section-description">Manage your notification preferences</p>
+                                    <div class="setting-options">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" v-model="settings.emailNotifications">
+                                            <span>Email Notifications</span>
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" v-model="settings.smsNotifications">
+                                            <span>SMS Notifications</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="setting-section">
+                                    <h3 class="section-title">Danger Zone</h3>
+                                    <p class="section-description">Permanently delete your account</p>
+                                    <button @click="deleteAccount" class="btn-danger">
+                                        Delete Account
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer Component -->
+        <footer-component 
+            @navigate="handleNavigate"
+            @social-click="handleSocialClick"
+        ></footer-component>
+
+        <!-- Account Sidebar -->
+        <account-sidebar
+            :show="showAccountSidebar"
+            :user-data="userData"
+            @close="closeAccountSidebar"
+            @navigate-account="handleNavigateAccount"
+            @logout="handleLogout"
+        ></account-sidebar>
+
+        <!-- Location Selection Modal -->
+        <location-selection-modal
+            :show="showLocationModal"
+            :saved-addresses="savedAddresses"
+            @location-selected="handleLocationSelected"
+            @add-new-address="handleAddNewAddress"
+            @close="closeLocationModal"
+        ></location-selection-modal>
+    </div>
+
+    <!-- Google Maps API (for location selection) -->
+    <!-- Note: Replace YOUR_API_KEY in assets/js/config.js with your actual Google Maps API key -->
+    <script src="assets/js/config.js?v=1"></script>
+    <script>
+        // Load Google Maps API with key from config
+        (function() {
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${APP_CONFIG.GOOGLE_MAPS_API_KEY}&libraries=places`;
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        })();
+    </script>
+    
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <!-- API Service (must load before components) -->
+    <script src="assets/js/services/api.js?v=3"></script>
+    
+    <!-- Components (must load before app.js) -->
+    <script src="assets/js/components/Header.js?v=6"></script>
+    <script src="assets/js/components/Footer.js?v=3"></script>
+    <script src="assets/js/components/AccountSidebar.js?v=1"></script>
+    <script src="assets/js/components/LocationSelectionModal.js?v=1"></script>
+    
+    <!-- Account App -->
+    <script src="assets/js/account-app.js?v=4"></script>
+</body>
+</html>
+

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nested Routes Exercise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .exercise-box {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .requirements {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #ff9800;
+            margin: 20px 0;
+        }
+        .hint {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+        .code-block {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            border: 1px solid #ddd;
+        }
+        nav {
+            background: #42b983;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 8px 15px;
+            border-radius: 3px;
+        }
+        nav a:hover, nav a.router-link-active {
+            background: rgba(255,255,255,0.2);
+        }
+        .nested-nav {
+            background: #e8f5e9;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .nested-nav a {
+            color: #42b983;
+            text-decoration: none;
+            margin: 0 10px;
+            padding: 5px 10px;
+        }
+        .nested-nav a.router-link-active {
+            background: #42b983;
+            color: white;
+            border-radius: 3px;
+        }
+        .page-content {
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            min-height: 200px;
+            background: white;
+        }
+        .nav-link {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background: #e3f2fd;
+            color: #1976d2;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .nav-link:hover {
+            background: #bbdefb;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-link">
+        <a href="index.html">← Back to Lesson 19</a>
+    </div>
+
+    <div class="exercise-box">
+        <h1>✏️ Exercise: Nested Routes for User Dashboard</h1>
+        
+        <div class="requirements">
+            <h2>📋 Requirements</h2>
+            <p><strong>Your Task:</strong> Build a user dashboard with nested routes.</p>
+            
+            <h3>Part 1: Create Parent Layout</h3>
+            <ol>
+                <li>Create a <code>/user</code> route with a UserDashboard component</li>
+                <li>The component should:
+                    <ul>
+                        <li>Display "User Dashboard" heading</li>
+                        <li>Have navigation links for child routes</li>
+                        <li>Include <code>&lt;router-view&gt;</code> for child routes</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <h3>Part 2: Create Child Routes</h3>
+            <ol>
+                <li>Create nested routes:
+                    <ul>
+                        <li><code>/user/profile</code> - UserProfile component</li>
+                        <li><code>/user/settings</code> - UserSettings component</li>
+                        <li><code>/user/orders</code> - UserOrders component</li>
+                    </ul>
+                </li>
+                <li>Each child component should display relevant content</li>
+            </ol>
+            
+            <h3>Part 3: Navigation</h3>
+            <ol>
+                <li>Add navigation links in the parent component for all child routes</li>
+                <li>Style the navigation (active link highlighting)</li>
+                <li>Test navigation between nested routes</li>
+            </ol>
+            
+            <h3>Part 4: Default Route</h3>
+            <ol>
+                <li>Set UserProfile as the default child route (empty path)</li>
+                <li>When visiting <code>/user</code>, it should show the profile</li>
+            </ol>
+            
+            <h3>Part 5: Bonus - Multiple Levels</h3>
+            <ol>
+                <li>Add a nested route under orders: <code>/user/orders/:orderId</code></li>
+                <li>Create an OrderDetail component</li>
+                <li>Display order ID from route parameter</li>
+            </ol>
+        </div>
+        
+        <div class="hint">
+            <h3>💡 Hints</h3>
+            <ul>
+                <li>Use <code>children</code> array in route definition</li>
+                <li>Child paths are relative (no leading <code>/</code>)</li>
+                <li>Parent component MUST have <code>&lt;router-view&gt;</code></li>
+                <li>Use empty path <code>''</code> for default child route</li>
+                <li>Full paths are: /user/profile, /user/settings, /user/orders</li>
+            </ul>
+        </div>
+        
+        <div class="exercise-box">
+            <h2>🎯 Your Solution Area</h2>
+            <p>Build your nested routes application below:</p>
+            
+            <div id="app">
+                <nav>
+                    <router-link to="/">Home</router-link>
+                    <router-link to="/user">User Dashboard</router-link>
+                </nav>
+                <!-- TODO: Add main navigation -->
+                <router-view></router-view>
+                <!-- TODO: Add router-view -->
+            </div>
+        </div>
+        
+        <div class="code-block">// Starter code structure
+const { createApp } = Vue;
+const { createRouter, createWebHashHistory } = VueRouter;
+
+// TODO: Create parent layout component
+const UserDashboard = {
+    template: `
+        &lt;div&gt;
+            &lt;h2&gt;User Dashboard&lt;/h2&gt;
+            &lt;!-- Navigation for child routes --&gt;
+            &lt;!-- router-view for children --&gt;
+        &lt;/div&gt;
+    `
+};
+
+// TODO: Create child components
+const UserProfile = {
+    template: `...`
+};
+
+// TODO: Define nested routes
+const routes = [
+    {
+        path: '/user',
+        component: UserDashboard,
+        children: [
+            // Your nested routes here
+        ]
+    }
+];
+
+// TODO: Create router and app
+const router = createRouter({
+    history: createWebHashHistory(),
+    routes
+});
+
+const app = createApp({});
+app.use(router);
+app.mount('#app');</div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue-router@4/dist/vue-router.global.js"></script>
+    <script>
+
+        const {createApp} = Vue;
+        const {createRouter, createWebHashHistory} = VueRouter;
+       
+
+        const UserDashboard = {
+            template: '<div>' +
+                '<h2>👤 User Dashboard</h2>' +
+                '<div class="nested-nav">' +
+                    '<router-link to="/user/profile">Profile</router-link>' +
+                    '<router-link to="/user/settings">Settings</router-link>' +
+                    '<router-link to="/user/orders">Orders</router-link>' +
+                '</div>' +
+                '<div style="margin-top: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">' +
+                    '<router-view></router-view>' +
+                '</div>' +
+            '</div>'
+        };
+
+        const UserProfile = {
+            template: '<div><h3>Profile</h3><p>This is your profile page. You can edit your personal information here.</p></div>'
+        };
+
+        const UserSettings = {
+            template: '<div><h3>Settings</h3><p>Manage your account settings, preferences, and privacy options.</p></div>'
+        };
+
+        const UserOrders = {
+            template: '<div><h3>Orders</h3><p>View your order history and track shipments.</p></div>'
+        };
+
+        const routes = [
+            { path: '/', component: { template: '<div><h2>🏠 Home</h2><p>Navigate to User Dashboard to see nested routes!</p></div>' } },
+            {
+                path: '/user',
+                component: UserDashboard,
+                children: [
+                    {path: '', component: UserProfile},
+                    {path: 'profile', component: UserProfile},
+                    {path: 'settings', component: UserSettings},
+                    {path: 'orders', component: UserOrders}
+                ]
+            }
+        ];
+
+        const router = createRouter({
+            history: createWebHashHistory(),
+            routes
+        })
+
+        
+        const app = createApp({});
+        app.use(router);
+        app.mount('#app');
+        
+        // YOUR CODE HERE
+        // 1. Create parent UserDashboard component with router-view
+        // 2. Create child components (Profile, Settings, Orders)
+        // 3. Define nested routes with children array
+        // 4. Add navigation links in parent component
+        
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+

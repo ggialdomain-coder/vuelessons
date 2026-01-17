@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Props Exercise - Product Cards with Props</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f6f9fc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        h1 {
+            color: #42b983;
+            text-align: center;
+        }
+        .hints {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .hints h3 {
+            margin-top: 0;
+            color: #ff9800;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: inline-block;
+            min-width: 250px;
+            vertical-align: top;
+        }
+        .card h3 {
+            color: #42b983;
+            margin-top: 0;
+        }
+        .card button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .card button:hover {
+            background: #35a372;
+        }
+        .price {
+            font-size: 1.5em;
+            color: #42b983;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        .products-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛍️ Product Cards with Props Exercise</h1>
+        <p style="text-align: center; color: #666;">Build ProductCard components that accept props! Pass different product data to each component.</p>
+        
+        <div class="hints">
+            <h3>📋 Requirements:</h3>
+            <ol>
+                <li>Create a ProductCard component that accepts props: <code>name</code>, <code>price</code>, and <code>description</code></li>
+                <li>Display the props in the template (name, price formatted with .toFixed(2), description)</li>
+                <li>Add a "Buy Now" button that shows an alert with the product name</li>
+                <li>Use the component with different products by passing props</li>
+                <li>Use <code>v-for</code> to display all products from the products array</li>
+            </ol>
+            
+            <h3>💡 Hints:</h3>
+            <ul>
+                <li>Define props: <code>props: ['name', 'price', 'description']</code></li>
+                <li>Use props in template: <code>{{ name }}</code>, <code>{{ price.toFixed(2) }}</code>, <code>{{ description }}</code></li>
+                <li>Pass props from parent: <code>&lt;product-card :name="product.name" :price="product.price" :description="product.description"&gt;&lt;/product-card&gt;</code></li>
+                <li>Always use <code>:</code> (v-bind) when passing dynamic values (numbers, variables)</li>
+                <li>Use <code>:key="product.id"</code> when using <code>v-for</code></li>
+                <li>Access props in methods: <code>this.name</code></li>
+            </ul>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- YOUR CODE STARTS HERE -->
+        <!-- ============================================ -->
+        
+        <div id="app">
+            <h2 style="color: #42b983; text-align: center;">Our Products</h2>
+            
+            <div class="products-container">
+            
+
+                <product-card
+                v-for="product in products"
+                :key="product.id"
+                :name="product.name"
+                :price="product.price"
+                :description="product.description"></product-card>
+                <!-- 
+                STEP 1: Use ProductCard component with props
+                After you create the component with props in the script section,
+                use it here like this:
+                
+                <product-card 
+                    :name="product1.name" 
+                    :price="product1.price" 
+                    :description="product1.description">
+                </product-card>
+                
+                Or use v-for to loop through the products array:
+                
+                <product-card 
+                    v-for="product in products" 
+                    :key="product.id"
+                    :name="product.name" 
+                    :price="product.price" 
+                    :description="product.description">
+                </product-card>
+                -->
+                
+            </div>
+        </div>
+        
+        <!-- ============================================ -->
+        <!-- YOUR CODE ENDS HERE -->
+        <!-- ============================================ -->
+    </div>
+
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        // Create the Vue app
+        const app = createApp({
+            data() {
+                return {
+                    products: [
+                        { id: 1, name: 'Vue.js Book', price: 29.99, description: 'Learn Vue.js the easy way!' },
+                        { id: 2, name: 'React Guide', price: 34.99, description: 'Master React development' },
+                        { id: 3, name: 'Angular Tutorial', price: 39.99, description: 'Complete Angular course' },
+                        { id: 4, name: 'JavaScript Mastery', price: 24.99, description: 'Advanced JavaScript concepts' },
+                        { id: 5, name: 'Node.js Handbook', price: 32.99, description: 'Build server-side applications' }
+                    ]
+                }
+            }
+        });
+
+        app.component( 'ProductCard', {
+            props: ['name', 'price', 'description'],
+            template: `
+                <div class="card">
+                    <h3>{{ name }}</h3>
+                    <p class="price">$ {{ price?.toFixed(2) }} </p>
+                    <p>{{ description }}</p>
+                    <button @click="buy">Buy Now</button>
+                </div>
+            `,
+            methods:{
+                buy() {
+                    alert(`Added ${this.name} to cart!`)
+                }
+            }
+        }
+
+        )
+        
+        // ============================================
+        // STEP 2: Create ProductCard Component with Props
+        // ============================================
+        // 
+        // Use app.component('ProductCard', { ... }) to register the component
+        // 
+        // The component needs:
+        // 1. props - Array of prop names: ['name', 'price', 'description']
+        // 2. template - HTML structure using the props:
+        //    - Product name: {{ name }}
+        //    - Price: ${{ price.toFixed(2) }}
+        //    - Description: {{ description }}
+        //    - "Buy Now" button with @click="buy"
+        //
+        // 3. methods - Object with buy() method:
+        //    {
+        //      buy() {
+        //        alert(`Added ${this.name} to cart!`);
+        //      }
+        //    }
+        //
+        // Note: You don't need data() anymore - props replace it!
+        //
+        // Example structure:
+        // app.component('ProductCard', {
+        //     props: ['name', 'price', 'description'],
+        //     template: `
+        //         <div class="card">
+        //             <h3>{{ name }}</h3>
+        //             <p class="price">${{ price.toFixed(2) }}</p>
+        //             <p>{{ description }}</p>
+        //             <button @click="buy">Buy Now</button>
+        //         </div>
+        //     `,
+        //     methods: {
+        //         buy() {
+        //             alert(`Added ${this.name} to cart!`);
+        //         }
+        //     }
+        // });
+        
+        // TODO: Write your ProductCard component with props here
+        
+        
+        // Mount the app
+        app.mount('#app');
+    </script>
+</body>
+</html>
+

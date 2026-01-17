@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 18: Route Parameters & Query Strings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .theory {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .exercise {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        .demo-box {
+            border: 2px solid #42b983;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .link-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .link-box a {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link-box a:hover {
+            text-decoration: underline;
+        }
+        nav {
+            background: #42b983;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 8px 15px;
+            border-radius: 3px;
+        }
+        nav a:hover, nav a.router-link-active {
+            background: rgba(255,255,255,0.2);
+        }
+        .page-content {
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            min-height: 200px;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Lesson 18: Route Parameters & Query Strings</h1>
+    
+    <div class="link-box">
+        <p><strong>📖 Tutorial:</strong> <a href="route-params-tutorial.html">Step-by-step Route Parameters Tutorial</a></p>
+        <p><strong>✏️ Exercise:</strong> <a href="route-params-exercise.html">Build Dynamic Routes with Parameters</a></p>
+    </div>
+    
+    <div class="theory">
+        <h2>🎓 Theory: Route Parameters & Query Strings</h2>
+        
+        <h3>Route Parameters</h3>
+        <p>Route parameters allow you to create dynamic routes. For example, <code>/user/123</code> where <code>123</code> is a parameter.</p>
+        
+        <h3>Defining Route Parameters:</h3>
+        <pre><code>const routes = [
+    { path: '/user/:id', component: User },
+    { path: '/product/:id', component: Product },
+    { path: '/post/:category/:slug', component: Post }
+];</code></pre>
+        
+        <h3>Accessing Parameters:</h3>
+        <pre><code>// In component
+export default {
+    mounted() {
+        const userId = this.$route.params.id;
+        console.log('User ID:', userId);
+    }
+}</code></pre>
+        
+        <h3>Query Strings</h3>
+        <p>Query strings are optional parameters in the URL: <code>/search?q=vue&sort=price</code></p>
+        
+        <h3>Accessing Query Strings:</h3>
+        <pre><code>// URL: /search?q=vue&sort=price
+this.$route.query.q      // 'vue'
+this.$route.query.sort   // 'price'
+this.$route.query        // { q: 'vue', sort: 'price' }</code></pre>
+        
+        <h3>Using Parameters in router-link:</h3>
+        <pre><code>&lt;router-link :to="'/user/' + userId"&gt;View User&lt;/router-link&gt;
+&lt;router-link :to="{ path: '/user', params: { id: userId }}"&gt;View User&lt;/router-link&gt;
+
+&lt;router-link :to="{ path: '/search', query: { q: 'vue', sort: 'price' }}"&gt;
+    Search
+&lt;/router-link&gt;</code></pre>
+        
+        <h3>Key Concepts:</h3>
+        <ul>
+            <li><strong>Params:</strong> Required dynamic segments in the URL path</li>
+            <li><strong>Query:</strong> Optional key-value pairs after <code>?</code></li>
+            <li><strong>$route.params:</strong> Object containing route parameters</li>
+            <li><strong>$route.query:</strong> Object containing query parameters</li>
+        </ul>
+    </div>
+
+    <div class="practice">
+        <h2>💻 Practice: Dynamic Routes</h2>
+        
+        <div id="app">
+            <nav>
+                <router-link to="/">Home</router-link>
+                <router-link to="/user/1">User 1</router-link>
+                <router-link to="/user/2">User 2</router-link>
+                <router-link to="/search?q=vue&sort=name">Search</router-link>
+            </nav>
+            
+            <div class="page-content">
+                <router-view></router-view>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>✏️ Exercise</h2>
+        <p><strong>Task:</strong> Create dynamic routes with parameters:</p>
+        <ol>
+            <li>Create a route <code>/product/:id</code> that displays product details</li>
+            <li>Create a route <code>/user/:id</code> that displays user profile</li>
+            <li>Access route parameters in components using <code>$route.params</code></li>
+            <li>Create a search page that uses query strings: <code>/search?q=term</code></li>
+            <li>Display query parameters in the search component</li>
+            <li>Add navigation links that pass parameters</li>
+        </ol>
+        <p><strong>Hint:</strong> Use <code>:paramName</code> in route path and access via <code>$route.params.paramName</code>!</p>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue-router@4/dist/vue-router.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        const { createRouter, createWebHashHistory } = VueRouter;
+        
+        const Home = {
+            template: '<div><h2>🏠 Home</h2><p>Navigate to /user/1 or /user/2 to see dynamic routes!</p></div>'
+        };
+        
+        const User = {
+            template: `
+                <div>
+                    <h2>👤 User Profile</h2>
+                    <p>User ID: {{ $route.params.id }}</p>
+                    <p>Current route: {{ $route.path }}</p>
+                </div>
+            `
+        };
+        
+        const Search = {
+            template: `
+                <div>
+                    <h2>🔍 Search</h2>
+                    <p>Search query: {{ $route.query.q || 'None' }}</p>
+                    <p>Sort by: {{ $route.query.sort || 'None' }}</p>
+                    <p>All query params: {{ JSON.stringify($route.query) }}</p>
+                </div>
+            `
+        };
+        
+        const routes = [
+            { path: '/', component: Home },
+            { path: '/user/:id', component: User },
+            { path: '/search', component: Search }
+        ];
+        
+        const router = createRouter({
+            history: createWebHashHistory(),
+            routes
+        });
+        
+        const app = createApp({});
+        app.use(router);
+        app.mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

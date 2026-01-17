@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 15: Custom Directives</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .theory {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .exercise {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        .demo-box {
+            border: 2px solid #42b983;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .link-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .link-box a {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link-box a:hover {
+            text-decoration: underline;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        input {
+            padding: 10px;
+            margin: 5px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+        .highlighted {
+            background: yellow;
+            transition: background 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Lesson 15: Custom Directives</h1>
+    
+    <div class="link-box">
+        <p><strong>📖 Tutorial:</strong> <a href="custom-directives-tutorial.html">Step-by-step Custom Directives Tutorial</a></p>
+        <p><strong>✏️ Exercise:</strong> <a href="custom-directives-exercise.html">Build Custom Directives</a></p>
+    </div>
+    
+    <div class="theory">
+        <h2>🎓 Theory: Custom Directives</h2>
+        
+        <h3>What are Custom Directives?</h3>
+        <p>Custom directives allow you to create reusable DOM manipulation logic. They're perfect for low-level DOM operations that need to be applied to multiple elements.</p>
+        
+        <h3>Why Use Custom Directives?</h3>
+        <ul>
+            <li>✅ Reusable DOM manipulation logic</li>
+            <li>✅ Direct access to DOM elements</li>
+            <li>✅ Encapsulate complex behavior</li>
+            <li>✅ Can accept values and arguments</li>
+        </ul>
+        
+        <h3>Directive Lifecycle Hooks:</h3>
+        <pre><code>// Directive definition object
+{
+    mounted(el, binding) {
+        // Called when element is inserted into DOM
+    },
+    updated(el, binding) {
+        // Called when element's parent updates
+    },
+    unmounted(el) {
+        // Called when element is removed
+    }
+}</code></pre>
+        
+        <h3>Registering Directives:</h3>
+        <h4>Global Registration:</h4>
+        <pre><code>// Register globally
+app.directive('focus', {
+    mounted(el) {
+        el.focus();
+    }
+});
+
+// Use in template
+&lt;input v-focus&gt;</code></pre>
+        
+        <h4>Local Registration:</h4>
+        <pre><code>// In component
+directives: {
+    focus: {
+        mounted(el) {
+            el.focus();
+        }
+    }
+}</code></pre>
+        
+        <h3>Directive Binding:</h3>
+        <pre><code>// v-directive="value"
+&lt;div v-highlight="'yellow'"&gt;Text&lt;/div&gt;
+
+// In directive
+mounted(el, binding) {
+    // binding.value = 'yellow'
+    // binding.arg = undefined
+    // binding.modifiers = {}
+}</code></pre>
+        
+        <h3>Common Use Cases:</h3>
+        <ul>
+            <li>✅ Auto-focus inputs (<code>v-focus</code>)</li>
+            <li>✅ Highlight text on click (<code>v-highlight</code>)</li>
+            <li>✅ Tooltips (<code>v-tooltip</code>)</li>
+            <li>✅ Click outside detection (<code>v-click-outside</code>)</li>
+            <li>✅ Infinite scroll</li>
+            <li>✅ Drag and drop</li>
+        </ul>
+        
+        <h3>Best Practices:</h3>
+        <ul>
+            <li>✅ Use directives for DOM manipulation only</li>
+            <li>✅ Clean up event listeners in <code>unmounted</code></li>
+            <li>✅ Use <code>binding.value</code> to access passed values</li>
+            <li>✅ Consider using components for complex logic instead</li>
+        </ul>
+    </div>
+
+    <div class="practice">
+        <h2>💻 Practice: Custom Directives</h2>
+        
+        <div id="app">
+            <div class="demo-box">
+                <h3>1. v-focus Directive</h3>
+                <input v-focus placeholder="This input is auto-focused">
+                <p><small>Input automatically receives focus when mounted</small></p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>2. v-highlight Directive</h3>
+                <p v-highlight="'yellow'" style="padding: 10px; cursor: pointer;">
+                    Click me to highlight!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>✏️ Exercise</h2>
+        <p><strong>Task:</strong> Create custom directives for common DOM operations:</p>
+        <ol>
+            <li>Create a <code>v-focus</code> directive that auto-focuses an input element</li>
+            <li>Create a <code>v-highlight</code> directive that highlights text when clicked</li>
+            <li>Register directives globally using <code>app.directive()</code></li>
+            <li>Use <code>mounted</code> hook for initial setup</li>
+            <li>Use <code>unmounted</code> hook to clean up event listeners</li>
+            <li>Access directive value using <code>binding.value</code></li>
+        </ol>
+        <p><strong>Hint:</strong> Use <code>el.focus()</code> for focus, and <code>el.addEventListener('click', ...)</code> for click events. Don't forget to remove event listeners in <code>unmounted</code>!</p>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        const app = createApp({
+            data() {
+                return {}
+            }
+        });
+        
+        // Register v-focus directive
+        app.directive('focus', {
+            mounted(el) {
+                el.focus();
+            }
+        });
+        
+        // Register v-highlight directive
+        app.directive('highlight', {
+            mounted(el, binding) {
+                const color = binding.value || 'yellow';
+                el.style.cursor = 'pointer';
+                el.addEventListener('click', function() {
+                    el.style.backgroundColor = color;
+                    setTimeout(() => {
+                        el.style.backgroundColor = '';
+                    }, 2000);
+                });
+            },
+            unmounted(el) {
+                // Clean up if needed
+            }
+        });
+        
+        app.mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

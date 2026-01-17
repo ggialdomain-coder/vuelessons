@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 26: Deployment & Build Tools</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .theory {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .exercise {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        .demo-box {
+            border: 2px solid #42b983;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .link-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .link-box a {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link-box a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Lesson 26: Deployment & Build Tools</h1>
+    
+    <div class="link-box">
+        <p><strong>📖 Tutorial:</strong> <a href="deployment-tutorial.html">Step-by-step Deployment Tutorial</a></p>
+        <p><strong>✏️ Exercise:</strong> <a href="deployment-exercise.html">Prepare Your App for Deployment</a></p>
+    </div>
+    
+    <div class="theory">
+        <h2>🎓 Theory: Deployment & Build Tools</h2>
+        
+        <h3>Why Build Tools?</h3>
+        <p>Build tools optimize your Vue app for production by bundling, minifying, and optimizing your code.</p>
+        
+        <h3>Popular Build Tools:</h3>
+        <ul>
+            <li><strong>Vite:</strong> Fast, modern build tool (recommended for Vue 3)</li>
+            <li><strong>Webpack:</strong> Powerful, flexible bundler</li>
+            <li><strong>Vue CLI:</strong> Official Vue.js tooling</li>
+        </ul>
+        
+        <h3>What Build Tools Do:</h3>
+        <ul>
+            <li><strong>Bundling:</strong> Combine multiple files into optimized bundles</li>
+            <li><strong>Minification:</strong> Reduce file size by removing whitespace</li>
+            <li><strong>Code Splitting:</strong> Split code into smaller chunks for faster loading</li>
+            <li><strong>Tree Shaking:</strong> Remove unused code</li>
+            <li><strong>Transpilation:</strong> Convert modern JavaScript to compatible versions</li>
+        </ul>
+        
+        <h3>Deployment Options:</h3>
+        <ul>
+            <li><strong>Netlify:</strong> Easy deployment with continuous integration</li>
+            <li><strong>Vercel:</strong> Great for static sites and serverless functions</li>
+            <li><strong>GitHub Pages:</strong> Free hosting for static sites</li>
+            <li><strong>Cloudflare Pages:</strong> Fast global CDN</li>
+            <li><strong>Traditional Hosting:</strong> Upload built files to any web server</li>
+        </ul>
+        
+        <h3>Basic Vite Setup:</h3>
+        <pre><code>npm create vue@latest my-app
+cd my-app
+npm install
+npm run dev      # Development server
+npm run build    # Build for production
+npm run preview  # Preview production build</code></pre>
+        
+        <h3>Build Output:</h3>
+        <p>After building, you'll have optimized files in a <code>dist</code> folder ready for deployment.</p>
+    </div>
+
+    <div class="practice">
+        <h2>💻 Practice: Understanding Build Process</h2>
+        
+        <div id="app">
+            <div class="demo-box">
+                <h3>Development vs Production</h3>
+                <p><strong>Development:</strong> Hot reload, detailed errors, source maps</p>
+                <p><strong>Production:</strong> Optimized, minified, smaller file sizes</p>
+                
+                <div style="margin-top: 20px;">
+                    <h4>Build Checklist:</h4>
+                    <ul>
+                        <li>✅ Remove console.log statements</li>
+                        <li>✅ Optimize images</li>
+                        <li>✅ Enable compression</li>
+                        <li>✅ Test production build locally</li>
+                        <li>✅ Configure environment variables</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>✏️ Exercise</h2>
+        <p><strong>Task:</strong> Prepare your Vue app for deployment:</p>
+        <ol>
+            <li>Learn about build tools and their purpose</li>
+            <li>Understand the build process</li>
+            <li>Identify files ready for production</li>
+            <li>Learn about deployment platforms</li>
+            <li>Prepare a checklist for deployment</li>
+        </ol>
+        <p><strong>Note:</strong> This lesson focuses on concepts. For actual building, you'll need Node.js and a build tool setup.</p>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp, ref } = Vue;
+        
+        const app = createApp({
+            setup() {
+                const checklist = ref([
+                    { id: 1, task: 'Remove console.log statements', done: false },
+                    { id: 2, task: 'Optimize images', done: false },
+                    { id: 3, task: 'Enable compression', done: false },
+                    { id: 4, task: 'Test production build locally', done: false },
+                    { id: 5, task: 'Configure environment variables', done: false }
+                ]);
+                
+                const toggleTask = (id) => {
+                    const task = checklist.value.find(t => t.id === id);
+                    if (task) {
+                        task.done = !task.done;
+                    }
+                };
+                
+                return { checklist, toggleTask };
+            }
+        });
+        
+        app.mount('#app');
+    </script>
+</body>
+</html>

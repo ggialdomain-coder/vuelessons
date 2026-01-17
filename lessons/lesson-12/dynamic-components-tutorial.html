@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a Tab System with Dynamic Components - Step by Step</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .step {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .step h2 {
+            color: #42b983;
+            border-bottom: 2px solid #42b983;
+            padding-bottom: 10px;
+        }
+        .explanation {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #42b983;
+        }
+        .code-block {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            word-wrap: break-word;
+            border: 1px solid #ddd;
+        }
+        .demo-app {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin: 20px 0;
+        }
+        .tip {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+        .tab-button {
+            background: #f0f0f0;
+            color: #333;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .tab-button:hover {
+            background: #e0e0e0;
+        }
+        .tab-button.active {
+            background: #42b983;
+            color: white;
+        }
+        .tab-content {
+            padding: 30px;
+            border: 2px solid #42b983;
+            border-radius: 5px;
+            min-height: 200px;
+            background: #f9f9f9;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <h1>📑 Building a Tab System with Dynamic Components - Step by Step Tutorial</h1>
+    <p style="font-size: 1.1em; color: #666;">Learn how to build a tab system using dynamic components! This tutorial will guide you through building exactly what you need for the exercise.</p>
+
+    <!-- STEP 1 -->
+    <div class="step">
+        <h2>Step 1: Understanding Dynamic Components</h2>
+        <div class="explanation">
+            <p><strong>Goal:</strong> Create a tab system where clicking tabs switches between different components (HomeTab, ProductsTab, ContactTab).</p>
+            <p><strong>What are Dynamic Components?</strong></p>
+            <ul>
+                <li>✅ Allow you to switch between different components dynamically</li>
+                <li>✅ Use <code>&lt;component :is="componentName"&gt;</code> syntax</li>
+                <li>✅ Perfect for tabs, modals, multi-step forms</li>
+                <li>✅ Component name comes from data property</li>
+            </ul>
+        </div>
+        
+        <div class="explanation">
+            <p><strong>How it works:</strong></p>
+            <ul>
+                <li>You have multiple components (HomeTab, ProductsTab, ContactTab)</li>
+                <li>You track which one to show in data: <code>activeTab: 'HomeTab'</code></li>
+                <li>You use <code>&lt;component :is="activeTab"&gt;</code> to render it</li>
+                <li>When you change <code>activeTab</code>, Vue automatically switches components!</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Key Concept:</strong> The <code>:is</code> attribute tells Vue which component to render. When it changes, Vue unmounts the old component and mounts the new one.
+        </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step">
+        <h2>Step 2: Create HomeTab Component</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create the HomeTab component that displays home information.</p>
+            <p><strong>Key concept:</strong> Each tab component has its own template with unique content.</p>
+        </div>
+        
+        <div class="code-block">
+const HomeTab = {
+    template: `
+        &lt;div&gt;
+            &lt;h3&gt;🏠 Home&lt;/h3&gt;
+            &lt;p&gt;Welcome to our website!&lt;/p&gt;
+            &lt;p&gt;This is the home page where you can find information about our company.&lt;/p&gt;
+            &lt;p&gt;We offer great products and excellent customer service.&lt;/p&gt;
+        &lt;/div&gt;
+    `
+};
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li>Component name: <code>HomeTab</code> (must match what we use in <code>:is</code>)</li>
+                <li>Has a <code>template</code> property with HTML content</li>
+                <li>Displays home information and welcome message</li>
+                <li>This component will be shown when <code>activeTab === 'HomeTab'</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step">
+        <h2>Step 3: Create ProductsTab Component</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create the ProductsTab component that displays a products list.</p>
+            <p><strong>Key concept:</strong> This component shows a list of products.</p>
+        </div>
+        
+        <div class="code-block">
+const ProductsTab = {
+    template: `
+        &lt;div&gt;
+            &lt;h3&gt;🛍️ Products&lt;/h3&gt;
+            &lt;ul&gt;
+                &lt;li&gt;Vue.js Book - $29.99&lt;/li&gt;
+                &lt;li&gt;JavaScript Guide - $24.99&lt;/li&gt;
+                &lt;li&gt;Web Development Course - $99.99&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    `
+};
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li>Component name: <code>ProductsTab</code></li>
+                <li>Displays a list of products with prices</li>
+                <li>Uses <code>&lt;ul&gt;</code> and <code>&lt;li&gt;</code> for the list</li>
+                <li>This component will be shown when <code>activeTab === 'ProductsTab'</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step">
+        <h2>Step 4: Create ContactTab Component</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create the ContactTab component that displays contact information.</p>
+            <p><strong>Key concept:</strong> This component shows contact details and information.</p>
+        </div>
+        
+        <div class="code-block">
+const ContactTab = {
+    template: `
+        &lt;div&gt;
+            &lt;h3&gt;📧 Contact&lt;/h3&gt;
+            &lt;p&gt;Get in touch with us!&lt;/p&gt;
+            &lt;p&gt;Email: contact@example.com&lt;/p&gt;
+            &lt;p&gt;Phone: 123-456-7890&lt;/p&gt;
+            &lt;p&gt;Address: 123 Main St, City, Country&lt;/p&gt;
+        &lt;/div&gt;
+    `
+};
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li>Component name: <code>ContactTab</code></li>
+                <li>Displays contact information (email, phone, address)</li>
+                <li>Shows how to get in touch</li>
+                <li>This component will be shown when <code>activeTab === 'ContactTab'</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step">
+        <h2>Step 5: Set Up Data Properties</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create data to track tabs and active tab.</p>
+            <p><strong>Key concept:</strong> We need an array of tab component names and a property to track which one is active.</p>
+        </div>
+        
+        <div class="code-block">
+data() {
+    return {
+        tabs: ['HomeTab', 'ProductsTab', 'ContactTab'],
+        activeTab: 'HomeTab'
+    }
+}
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>tabs</code> - Array of component names (used for buttons with v-for)</li>
+                <li>Component names must match exactly: <code>'HomeTab'</code>, <code>'ProductsTab'</code>, <code>'ContactTab'</code></li>
+                <li><code>activeTab</code> - Current active tab component name</li>
+                <li>Default is <code>'HomeTab'</code> - shows HomeTab first when page loads</li>
+                <li>When user clicks a tab button, we'll change <code>activeTab</code> to that tab's name</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step">
+        <h2>Step 6: Register Components</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Register all tab components so Vue knows about them.</p>
+            <p><strong>Key concept:</strong> Components must be registered before they can be used with <code>:is</code>.</p>
+        </div>
+        
+        <div class="code-block">
+components: {
+    HomeTab,
+    ProductsTab,
+    ContactTab
+}
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li>Register all three tab components in the <code>components</code> option</li>
+                <li>Component names in <code>components</code> must match the names in <code>tabs</code> array</li>
+                <li>Vue will use these registered components when <code>:is</code> references them</li>
+                <li>If component name doesn't match, Vue won't be able to find it!</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="step">
+        <h2>Step 7: Create Tab Buttons with v-for</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create buttons for each tab using v-for to loop through the tabs array.</p>
+            <p><strong>Key concept:</strong> Loop through tabs array and create a button for each tab, with active highlighting.</p>
+        </div>
+        
+        <div class="code-block">
+&lt;div class="tabs"&gt;
+    &lt;button 
+        v-for="tab in tabs" 
+        :key="tab"
+        :class="{ active: activeTab === tab }"
+        @click="activeTab = tab"
+        class="tab-button"&gt;
+        {{ tab }}
+    &lt;/button&gt;
+&lt;/div&gt;
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>v-for="tab in tabs"</code> - Loops through tabs array, creates a button for each tab</li>
+                <li><code>:key="tab"</code> - Required for v-for (unique identifier for each button)</li>
+                <li><code>:class="{ active: activeTab === tab }"</code> - Adds 'active' class when this tab is the active one</li>
+                <li>When <code>activeTab === tab</code> is true, the button gets the 'active' class (highlighted)</li>
+                <li><code>@click="activeTab = tab"</code> - When button clicked, sets activeTab to that tab's name</li>
+                <li><code>{{ tab }}</code> - Displays tab name on button (HomeTab, ProductsTab, ContactTab)</li>
+            </ul>
+        </div>
+
+        <div class="demo-app">
+            <h3>Live Demo (Tab Buttons):</h3>
+            <div id="demo1">
+                <div class="tabs">
+                    <button 
+                        v-for="tab in tabs" 
+                        :key="tab"
+                        :class="{ active: activeTab === tab }"
+                        @click="activeTab = tab"
+                        class="tab-button">
+                        {{ tab }}
+                    </button>
+                </div>
+                <p>Active Tab: <strong>{{ activeTab }}</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 8 -->
+    <div class="step">
+        <h2>Step 8: Add Dynamic Component</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Use <code>&lt;component :is&gt;</code> to render the active tab component.</p>
+            <p><strong>Key concept:</strong> The component changes automatically when activeTab changes.</p>
+        </div>
+        
+        <div class="code-block">
+&lt;div class="tab-content"&gt;
+    &lt;component :is="activeTab"&gt;&lt;/component&gt;
+&lt;/div&gt;
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>&lt;component :is="activeTab"&gt;</code> - Renders component based on activeTab value</li>
+                <li>When <code>activeTab = 'HomeTab'</code> → renders HomeTab component (shows home info)</li>
+                <li>When <code>activeTab = 'ProductsTab'</code> → renders ProductsTab component (shows products list)</li>
+                <li>When <code>activeTab = 'ContactTab'</code> → renders ContactTab component (shows contact info)</li>
+                <li>Vue automatically switches components when activeTab changes!</li>
+                <li>No manual DOM manipulation needed - Vue handles everything!</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Magic:</strong> When you click a tab button, <code>activeTab</code> changes, and Vue automatically unmounts the old component and mounts the new one. The content switches instantly!
+        </div>
+    </div>
+
+    <!-- STEP 9 -->
+    <div class="step">
+        <h2>Step 9: Complete Working Code</h2>
+        <p>Here's the complete code for the tab system that matches your exercise:</p>
+        
+        <div class="code-block">
+&lt;script src="https://unpkg.com/vue@3/dist/vue.global.js"&gt;&lt;/script&gt;
+
+&lt;script&gt;
+    const { createApp } = Vue;
+    
+    // Define tab components
+    const HomeTab = {
+        template: `
+            &lt;div&gt;
+                &lt;h3&gt;🏠 Home&lt;/h3&gt;
+                &lt;p&gt;Welcome to our website!&lt;/p&gt;
+                &lt;p&gt;This is the home page where you can find information about our company.&lt;/p&gt;
+                &lt;p&gt;We offer great products and excellent customer service.&lt;/p&gt;
+            &lt;/div&gt;
+        `
+    };
+    
+    const ProductsTab = {
+        template: `
+            &lt;div&gt;
+                &lt;h3&gt;🛍️ Products&lt;/h3&gt;
+                &lt;ul&gt;
+                    &lt;li&gt;Vue.js Book - $29.99&lt;/li&gt;
+                    &lt;li&gt;JavaScript Guide - $24.99&lt;/li&gt;
+                    &lt;li&gt;Web Development Course - $99.99&lt;/li&gt;
+                &lt;/ul&gt;
+            &lt;/div&gt;
+        `
+    };
+    
+    const ContactTab = {
+        template: `
+            &lt;div&gt;
+                &lt;h3&gt;📧 Contact&lt;/h3&gt;
+                &lt;p&gt;Get in touch with us!&lt;/p&gt;
+                &lt;p&gt;Email: contact@example.com&lt;/p&gt;
+                &lt;p&gt;Phone: 123-456-7890&lt;/p&gt;
+                &lt;p&gt;Address: 123 Main St, City, Country&lt;/p&gt;
+            &lt;/div&gt;
+        `
+    };
+    
+    // Create Vue app
+    const app = createApp({
+        data() {
+            return {
+                tabs: ['HomeTab', 'ProductsTab', 'ContactTab'],
+                activeTab: 'HomeTab'
+            }
+        },
+        components: {
+            HomeTab,
+            ProductsTab,
+            ContactTab
+        }
+    });
+    
+    app.mount('#app');
+&lt;/script&gt;
+
+&lt;!-- HTML --&gt;
+&lt;div id="app"&gt;
+    &lt;h2&gt;Tab System&lt;/h2&gt;
+    
+    &lt;div class="tabs"&gt;
+        &lt;button 
+            v-for="tab in tabs" 
+            :key="tab"
+            :class="{ active: activeTab === tab }"
+            @click="activeTab = tab"
+            class="tab-button"&gt;
+            {{ tab }}
+        &lt;/button&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="tab-content"&gt;
+        &lt;component :is="activeTab"&gt;&lt;/component&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- STEP 10 -->
+    <div class="step">
+        <h2>Step 10: Full Working Demo</h2>
+        <p>See the complete tab system in action:</p>
+        
+        <div class="demo-app">
+            <h3>Complete Tab System:</h3>
+            <div id="demo2">
+                <h2 style="color: #42b983; text-align: center;">Tab System</h2>
+                
+                <div class="tabs">
+                    <button 
+                        v-for="tab in tabs" 
+                        :key="tab"
+                        :class="{ active: activeTab === tab }"
+                        @click="activeTab = tab"
+                        class="tab-button">
+                        {{ tab }}
+                    </button>
+                </div>
+                
+                <div class="tab-content">
+                    <component :is="activeTab"></component>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KEY CONCEPTS -->
+    <div class="step">
+        <h2>🎓 Key Concepts You Learned</h2>
+        <div class="explanation">
+            <h3>Dynamic Components:</h3>
+            <ul>
+                <li>✅ Use <code>&lt;component :is="componentName"&gt;</code> to render components dynamically</li>
+                <li>✅ Component name comes from data property (<code>activeTab</code>)</li>
+                <li>✅ Vue automatically switches components when the name changes</li>
+                <li>✅ Perfect for tabs, modals, multi-step forms</li>
+            </ul>
+            
+            <h3>Component Registration:</h3>
+            <ul>
+                <li>✅ Register components in <code>components</code> option</li>
+                <li>✅ Component names must match what you use in <code>:is</code> and in <code>tabs</code> array</li>
+                <li>✅ Can register multiple components at once</li>
+            </ul>
+            
+            <h3>Tab System Pattern:</h3>
+            <ul>
+                <li>✅ Create array of component names: <code>tabs: ['HomeTab', 'ProductsTab', 'ContactTab']</code></li>
+                <li>✅ Track active tab: <code>activeTab: 'HomeTab'</code></li>
+                <li>✅ Use <code>v-for="tab in tabs"</code> to render tab buttons</li>
+                <li>✅ Use <code>:class="{ active: activeTab === tab }"</code> to highlight active tab</li>
+                <li>✅ Use <code>@click="activeTab = tab"</code> to switch tabs</li>
+                <li>✅ Use <code>&lt;component :is="activeTab"&gt;</code> to render active component</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Ready for the Exercise?</strong> You now have everything you need! Go to the exercise page and build your tab system. Remember:
+            <ol>
+                <li>Create three tab components: <code>HomeTab</code> (home info), <code>ProductsTab</code> (products list), <code>ContactTab</code> (contact info)</li>
+                <li>Register them in <code>components</code> option</li>
+                <li>Create <code>tabs</code> array and <code>activeTab</code> in data</li>
+                <li>Use <code>v-for</code> to render tab buttons</li>
+                <li>Use <code>:class="{ active: activeTab === tab }"</code> to highlight active tab</li>
+                <li>Use <code>&lt;component :is="activeTab"&gt;</code> to render active tab</li>
+            </ol>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        (function() {
+            function initDemos() {
+                if (typeof Vue === 'undefined') {
+                    setTimeout(initDemos, 100);
+                    return;
+                }
+                
+                const { createApp } = Vue;
+                
+                // Define components for demos
+                const HomeTab = {
+                    template: `
+                        <div>
+                            <h3>🏠 Home</h3>
+                            <p>Welcome to our website!</p>
+                            <p>This is the home page where you can find information about our company.</p>
+                            <p>We offer great products and excellent customer service.</p>
+                        </div>
+                    `
+                };
+                
+                const ProductsTab = {
+                    template: `
+                        <div>
+                            <h3>🛍️ Products</h3>
+                            <ul>
+                                <li>Vue.js Book - $29.99</li>
+                                <li>JavaScript Guide - $24.99</li>
+                                <li>Web Development Course - $99.99</li>
+                            </ul>
+                        </div>
+                    `
+                };
+                
+                const ContactTab = {
+                    template: `
+                        <div>
+                            <h3>📧 Contact</h3>
+                            <p>Get in touch with us!</p>
+                            <p>Email: contact@example.com</p>
+                            <p>Phone: 123-456-7890</p>
+                            <p>Address: 123 Main St, City, Country</p>
+                        </div>
+                    `
+                };
+                
+                // Demo 1: Tab buttons only
+                const demo1El = document.getElementById('demo1');
+                if (demo1El) {
+                    const app1 = createApp({
+                        data() {
+                            return {
+                                tabs: ['HomeTab', 'ProductsTab', 'ContactTab'],
+                                activeTab: 'HomeTab'
+                            }
+                        }
+                    });
+                    app1.mount('#demo1');
+                }
+                
+                // Demo 2: Complete tab system
+                const demo2El = document.getElementById('demo2');
+                if (demo2El) {
+                    const app2 = createApp({
+                        data() {
+                            return {
+                                tabs: ['HomeTab', 'ProductsTab', 'ContactTab'],
+                                activeTab: 'HomeTab'
+                            }
+                        },
+                        components: {
+                            HomeTab,
+                            ProductsTab,
+                            ContactTab
+                        }
+                    });
+                    app2.mount('#demo2');
+                }
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initDemos);
+            } else {
+                initDemos();
+            }
+        })();
+    </script>
+</body>
+</html>

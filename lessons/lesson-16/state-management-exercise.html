@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>State Management Exercise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .exercise-box {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .requirements {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #ff9800;
+            margin: 20px 0;
+        }
+        .hint {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+        .code-block {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            border: 1px solid #ddd;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        .component-box {
+            border: 2px solid #42b983;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .nav-link {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background: #e3f2fd;
+            color: #1976d2;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .nav-link:hover {
+            background: #bbdefb;
+        }
+        input {
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-link">
+        <a href="index.html">← Back to Lesson 16</a>
+    </div>
+
+    <div class="exercise-box">
+        <h1>✏️ Exercise: Shopping Cart with Shared State</h1>
+        
+        <div class="requirements">
+            <h2>📋 Requirements</h2>
+            <p><strong>Your Task:</strong> Build a shopping cart system using state management where multiple components share the same cart state.</p>
+            
+            <h3>Part 1: Create the Store</h3>
+            <ol>
+                <li>Create a <code>cartStore</code> object with:
+                    <ul>
+                        <li>State: <code>items</code> array and <code>total</code> number</li>
+                        <li>Method: <code>addItem(product)</code> - adds product to cart</li>
+                        <li>Method: <code>removeItem(itemId)</code> - removes item from cart</li>
+                        <li>Method: <code>clearCart()</code> - empties the cart</li>
+                        <li>Method: <code>calculateTotal()</code> - updates total price</li>
+                    </ul>
+                </li>
+                <li>Use <code>Vue.reactive()</code> for the state</li>
+            </ol>
+            
+            <h3>Part 2: Create ProductList Component</h3>
+            <ol>
+                <li>Display a list of products (at least 3 products)</li>
+                <li>Each product should show: name, price, and "Add to Cart" button</li>
+                <li>When "Add to Cart" is clicked, add the product to the store's cart</li>
+            </ol>
+            
+            <h3>Part 3: Create CartDisplay Component</h3>
+            <ol>
+                <li>Display all items in the cart from the store</li>
+                <li>Show item name, price, and "Remove" button for each item</li>
+                <li>Display the total price</li>
+                <li>Show "Clear Cart" button</li>
+                <li>Show message when cart is empty</li>
+            </ol>
+            
+            <h3>Part 4: Test the Integration</h3>
+            <ol>
+                <li>Add items from ProductList - they should appear in CartDisplay</li>
+                <li>Remove items from CartDisplay - they should disappear</li>
+                <li>Total should update automatically</li>
+                <li>Clear cart should empty everything</li>
+            </ol>
+        </div>
+        
+        <div class="hint">
+            <h3>💡 Hints</h3>
+            <ul>
+                <li>Use <code>Vue.reactive()</code> to make the store state reactive</li>
+                <li>Access store state in components via <code>data() { return { store: cartStore.state } }</code></li>
+                <li>Call store methods from component methods: <code>cartStore.addItem(product)</code></li>
+                <li>Use <code>v-for</code> to display lists</li>
+                <li>Calculate total by summing all item prices</li>
+            </ul>
+        </div>
+        
+        <div class="exercise-box">
+            <h2>🎯 Your Solution Area</h2>
+            <p>Write your code below. Start by creating the store, then the components.</p>
+            
+            <div id="app">
+                <!-- TODO: Create your components here -->
+                <div class="component-box">
+                    <h3>Product List Component</h3>
+                    <product-list></product-list>
+                    <!-- Your ProductList component here -->
+                </div>
+                
+                <div class="component-box">
+                    <h3>Cart Display Component</h3>
+                    <cart-display></cart-display>
+                    <!-- Your CartDisplay component here -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="code-block">// Starter code structure
+const { createApp, reactive } = Vue;
+
+// TODO: Create cartStore
+const cartStore = {
+    state: reactive({
+        // Your state here
+    }),
+    // Your methods here
+};
+
+// TODO: Create ProductList component
+app.component('ProductList', {
+    // Your component code
+});
+
+// TODO: Create CartDisplay component
+app.component('CartDisplay', {
+    // Your component code
+});
+
+const app = createApp({
+    data() {
+        return {
+            // Your data here
+        }
+    }
+});
+
+app.mount('#app');</div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+
+    const { createApp, reactive } = Vue;
+
+        const cartStore = {
+            state: reactive({
+                items: [],
+                total: 0
+            }),
+
+            addItem(product) {
+                this.state.items.push({
+                    id: Date.now(),
+                    name: product.name,
+                    price: product.price
+                });
+                this.calculateTotal();
+            },
+
+            removeItem(itemId) {
+                const index = this.state.items.findIndex(item => item.id === itemId);
+                if (index > -1) {
+                    this.state.items.splice(index,1);
+                    this.calculateTotal();
+                }
+            },
+
+            clearCart() {
+                this.state.items = [];
+                this.state.total = 0;
+            },
+
+            calculateTotal() {
+                this.state.total = this.state.items.reduce((sum,item) => 
+                {return sum + item.price},
+                0);
+            }
+        };
+
+        
+        // Create app
+        const app = createApp({
+            data() {
+                return {
+                    store: cartStore.state
+                }
+            }
+        });
+
+        app.component('product-list', {
+            template: '<div class="component-box">' +
+                '<h3>🛍️ Products</h3>' +
+                '<div v-for="product in products" :key="product.id" class="product-item">' +
+                    '<div>' +
+                        '<strong>{{ product.name }}</strong> - ${{ product.price }}' +
+                    '</div>' +
+                    '<button @click="addToCart(product)">Add to Cart</button>' +
+                '</div>' +
+            '</div>',
+
+            data() {
+                return {
+                    products :[
+                        {id: 1, name: 'Laptop', price: 999},
+                        {id: 2, name: 'Mouse', price: 25},
+                        {id: 3, name: 'Keyboard', price: 75},
+                        {id: 4, name: 'Monitor', price: 200}
+                    ]
+                }
+            },
+
+            methods: {
+                addToCart(product) {
+                    cartStore.addItem(product);
+                }
+            }
+        })
+
+        app.component('cart-display', {
+            template: '<div class="component-box">' +
+                '<h3>🛒 Shopping Cart</h3>' +
+                '<div v-if="store.items.length === 0">' +
+                    '<p>Cart is empty</p>' +
+                '</div>' +
+                '<div v-else>' +
+                    '<div v-for="item in store.items" :key="item.id" class="cart-item">' +
+                        '<div>{{ item.name }} - ${{ item.price }}</div>' +
+                        '<button @click="removeFromCart(item.id)">Remove</button>' +
+                    '</div>' +
+                    '<div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #ddd;">' +
+                        '<p><strong>Total: ${{ store.total }}</strong></p>' +
+                        '<button @click="clearCart">Clear Cart</button>' +
+                    '</div>' +
+                '</div>' +
+            '</div>',
+
+            data() {
+                return {
+                    store: cartStore.state
+                }
+            },
+
+            methods: {
+                removeFromCart(itemId) {
+                    cartStore.removeItem(itemId);
+                },
+                clearCart() {
+                    cartStore.clearCart();
+                }
+            }
+        })
+
+        app.mount('#app');
+        // YOUR CODE HERE
+        // Start by creating the cartStore, then build the components
+        
+    </script>
+</body>
+</html>
+

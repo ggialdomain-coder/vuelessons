@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Optimization Tutorial - Step by Step</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .step {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .step h2 {
+            color: #42b983;
+            border-bottom: 2px solid #42b983;
+            padding-bottom: 10px;
+        }
+        .explanation {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #42b983;
+        }
+        .code-block {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            word-wrap: break-word;
+            border: 1px solid #ddd;
+        }
+        .code-explanation {
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 3px solid #ffc107;
+            font-size: 0.9em;
+        }
+        .demo-app {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin: 20px 0;
+        }
+        .tip {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        .nav-link {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background: #e3f2fd;
+            color: #1976d2;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .nav-link:hover {
+            background: #bbdefb;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-link">
+        <a href="index.html">← Back to Lesson 24</a>
+    </div>
+
+    <h1>📖 Performance Optimization Tutorial - Step by Step</h1>
+    <p style="background: #e3f2fd; padding: 15px; border-radius: 5px; margin: 20px 0;">
+        <strong>Goal:</strong> Learn techniques to optimize Vue component performance. This tutorial covers v-show vs v-if, computed properties, and v-memo to prepare you for optimizing a slow component in the exercise.
+    </p>
+    
+    <div class="step">
+        <h2>Step 1: v-show vs v-if</h2>
+        <div class="explanation">
+            <p><strong>v-if</strong> removes elements from DOM. <strong>v-show</strong> hides them with CSS. Choose based on toggle frequency.</p>
+        </div>
+        
+        <div class="code-block">// v-if - Removes from DOM (expensive to toggle)
+&lt;div v-if="show"&gt;Content&lt;/div&gt;
+
+// v-show - Hides with CSS (cheap to toggle)
+&lt;div v-show="show"&gt;Content&lt;/div&gt;</div>
+        
+        <div class="code-explanation">
+            <strong>Code Explanation:</strong>
+            <ul>
+                <li><code>v-if="show"</code> - Conditionally renders element (adds/removes from DOM)</li>
+                <li>Use when: Element rarely toggles, initial render cost is high</li>
+                <li><code>v-show="show"</code> - Always renders, toggles CSS display property</li>
+                <li>Use when: Element frequently toggles, want to preserve state</li>
+                <li><strong>Rule:</strong> Frequent toggles = v-show, Rare toggles = v-if</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 2: Computed vs Methods in Templates</h2>
+        <div class="explanation">
+            <p>Use <code>computed</code> for derived data that's used in templates. Methods run every render, computed caches results.</p>
+        </div>
+        
+        <div class="code-block">// ❌ BAD - Method runs on every render
+&lt;div&gt;{{ expensiveCalculation() }}&lt;/div&gt;
+
+// ✅ GOOD - Computed caches result
+&lt;div&gt;{{ expensiveValue }}&lt;/div&gt;
+
+setup() {
+    const data = ref([1, 2, 3, 4, 5]);
+    
+    // Method - runs every time
+    const expensiveCalculation = () => {
+        return data.value.reduce((sum, n) => sum + n, 0);
+    };
+    
+    // Computed - caches result, only recalculates when data changes
+    const expensiveValue = computed(() => {
+        return data.value.reduce((sum, n) => sum + n, 0);
+    });
+    
+    return { expensiveValue };
+}</div>
+        
+        <div class="code-explanation">
+            <strong>Code Explanation:</strong>
+            <ul>
+                <li><code>expensiveCalculation()</code> - Method runs on every render (even if data didn't change)</li>
+                <li><code>computed(() => {...})</code> - Only recalculates when dependencies change</li>
+                <li>Computed properties cache results for better performance</li>
+                <li>Use computed for values derived from reactive data</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 3: Using v-memo for Expensive Lists</h2>
+        <div class="explanation">
+            <p><code>v-memo</code> memoizes list items, preventing re-renders when dependencies haven't changed.</p>
+        </div>
+        
+        <div class="code-block">&lt;div v-for="item in items" :key="item.id" v-memo="[item.id, item.name]"&gt;
+    &lt;ExpensiveComponent :item="item" /&gt;
+&lt;/div&gt;</div>
+        
+        <div class="code-explanation">
+            <strong>Code Explanation:</strong>
+            <ul>
+                <li><code>v-memo="[item.id, item.name]"</code> - Memoizes based on these values</li>
+                <li>Only re-renders item if id or name changes</li>
+                <li>Useful for expensive list items with complex rendering</li>
+                <li>Improves performance with large lists</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 4: Key Best Practices</h2>
+        <div class="explanation">
+            <h4>1. Use :key in v-for</h4>
+            <div class="code-block">// ✅ Always use :key
+&lt;div v-for="item in items" :key="item.id"&gt;...&lt;/div&gt;</div>
+            
+            <h4>2. Avoid inline functions in templates</h4>
+            <div class="code-block">// ❌ BAD
+&lt;button @click="items.push({id: Date.now()})"&gt;Add&lt;/button&gt;
+
+// ✅ GOOD
+&lt;button @click="addItem"&gt;Add&lt;/button&gt;</div>
+            
+            <h4>3. Use Object.freeze() for static data</h4>
+            <div class="code-block">const staticData = Object.freeze([
+    { id: 1, name: 'Item 1' },
+    { id: 2, name: 'Item 2' }
+]);</div>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>🎓 Key Concepts You Learned</h2>
+        <div class="explanation">
+            <ol>
+                <li><strong>v-show vs v-if:</strong> v-show for frequent toggles, v-if for rare toggles</li>
+                <li><strong>Computed:</strong> Cache derived data, only recalculate when dependencies change</li>
+                <li><strong>v-memo:</strong> Memoize expensive list items</li>
+                <li><strong>:key:</strong> Always use in v-for for better performance</li>
+                <li><strong>Avoid inline functions:</strong> Define methods instead</li>
+            </ol>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp, ref, computed } = Vue;
+        
+        const app = createApp({
+            setup() {
+                const show = ref(true);
+                const toggle = () => {
+                    show.value = !show.value;
+                };
+                return { show, toggle };
+            }
+        });
+        
+        app.mount('#demo');
+    </script>
+</body>
+</html>
+
+
+
+

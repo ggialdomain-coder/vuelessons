@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - ShopVue Header</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="test-app">
+        <header-component 
+            :cart-count="0"
+            :current-page="'home'"
+            :logo-image="''"
+        ></header-component>
+        <div style="padding: 20px;">
+            <h2>Header Test</h2>
+            <p>If you can see the header above with delivery address and login button, everything is working!</p>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="assets/js/components/Header.js"></script>
+    <script>
+        const { createApp } = Vue;
+        const app = createApp({
+            data() {
+                return {}
+            },
+            components: {
+                Header
+            }
+        });
+        app.mount('#test-app');
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

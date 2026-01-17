@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a Todo List with Lists & Keys - Step by Step</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .step {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .step h2 {
+            color: #42b983;
+            border-bottom: 2px solid #42b983;
+            padding-bottom: 10px;
+        }
+        .explanation {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #42b983;
+        }
+        .code-block {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            word-wrap: break-word;
+            border: 1px solid #ddd;
+        }
+        .demo-app {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin: 20px 0;
+        }
+        .tip {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        .warning {
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #dc3545;
+            margin: 15px 0;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        .todo-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .todo-form input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .todo-form button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .todo-list {
+            list-style: none;
+            padding: 0;
+        }
+        .todo-item {
+            background: #f9f9f9;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 2px solid #ddd;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .todo-item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+        .todo-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        .todo-item span {
+            flex: 1;
+            font-size: 16px;
+        }
+        .todo-item button {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .stats {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>✅ Building a Todo List with Lists & Keys - Step by Step Tutorial</h1>
+    <p style="font-size: 1.1em; color: #666;">Learn how to build a todo list using v-for and keys! This tutorial will guide you through building exactly what you need for the exercise.</p>
+
+    <!-- STEP 1 -->
+    <div class="step">
+        <h2>Step 1: Understanding Keys</h2>
+        <div class="explanation">
+            <p><strong>Goal:</strong> Build a todo list where you can add, delete, and toggle todos. Learn why keys are essential!</p>
+            <p><strong>What are Keys?</strong></p>
+            <ul>
+                <li>✅ Unique identifiers for list items</li>
+                <li>✅ Help Vue track which items changed</li>
+                <li>✅ Required when using <code>v-for</code></li>
+                <li>✅ Prevent bugs when list order changes</li>
+            </ul>
+        </div>
+        
+        <div class="warning">
+            <strong>⚠️ Critical Rule:</strong> Always use <code>:key</code> with <code>v-for</code>! Without keys, Vue can't properly track list items, causing bugs and performance issues.
+        </div>
+
+        <div class="explanation">
+            <p><strong>Why Keys Matter:</strong></p>
+            <ul>
+                <li>When you delete a todo, Vue needs to know which one to remove</li>
+                <li>When you reorder todos, Vue needs to track which item moved where</li>
+                <li>Keys help Vue efficiently update the DOM</li>
+                <li>Without keys, Vue might reuse the wrong DOM elements!</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step">
+        <h2>Step 2: Set Up Data Structure</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create the todos array with initial todos. Each todo needs an <code>id</code>, <code>text</code>, and <code>completed</code> status.</p>
+            <p><strong>Key concept:</strong> Each todo must have a unique <code>id</code> - this will be our key!</p>
+        </div>
+        
+        <div class="code-block">
+data() {
+    return {
+        todos: [
+            { id: 1, text: 'Learn Vue', completed: false },
+            { id: 2, text: 'Build apps', completed: false }
+        ],
+        newTodo: ''
+    }
+}
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>todos</code> - Array of todo objects</li>
+                <li>Each todo has: <code>id</code> (unique identifier), <code>text</code> (todo text), <code>completed</code> (boolean)</li>
+                <li><code>id</code> is critical - we'll use it as the key!</li>
+                <li><code>newTodo</code> - Stores the text for new todos being added</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 ID Generation:</strong> For new todos, use <code>Date.now()</code> to generate unique IDs. This ensures each todo has a unique identifier.
+        </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step">
+        <h2>Step 3: Render Todos with v-for and :key</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Use <code>v-for</code> to render todos, and always include <code>:key</code>!</p>
+            <p><strong>Key concept:</strong> The <code>:key</code> must be unique and stable (use <code>todo.id</code>, not index!).</p>
+        </div>
+        
+        <div class="code-block">
+&lt;ul class="todo-list"&gt;
+    &lt;li 
+        v-for="todo in todos" 
+        :key="todo.id"
+        class="todo-item"&gt;
+        {{ todo.text }}
+    &lt;/li&gt;
+&lt;/ul&gt;
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>v-for="todo in todos"</code> - Loops through todos array</li>
+                <li><code>:key="todo.id"</code> - <strong>CRITICAL!</strong> Uses todo's unique ID as key</li>
+                <li>Vue uses the key to track which item is which</li>
+                <li>When you delete or reorder, Vue knows exactly which DOM element to update</li>
+                <li><code>{{ todo.text }}</code> - Displays the todo text</li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Never Forget :key!</strong> Always include <code>:key="todo.id"</code> when using <code>v-for</code>. Without it, you'll get bugs when adding, deleting, or reordering items!
+        </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step">
+        <h2>Step 4: Add Checkbox with v-model and Toggle Method</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Add a checkbox to toggle todo completion. We'll use <code>v-model</code> for binding, and also create a <code>toggleTodo</code> method as required by the exercise.</p>
+            <p><strong>Key concept:</strong> Use <code>v-model</code> to bind checkbox to <code>todo.completed</code>, and add <code>:class</code> to style completed todos.</p>
+        </div>
+        
+        <div class="code-block">
+&lt;li 
+    v-for="todo in todos" 
+    :key="todo.id"
+    :class="{ completed: todo.completed }"
+    class="todo-item"&gt;
+    &lt;input 
+        type="checkbox" 
+        v-model="todo.completed"&gt;
+    &lt;span&gt;{{ todo.text }}&lt;/span&gt;
+&lt;/li&gt;
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>v-model="todo.completed"</code> - Two-way binding to todo's completed status</li>
+                <li>When checkbox is checked, <code>todo.completed</code> becomes <code>true</code></li>
+                <li>When unchecked, <code>todo.completed</code> becomes <code>false</code></li>
+                <li><code>:class="{ completed: todo.completed }"</code> - Adds 'completed' class when todo is done</li>
+                <li>This styles completed todos (line-through, opacity)</li>
+            </ul>
+        </div>
+
+        <div class="code-block">
+// Also create toggleTodo method (as required by exercise)
+methods: {
+    toggleTodo(id) {
+        const todo = this.todos.find(t => t.id === id);
+        if (todo) {
+            todo.completed = !todo.completed;
+        }
+    }
+}
+        </div>
+
+        <div class="explanation">
+            <p><strong>Note:</strong> The exercise requires a <code>toggleTodo(id)</code> method. You can use <code>v-model</code> (which automatically toggles), or call <code>@click="toggleTodo(todo.id)"</code> instead. Both work, but <code>v-model</code> is simpler!</p>
+        </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step">
+        <h2>Step 5: Add Delete Functionality</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Add a delete button and method to remove todos.</p>
+            <p><strong>Key concept:</strong> Use <code>filter()</code> to remove the todo with matching ID.</p>
+        </div>
+        
+        <div class="code-block">
+&lt;li 
+    v-for="todo in todos" 
+    :key="todo.id"
+    :class="{ completed: todo.completed }"
+    class="todo-item"&gt;
+    &lt;input type="checkbox" v-model="todo.completed"&gt;
+    &lt;span&gt;{{ todo.text }}&lt;/span&gt;
+    &lt;button @click="deleteTodo(todo.id)"&gt;Delete&lt;/button&gt;
+&lt;/li&gt;
+
+// In methods:
+deleteTodo(id) {
+    this.todos = this.todos.filter(todo => todo.id !== id);
+}
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>@click="deleteTodo(todo.id)"</code> - Calls deleteTodo with the todo's ID</li>
+                <li><code>filter()</code> - Creates new array with todos that don't match the ID</li>
+                <li><code>todo.id !== id</code> - Keeps todos whose ID doesn't match (removes the one that matches)</li>
+                <li>Because we used <code>:key="todo.id"</code>, Vue knows exactly which DOM element to remove!</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Why Keys Help Here:</strong> When you delete a todo, Vue uses the key to find the exact DOM element to remove. Without keys, Vue might remove the wrong element!
+        </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step">
+        <h2>Step 6: Add New Todo Functionality</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create a form to add new todos with unique IDs.</p>
+            <p><strong>Key concept:</strong> Generate unique IDs for new todos (use <code>Date.now()</code>).</p>
+        </div>
+        
+        <div class="code-block">
+&lt;div class="todo-form"&gt;
+    &lt;input 
+        type="text" 
+        v-model="newTodo" 
+        placeholder="Add new todo"&gt;
+    &lt;button @click="addTodo"&gt;Add&lt;/button&gt;
+&lt;/div&gt;
+
+// In methods:
+addTodo() {
+    if (this.newTodo.trim()) {
+        this.todos.push({
+            id: Date.now(),
+            text: this.newTodo,
+            completed: false
+        });
+        this.newTodo = '';
+    }
+}
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>v-model="newTodo"</code> - Binds input to newTodo data property</li>
+                <li><code>@click="addTodo"</code> - Calls addTodo method when button clicked</li>
+                <li><code>this.newTodo.trim()</code> - Checks if input is not empty (removes whitespace)</li>
+                <li><code>id: Date.now()</code> - Generates unique ID using current timestamp</li>
+                <li><code>this.todos.push()</code> - Adds new todo to the array</li>
+                <li><code>this.newTodo = ''</code> - Clears the input after adding</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Unique IDs:</strong> <code>Date.now()</code> returns milliseconds since 1970, ensuring each todo gets a unique ID. This is perfect for keys!
+        </div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="step">
+        <h2>Step 7: Add Completed Count (Computed Property)</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create a computed property to count completed todos and display stats.</p>
+            <p><strong>Key concept:</strong> Use computed property to automatically calculate completed count.</p>
+        </div>
+        
+        <div class="code-block">
+// In computed:
+computed: {
+    completedCount() {
+        return this.todos.filter(todo => todo.completed).length;
+    }
+}
+
+// In template:
+&lt;div class="stats"&gt;
+    Completed: {{ completedCount }} / Total: {{ todos.length }}
+&lt;/div&gt;
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>completedCount()</code> - Computed property that recalculates automatically</li>
+                <li><code>filter(todo => todo.completed)</code> - Gets only completed todos</li>
+                <li><code>.length</code> - Counts how many completed todos</li>
+                <li>Computed property updates automatically when todos change!</li>
+                <li>Displays "Completed: X / Total: Y" in the template</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 8 -->
+    <div class="step">
+        <h2>Step 8: Complete Working Code</h2>
+        <p>Here's the complete code for the todo list that matches your exercise:</p>
+        
+        <div class="code-block">
+&lt;script src="https://unpkg.com/vue@3/dist/vue.global.js"&gt;&lt;/script&gt;
+
+&lt;script&gt;
+    const { createApp } = Vue;
+    
+    const app = createApp({
+        data() {
+            return {
+                todos: [
+                    { id: 1, text: 'Learn Vue', completed: false },
+                    { id: 2, text: 'Build apps', completed: false }
+                ],
+                newTodo: ''
+            }
+        },
+        computed: {
+            completedCount() {
+                return this.todos.filter(todo => todo.completed).length;
+            }
+        },
+        methods: {
+            addTodo() {
+                if (this.newTodo.trim()) {
+                    this.todos.push({
+                        id: Date.now(),
+                        text: this.newTodo,
+                        completed: false
+                    });
+                    this.newTodo = '';
+                }
+            },
+            deleteTodo(id) {
+                this.todos = this.todos.filter(todo => todo.id !== id);
+            },
+            toggleTodo(id) {
+                const todo = this.todos.find(t => t.id === id);
+                if (todo) {
+                    todo.completed = !todo.completed;
+                }
+            }
+        }
+    });
+    
+    app.mount('#app');
+&lt;/script&gt;
+
+&lt;!-- HTML --&gt;
+&lt;div id="app"&gt;
+    &lt;h2&gt;My Todo List&lt;/h2&gt;
+    
+    &lt;div class="todo-form"&gt;
+        &lt;input 
+            type="text" 
+            v-model="newTodo" 
+            placeholder="Add new todo"&gt;
+        &lt;button @click="addTodo"&gt;Add&lt;/button&gt;
+    &lt;/div&gt;
+    
+    &lt;ul class="todo-list"&gt;
+        &lt;li 
+            v-for="todo in todos" 
+            :key="todo.id"
+            :class="{ completed: todo.completed }"
+            class="todo-item"&gt;
+            &lt;input type="checkbox" v-model="todo.completed"&gt;
+            &lt;span&gt;{{ todo.text }}&lt;/span&gt;
+            &lt;button @click="deleteTodo(todo.id)"&gt;Delete&lt;/button&gt;
+        &lt;/li&gt;
+    &lt;/ul&gt;
+    
+    &lt;div class="stats"&gt;
+        Completed: {{ completedCount }} / Total: {{ todos.length }}
+    &lt;/div&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- STEP 9 -->
+    <div class="step">
+        <h2>Step 9: Full Working Demo</h2>
+        <p>See the complete todo list in action:</p>
+        
+        <div class="demo-app">
+            <h3>Complete Todo List:</h3>
+            <div id="demo">
+                <h2 style="color: #42b983; text-align: center;">My Todo List</h2>
+                
+                <div class="todo-form">
+                    <input 
+                        type="text" 
+                        v-model="newTodo" 
+                        placeholder="Add new todo">
+                    <button @click="addTodo">Add</button>
+                </div>
+                
+                <ul class="todo-list">
+                    <li 
+                        v-for="todo in todos" 
+                        :key="todo.id"
+                        :class="{ completed: todo.completed }"
+                        class="todo-item">
+                        <input type="checkbox" v-model="todo.completed">
+                        <span>{{ todo.text }}</span>
+                        <button @click="deleteTodo(todo.id)">Delete</button>
+                    </li>
+                </ul>
+                
+                <div class="stats">
+                    Completed: {{ completedCount }} / Total: {{ todos.length }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KEY CONCEPTS -->
+    <div class="step">
+        <h2>🎓 Key Concepts You Learned</h2>
+        <div class="explanation">
+            <h3>Keys with v-for:</h3>
+            <ul>
+                <li>✅ Always use <code>:key</code> with <code>v-for</code></li>
+                <li>✅ Use unique, stable identifiers (like <code>id</code>)</li>
+                <li>✅ Never use <code>index</code> as key when items can be reordered</li>
+                <li>✅ Keys help Vue track which items changed</li>
+            </ul>
+            
+            <h3>List Management:</h3>
+            <ul>
+                <li>✅ Use <code>push()</code> to add items to array</li>
+                <li>✅ Use <code>filter()</code> to remove items from array</li>
+                <li>✅ Use <code>find()</code> to find specific items</li>
+                <li>✅ Always generate unique IDs for new items</li>
+            </ul>
+            
+            <h3>Todo List Pattern:</h3>
+            <ul>
+                <li>✅ Each todo has: <code>id</code>, <code>text</code>, <code>completed</code></li>
+                <li>✅ Use <code>v-for="todo in todos" :key="todo.id"</code> to render</li>
+                <li>✅ Use <code>v-model="todo.completed"</code> for checkbox binding</li>
+                <li>✅ Use <code>:class="{ completed: todo.completed }"</code> to style completed todos</li>
+                <li>✅ Use computed properties for derived data (like counts)</li>
+                <li>✅ Create methods: <code>addTodo()</code>, <code>deleteTodo(id)</code>, <code>toggleTodo(id)</code></li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Remember:</strong> Always include <code>:key="todo.id"</code> when using <code>v-for</code>! This is not optional - it's essential for Vue to work correctly with lists.
+        </div>
+
+        <div class="tip">
+            <strong>💡 Ready for the Exercise?</strong> You now have everything you need! Go to the exercise page and build your todo list. Remember:
+            <ol>
+                <li>Create todos array with id, text, completed</li>
+                <li>Use <code>v-for="todo in todos" :key="todo.id"</code> to render</li>
+                <li>Add form to create new todos (use <code>Date.now()</code> for IDs)</li>
+                <li>Add <code>addTodo()</code> method</li>
+                <li>Add <code>deleteTodo(id)</code> method with <code>filter()</code></li>
+                <li>Add <code>toggleTodo(id)</code> method with <code>find()</code></li>
+                <li>Use <code>v-model="todo.completed"</code> for checkbox</li>
+                <li>Add <code>:class="{ completed: todo.completed }"</code> for styling</li>
+                <li>Create <code>completedCount</code> computed property</li>
+                <li>Display "Completed: X / Total: Y" in stats</li>
+                <li><strong>Never forget the :key!</strong></li>
+            </ol>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        (function() {
+            function initDemo() {
+                if (typeof Vue === 'undefined') {
+                    setTimeout(initDemo, 100);
+                    return;
+                }
+                
+                const { createApp } = Vue;
+                
+                const app = createApp({
+                    data() {
+                        return {
+                            todos: [
+                                { id: 1, text: 'Learn Vue', completed: false },
+                                { id: 2, text: 'Build apps', completed: false }
+                            ],
+                            newTodo: ''
+                        }
+                    },
+                    computed: {
+                        completedCount() {
+                            return this.todos.filter(todo => todo.completed).length;
+                        }
+                    },
+                    methods: {
+                        addTodo() {
+                            if (this.newTodo.trim()) {
+                                this.todos.push({
+                                    id: Date.now(),
+                                    text: this.newTodo,
+                                    completed: false
+                                });
+                                this.newTodo = '';
+                            }
+                        },
+                        deleteTodo(id) {
+                            this.todos = this.todos.filter(todo => todo.id !== id);
+                        },
+                        toggleTodo(id) {
+                            const todo = this.todos.find(t => t.id === id);
+                            if (todo) {
+                                todo.completed = !todo.completed;
+                            }
+                        }
+                    }
+                });
+                
+                app.mount('#demo');
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initDemo);
+            } else {
+                initDemo();
+            }
+        })();
+    </script>
+</body>
+</html>

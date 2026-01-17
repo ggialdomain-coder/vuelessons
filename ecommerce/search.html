@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ShopVue - Search Results">
+    <title>ShopVue - Search Results</title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/css/main.css?v=14">
+</head>
+<body>
+    <!-- Vue App Mount Point -->
+    <div id="app">
+        <!-- Header Component -->
+        <header-component 
+            :cart-count="cartCount"
+            :current-page="currentPage"
+            :logo-image="logoImage"
+            :is-logged-in="isLoggedIn"
+            :user-email="userEmail"
+            @navigate="handleNavigate"
+            @search="handleSearch"
+            @login="handleLogin"
+            @logout="handleLogout"
+            @open-account="openAccountSidebar"
+            @change-address="handleChangeAddress"
+        ></header-component>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <h1 class="page-title">Search Results</h1>
+                <p class="page-subtitle" v-if="searchQuery">
+                    {{ resultsCount === 0 ? 'No results found for' : 'Found' }} 
+                    <strong>"{{ searchQuery }}"</strong>
+                    <span v-if="resultsCount > 0">({{ resultsCount }} {{ resultsCount === 1 ? 'result' : 'results' }})</span>
+                </p>
+                <p class="page-subtitle" v-else>
+                    Enter a search term to find products
+                </p>
+            </section>
+
+            <!-- Search Results Section -->
+            <section class="search-results-section">
+                <!-- Loading State -->
+                <div v-if="loading" class="loading">
+                    <p>Searching products...</p>
+                </div>
+
+                <!-- Error State -->
+                <div v-if="error" class="error">
+                    <p>{{ error }}</p>
+                    <button @click="performSearch" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #42b983; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                        Try Again
+                    </button>
+                </div>
+
+                <!-- Empty State (No Query) -->
+                <div v-if="!loading && !error && !searchQuery" class="search-empty">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    <h3>Start Searching</h3>
+                    <p>Use the search bar above to find products</p>
+                </div>
+
+                <!-- Empty State (No Results) -->
+                <div v-if="!loading && !error && searchQuery && resultsCount === 0" class="search-empty">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    <h3>No Results Found</h3>
+                    <p>We couldn't find any products matching "{{ searchQuery }}"</p>
+                    <p class="search-suggestions">Try searching with different keywords or browse our categories</p>
+                    <button @click="handleNavigate('products')" class="btn-primary" style="margin-top: 1rem;">
+                        Browse All Products
+                    </button>
+                </div>
+
+                <!-- Search Results Grid -->
+                <div v-if="!loading && !error && searchQuery && resultsCount > 0" class="search-results">
+                    <div class="products-grid">
+                        <product-card
+                            v-for="product in searchResults"
+                            :key="product.id"
+                            :product="product"
+                            @product-click="handleProductClick"
+                        ></product-card>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer Component -->
+        <footer-component 
+            @navigate="handleNavigate"
+            @social-click="handleSocialClick"
+        ></footer-component>
+
+        <!-- Product Modal -->
+        <product-modal
+            :show="showModal"
+            :product="selectedProduct"
+            @close="closeModal"
+            @add-to-cart="handleAddToCart"
+        ></product-modal>
+
+        <!-- Cart Sidebar -->
+        <cart-sidebar
+            :show="showCartSidebar"
+            :cart-items="cartItems"
+            @close="closeCartSidebar"
+            @update-quantity="updateQuantity"
+            @remove-item="removeCartItem"
+            @go-to-cart="goToCartPage"
+        ></cart-sidebar>
+
+        <!-- Account Sidebar -->
+        <account-sidebar
+            :show="showAccountSidebar"
+            :user-data="userData"
+            @close="closeAccountSidebar"
+            @navigate-account="handleNavigateAccount"
+            @logout="handleLogout"
+        ></account-sidebar>
+    </div>
+
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <!-- API Service (must load before components) -->
+    <script src="assets/js/services/api.js?v=3"></script>
+    
+    <!-- Components (must load before app.js) -->
+    <script src="assets/js/components/Header.js?v=6"></script>
+    <script src="assets/js/components/Footer.js?v=3"></script>
+    <script src="assets/js/components/ProductCard.js?v=2"></script>
+    <script src="assets/js/components/ProductModal.js?v=1"></script>
+    <script src="assets/js/components/CartSidebar.js?v=1"></script>
+    <script src="assets/js/components/AccountSidebar.js?v=1"></script>
+    
+    <!-- Search App -->
+    <script src="assets/js/search-app.js?v=1"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

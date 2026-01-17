@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 23: Teleport & Suspense</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .theory {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .exercise {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        .demo-box {
+            border: 2px solid #42b983;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .link-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .link-box a {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link-box a:hover {
+            text-decoration: underline;
+        }
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Lesson 23: Teleport & Suspense</h1>
+    
+    <div class="link-box">
+        <p><strong>📖 Tutorial:</strong> <a href="teleport-suspense-tutorial.html">Step-by-step Teleport & Suspense Tutorial</a></p>
+        <p><strong>✏️ Exercise:</strong> <a href="teleport-suspense-exercise.html">Build Modal with Teleport</a></p>
+    </div>
+    
+    <div class="theory">
+        <h2>🎓 Theory: Teleport & Suspense</h2>
+        
+        <h3>What is Teleport?</h3>
+        <p><code>&lt;Teleport&gt;</code> allows you to render a component's content to a different part of the DOM, outside the component's hierarchy.</p>
+        <p><strong>Use Case:</strong> Modals, tooltips, notifications that need to be at the root level.</p>
+        
+        <h3>What is Suspense?</h3>
+        <p><code>&lt;Suspense&gt;</code> allows you to show fallback content while async components are loading.</p>
+        <p><strong>Use Case:</strong> Loading states for async components or data fetching.</p>
+        
+        <h3>Teleport Syntax:</h3>
+        <pre><code>&lt;Teleport to="body"&gt;
+    &lt;div class="modal"&gt;
+        Modal content here
+    &lt;/div&gt;
+&lt;/Teleport&gt;</code></pre>
+        
+        <h3>Suspense Syntax:</h3>
+        <pre><code>&lt;Suspense&gt;
+    &lt;template #default&gt;
+        &lt;AsyncComponent /&gt;
+    &lt;/template&gt;
+    &lt;template #fallback&gt;
+        &lt;div&gt;Loading...&lt;/div&gt;
+    &lt;/template&gt;
+&lt;/Suspense&gt;</code></pre>
+    </div>
+
+    <div class="practice">
+        <h2>💻 Practice: Modal with Teleport</h2>
+        
+        <div id="app">
+            <div class="demo-box">
+                <button @click="showModal = true">Open Modal</button>
+                <teleport to="body">
+                    <div v-if="showModal" class="overlay" @click="showModal = false">
+                        <div class="modal" @click.stop>
+                            <h3>Modal Title</h3>
+                            <p>This modal is teleported to body!</p>
+                            <button @click="showModal = false">Close</button>
+                        </div>
+                    </div>
+                </teleport>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>✏️ Exercise</h2>
+        <p><strong>Task:</strong> Build a modal system using Teleport:</p>
+        <ol>
+            <li>Create a modal component</li>
+            <li>Use <code>&lt;Teleport to="body"&gt;</code> to render modal at body level</li>
+            <li>Add overlay background</li>
+            <li>Add open/close functionality</li>
+            <li>Test that modal appears outside component hierarchy</li>
+        </ol>
+        <p><strong>Hint:</strong> Use <code>to="body"</code> to teleport to body, or <code>to="#modal-container"</code> for a specific element!</p>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp, ref } = Vue;
+        
+        const app = createApp({
+            setup() {
+                const showModal = ref(false);
+                return { showModal };
+            }
+        });
+        
+        app.mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+

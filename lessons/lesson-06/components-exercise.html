@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Components Exercise - Build a Product Card</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f6f9fc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        h1 {
+            color: #42b983;
+            text-align: center;
+        }
+        .hints {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .hints h3 {
+            margin-top: 0;
+            color: #ff9800;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: inline-block;
+            min-width: 250px;
+            vertical-align: top;
+        }
+        .card h3 {
+            color: #42b983;
+            margin-top: 0;
+        }
+        .card button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .card button:hover {
+            background: #35a372;
+        }
+        .price {
+            font-size: 1.5em;
+            color: #42b983;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        .products-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛍️ Product Card Component Exercise</h1>
+        <p style="text-align: center; color: #666;">Build a reusable Product Card component! Follow the requirements below.</p>
+        
+        <div class="hints">
+            <h3>📋 Requirements:</h3>
+            <ol>
+                <li>Create a component called <code>ProductCard</code></li>
+                <li>Display product name, price, and description</li>
+                <li>Add a "Buy Now" button that shows an alert with the product name</li>
+                <li>Use the component at least 3 times</li>
+                <li>Each component instance should have its own data (remember: <code>data()</code> must be a function!)</li>
+            </ol>
+            
+            <h3>💡 Hints:</h3>
+            <ul>
+                <li>Use <code>app.component('ProductCard', { ... })</code> to register the component</li>
+                <li>Component name should be PascalCase: <code>'ProductCard'</code></li>
+                <li>Use kebab-case in template: <code>&lt;product-card&gt;&lt;/product-card&gt;</code></li>
+                <li><code>data()</code> must be a function that returns an object!</li>
+                <li>Template should include: product name (h3), price (formatted with <code>.toFixed(2)</code>), description (p), and button</li>
+                <li>Button should call a method that shows an alert</li>
+                <li>Access component data in template: <code>{{ product.name }}</code></li>
+                <li>Access component data in methods: <code>this.product.name</code></li>
+            </ul>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- YOUR CODE STARTS HERE -->
+        <!-- ============================================ -->
+        
+        <div id="app">
+            <h2 style="color: #42b983; text-align: center;">Our Products</h2>
+            
+            <div class="products-container">
+                <product-card></product-card>
+                <product-card></product-card>   
+                <product-card></product-card>
+                <product-card></product-card>
+                <!-- 
+                STEP 1: Add ProductCard components here
+                After you create the component in the script section below,
+                use it here like this:
+                
+                <product-card></product-card>
+                <product-card></product-card>
+                <product-card></product-card>
+                
+                Add at least 3 instances!
+                -->
+                
+            </div>
+        </div>
+        
+        <!-- ============================================ -->
+        <!-- YOUR CODE ENDS HERE -->
+        <!-- ============================================ -->
+    </div>
+
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        // Create the Vue app
+        const app = createApp({
+            data() {
+                return {
+                    message: 'Product Store'
+                }
+            }
+        });
+
+        app.component('ProductCard', {
+            template: `
+                <div class="card">
+                    <h3>{{ product.name }}</h2>
+                    <p class="price">$ {{ product.price.toFixed(2) }}</p>
+                    <p> {{ product.description }} </p>
+                    <button @click="buy"> Buy Now </button>
+                </div>
+            `,
+            data() {
+                return {
+                    product:{
+                        name: 'Vue.js Book',
+                        price: 29.99,
+                        description: 'Learn Vue.js',
+                    }
+                }
+            },
+            methods: {
+                buy() {
+                    alert(`Added ${this.product.name} to cart!`)
+                }
+            }
+        });
+        
+        // ============================================
+        // STEP 2: Create ProductCard Component
+        // ============================================
+        // 
+        // Use app.component('ProductCard', { ... }) to register the component
+        // 
+        // The component needs:
+        // 1. template - HTML structure with:
+        //    - Product name in <h3> tag
+        //    - Price in <p class="price"> with .toFixed(2) formatting
+        //    - Description in <p> tag
+        //    - "Buy Now" button with @click="buy"
+        //
+        // 2. data() - Function that returns an object:
+        //    {
+        //      product: {
+        //        name: 'Vue.js Book',
+        //        price: 29.99,
+        //        description: 'Learn Vue.js the easy way!'
+        //      }
+        //    }
+        //
+        // 3. methods - Object with buy() method:
+        //    {
+        //      buy() {
+        //        alert(`Added ${this.product.name} to cart!`);
+        //      }
+        //    }
+        //
+        // Example structure:
+        // app.component('ProductCard', {
+        //     template: `
+        //         <div class="card">
+        //             <h3>{{ product.name }}</h3>
+        //             <p class="price">${{ product.price.toFixed(2) }}</p>
+        //             <p>{{ product.description }}</p>
+        //             <button @click="buy">Buy Now</button>
+        //         </div>
+        //     `,
+        //     data() {
+        //         return {
+        //             product: {
+        //                 name: 'Vue.js Book',
+        //                 price: 29.99,
+        //                 description: 'Learn Vue.js the easy way!'
+        //             }
+        //         }
+        //     },
+        //     methods: {
+        //         buy() {
+        //             alert(`Added ${this.product.name} to cart!`);
+        //         }
+        //     }
+        // });
+        
+        // TODO: Write your ProductCard component here
+        
+        
+        // Mount the app
+        app.mount('#app');
+    </script>
+</body>
+</html>

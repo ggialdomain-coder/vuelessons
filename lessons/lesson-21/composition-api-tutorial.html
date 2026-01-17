@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Composition API Tutorial - Step by Step</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .step {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .step h2 {
+            color: #42b983;
+            border-bottom: 2px solid #42b983;
+            padding-bottom: 10px;
+        }
+        .explanation {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #42b983;
+        }
+        .code-block {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            word-wrap: break-word;
+            border: 1px solid #ddd;
+        }
+        .code-explanation {
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 3px solid #ffc107;
+            font-size: 0.9em;
+        }
+        .demo-app {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin: 20px 0;
+        }
+        .tip {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        .warning {
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #dc3545;
+            margin: 15px 0;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        .nav-link {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background: #e3f2fd;
+            color: #1976d2;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .nav-link:hover {
+            background: #bbdefb;
+        }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .comparison-box {
+            border: 2px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .comparison-box h4 {
+            margin-top: 0;
+            color: #42b983;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-link">
+        <a href="index.html">← Back to Lesson 21</a>
+    </div>
+
+    <h1>📖 Composition API Tutorial - Converting Options API to Composition API</h1>
+    <p style="background: #e3f2fd; padding: 15px; border-radius: 5px; margin: 20px 0;">
+        <strong>Goal:</strong> Learn how to convert Options API components to Composition API. This tutorial will teach you step-by-step conversion using the same example from your exercise.
+    </p>
+    
+    <div class="step">
+        <h2>Step 1: Understanding the Conversion Task</h2>
+        <div class="explanation">
+            <p><strong>Your Exercise Goal:</strong> Convert an Options API component to Composition API.</p>
+            <p>You'll be converting a component that has:</p>
+            <ul>
+                <li><code>data()</code> with <code>count</code> and <code>message</code></li>
+                <li><code>computed</code> property <code>doubled</code></li>
+                <li><code>methods</code> with <code>increment()</code> and <code>updateMessage()</code></li>
+            </ul>
+        </div>
+        
+        <div class="code-block">// Options API (what you need to convert)
+const app = createApp({
+    data() {
+        return {
+            count: 0,
+            message: 'Hello'
+        }
+    },
+    computed: {
+        doubled() {
+            return this.count * 2;
+        }
+    },
+    methods: {
+        increment() {
+            this.count++;
+        },
+        updateMessage(newMsg) {
+            this.message = newMsg;
+        }
+    }
+});</div>
+        
+        <div class="comparison">
+            <div class="comparison-box">
+                <h4>Options API (What You Start With)</h4>
+                <div class="code-block">data() {
+    return { count: 0 }
+},
+methods: {
+    increment() {
+        this.count++
+    }
+}</div>
+            </div>
+            <div class="comparison-box">
+                <h4>Composition API (What You Convert To)</h4>
+                <div class="code-block">setup() {
+    const count = ref(0)
+    const increment = () => {
+        count.value++
+    }
+    return { count, increment }
+}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 2: Part 1 - Create setup() Function and Convert data()</h2>
+        <div class="explanation">
+            <p><strong>Conversion Step 1:</strong> Replace <code>data()</code> with <code>setup()</code> and convert data properties to <code>ref()</code>.</p>
+        </div>
+        
+        <div class="code-block">// BEFORE (Options API)
+const app = createApp({
+    data() {
+        return {
+            count: 0,
+            message: 'Hello'
+        }
+    }
+});
+
+// AFTER (Composition API)
+const { createApp, ref } = Vue;
+
+const app = createApp({
+    setup() {
+        // Convert data() properties to ref()
+        const count = ref(0);
+        const message = ref('Hello');
+        
+        // Must return everything for template
+        return {
+            count,
+            message
+        }
+    }
+});</div>
+        
+        <div class="code-explanation">
+            <strong>Conversion Checklist:</strong>
+            <ul>
+                <li>✅ Import <code>ref</code> from Vue: <code>const { createApp, ref } = Vue</code></li>
+                <li>✅ Replace <code>data()</code> with <code>setup()</code> function</li>
+                <li>✅ Convert each data property: <code>count: 0</code> → <code>const count = ref(0)</code></li>
+                <li>✅ Convert each data property: <code>message: 'Hello'</code> → <code>const message = ref('Hello')</code></li>
+                <li>✅ Return all refs: <code>return { count, message }</code></li>
+            </ul>
+        </div>
+        
+        <div class="warning">
+            <strong>⚠️ Important:</strong> You MUST return everything you want to use in the template. If you forget to return <code>count</code> or <code>message</code>, they won't be available in your template!
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 3: Part 2 - Convert Methods</h2>
+        <div class="explanation">
+            <p><strong>Conversion Step 2:</strong> Move methods from <code>methods:</code> option into <code>setup()</code> and remove <code>this</code> keyword.</p>
+        </div>
+        
+        <div class="code-block">// BEFORE (Options API)
+const app = createApp({
+    data() {
+        return {
+            count: 0,
+            message: 'Hello'
+        }
+    },
+    methods: {
+        increment() {
+            this.count++;
+        },
+        updateMessage(newMsg) {
+            this.message = newMsg;
+        }
+    }
+});
+
+// AFTER (Composition API)
+const { createApp, ref } = Vue;
+
+const app = createApp({
+    setup() {
+        const count = ref(0);
+        const message = ref('Hello');
+        
+        // Convert methods - remove 'this' and use .value
+        const increment = () => {
+            count.value++;  // Use .value instead of this.count
+        };
+        
+        const updateMessage = (newMsg) => {
+            message.value = newMsg;  // Use .value instead of this.message
+        };
+        
+        return {
+            count,
+            message,
+            increment,      // Must return methods too!
+            updateMessage
+        }
+    }
+});</div>
+        
+        <div class="code-explanation">
+            <strong>Conversion Checklist:</strong>
+            <ul>
+                <li>✅ Move methods from <code>methods:</code> into <code>setup()</code></li>
+                <li>✅ Convert to arrow functions or regular functions: <code>const increment = () => { ... }</code></li>
+                <li>✅ Remove <code>this</code> keyword: <code>this.count</code> → <code>count.value</code></li>
+                <li>✅ Use <code>.value</code> to access ref values: <code>count.value++</code></li>
+                <li>✅ Return all methods: <code>return { increment, updateMessage }</code></li>
+            </ul>
+        </div>
+        
+        <div class="warning">
+            <strong>⚠️ Key Changes:</strong>
+            <ul>
+                <li><code>this.count++</code> → <code>count.value++</code></li>
+                <li><code>this.message = newMsg</code> → <code>message.value = newMsg</code></li>
+                <li>No <code>this</code> keyword needed in Composition API!</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 4: Part 3 - Convert Computed Properties</h2>
+        <div class="explanation">
+            <p><strong>Conversion Step 3:</strong> Convert <code>computed</code> properties to <code>computed()</code> function.</p>
+        </div>
+        
+        <div class="code-block">// BEFORE (Options API)
+const app = createApp({
+    data() {
+        return {
+            count: 0
+        }
+    },
+    computed: {
+        doubled() {
+            return this.count * 2;
+        }
+    }
+});
+
+// AFTER (Composition API)
+const { createApp, ref, computed } = Vue;
+
+const app = createApp({
+    setup() {
+        const count = ref(0);
+        
+        // Convert computed property
+        const doubled = computed(() => {
+            return count.value * 2;  // Use .value and remove 'this'
+        });
+        
+        return {
+            count,
+            doubled  // Must return computed property
+        }
+    }
+});</div>
+        
+        <div class="code-explanation">
+            <strong>Conversion Checklist:</strong>
+            <ul>
+                <li>✅ Import <code>computed</code> from Vue: <code>const { createApp, ref, computed } = Vue</code></li>
+                <li>✅ Convert computed property: <code>doubled() { ... }</code> → <code>const doubled = computed(() => { ... })</code></li>
+                <li>✅ Use arrow function syntax: <code>computed(() => { ... })</code></li>
+                <li>✅ Remove <code>this</code> and use <code>.value</code>: <code>this.count</code> → <code>count.value</code></li>
+                <li>✅ Return computed property: <code>return { doubled }</code></li>
+            </ul>
+        </div>
+        
+        <div class="tip">
+            <strong>💡 Remember:</strong> Computed properties automatically recalculate when their dependencies change, just like in Options API!
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 5: Part 4 - Complete Conversion Example</h2>
+        <div class="explanation">
+            <p><strong>Complete Solution:</strong> Here's the full conversion of your exercise component.</p>
+        </div>
+        
+        <div class="code-block">// COMPLETE CONVERSION - Options API to Composition API
+
+// BEFORE (Options API)
+const app = createApp({
+    data() {
+        return {
+            count: 0,
+            message: 'Hello'
+        }
+    },
+    computed: {
+        doubled() {
+            return this.count * 2;
+        }
+    },
+    methods: {
+        increment() {
+            this.count++;
+        },
+        updateMessage(newMsg) {
+            this.message = newMsg;
+        }
+    }
+});
+
+// AFTER (Composition API - Your Solution)
+const { createApp, ref, computed } = Vue;
+
+const app = createApp({
+    setup() {
+        // Part 1: Convert data() to ref()
+        const count = ref(0);
+        const message = ref('Hello');
+        
+        // Part 3: Convert computed property
+        const doubled = computed(() => {
+            return count.value * 2;
+        });
+        
+        // Part 2: Convert methods
+        const increment = () => {
+            count.value++;
+        };
+        
+        const updateMessage = (newMsg) => {
+            message.value = newMsg;
+        };
+        
+        // Part 4: Return everything
+        return {
+            count,
+            message,
+            doubled,
+            increment,
+            updateMessage
+        }
+    }
+});</div>
+        
+        <div class="code-explanation">
+            <strong>Complete Conversion Checklist:</strong>
+            <ol>
+                <li>✅ Import <code>ref</code> and <code>computed</code> from Vue</li>
+                <li>✅ Replace <code>data()</code> with <code>setup()</code></li>
+                <li>✅ Convert data properties: <code>count: 0</code> → <code>const count = ref(0)</code></li>
+                <li>✅ Convert computed: <code>doubled() { ... }</code> → <code>const doubled = computed(() => { ... })</code></li>
+                <li>✅ Convert methods: Remove <code>this</code>, use <code>.value</code></li>
+                <li>✅ Return everything: All refs, computed, and methods</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 6: Working Example - Your Exercise Component</h2>
+        <div class="explanation">
+            <p>Here's the complete working code for your exercise component, converted to Composition API.</p>
+        </div>
+        
+        <div class="code-block">const { createApp, ref, computed } = Vue;
+
+const app = createApp({
+    setup() {
+        // Converted from data()
+        const count = ref(0);
+        const message = ref('Hello');
+        
+        // Converted from computed
+        const doubled = computed(() => {
+            return count.value * 2;
+        });
+        
+        // Converted from methods
+        const increment = () => {
+            count.value++;
+        };
+        
+        const updateMessage = (newMsg) => {
+            message.value = newMsg;
+        };
+        
+        // Return everything for template
+        return {
+            count,
+            message,
+            doubled,
+            increment,
+            updateMessage
+        }
+    },
+    template: `
+        &lt;div&gt;
+            &lt;p&gt;Count: {{ count }}&lt;/p&gt;
+            &lt;p&gt;Doubled: {{ doubled }}&lt;/p&gt;
+            &lt;p&gt;Message: {{ message }}&lt;/p&gt;
+            &lt;button @click="increment"&gt;Increment&lt;/button&gt;
+            &lt;button @click="updateMessage('New Message')"&gt;Update Message&lt;/button&gt;
+        &lt;/div&gt;
+    `
+});
+
+app.mount('#app');</div>
+        
+        <div class="code-explanation">
+            <strong>Key Points:</strong>
+            <ul>
+                <li>All data, computed, and methods are in <code>setup()</code></li>
+                <li>Use <code>ref()</code> for primitives (count, message)</li>
+                <li>Use <code>computed()</code> for computed properties</li>
+                <li>Use <code>.value</code> to access refs in JavaScript</li>
+                <li>Return everything you need in the template</li>
+                <li>Template works exactly the same as Options API!</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 7: Live Demo - Your Exercise Component</h2>
+        <div class="demo-app">
+            <h3>Try It Out! This matches your exercise component.</h3>
+            <div id="demo">
+                <div style="padding: 20px; border: 2px solid #42b983; border-radius: 5px;">
+                    <h3>Composition API Conversion Demo</h3>
+                    <p><strong>Count:</strong> {{ count }}</p>
+                    <p><strong>Doubled:</strong> {{ doubled }}</p>
+                    <p><strong>Message:</strong> {{ message }}</p>
+                    <button @click="increment">Increment Count</button>
+                    <button @click="updateMessage('Hello Vue!')">Update Message</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 8: Key Conversion Differences</h2>
+        <div class="explanation">
+            <h4>1. data() → ref() in setup()</h4>
+            <div class="code-block">// Options API
+data() {
+    return { count: 0, message: 'Hello' }
+}
+
+// Composition API
+setup() {
+    const count = ref(0);
+    const message = ref('Hello');
+    return { count, message }  // Must return!
+}</div>
+            
+            <h4>2. methods → functions in setup()</h4>
+            <div class="code-block">// Options API
+methods: {
+    increment() {
+        this.count++
+    }
+}
+
+// Composition API
+setup() {
+    const count = ref(0);
+    const increment = () => {
+        count.value++  // No 'this', use .value
+    };
+    return { count, increment }
+}</div>
+            
+            <h4>3. computed → computed() function</h4>
+            <div class="code-block">// Options API
+computed: {
+    doubled() {
+        return this.count * 2;
+    }
+}
+
+// Composition API
+setup() {
+    const count = ref(0);
+    const doubled = computed(() => {
+        return count.value * 2;  // No 'this', use .value
+    });
+    return { count, doubled }
+}</div>
+            
+            <h4>4. Use .value for refs in JavaScript (not in template)</h4>
+            <div class="code-block">// In setup() function (JavaScript)
+count.value++        // Use .value
+message.value = 'Hi'  // Use .value
+
+// In template (HTML)
+{{ count }}           // Vue unwraps automatically
+{{ message }}         // No .value needed!</div>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>🎓 Conversion Summary - What You Need to Remember</h2>
+        <div class="explanation">
+            <h3>For Your Exercise:</h3>
+            <ol>
+                <li><strong>Import:</strong> <code>const { createApp, ref, computed } = Vue</code></li>
+                <li><strong>Replace data():</strong> Convert each property to <code>ref()</code> in <code>setup()</code></li>
+                <li><strong>Replace methods:</strong> Convert to functions, remove <code>this</code>, use <code>.value</code></li>
+                <li><strong>Replace computed:</strong> Use <code>computed(() => { ... })</code>, remove <code>this</code>, use <code>.value</code></li>
+                <li><strong>Return everything:</strong> All refs, computed, and methods must be returned</li>
+                <li><strong>No this keyword:</strong> Use variable names directly</li>
+                <li><strong>.value in JavaScript:</strong> Use <code>.value</code> to access refs in <code>setup()</code>, but NOT in template</li>
+            </ol>
+            
+            <div class="tip">
+                <strong>💡 Quick Reference:</strong>
+                <ul>
+                    <li><code>data() { return { count: 0 } }</code> → <code>const count = ref(0)</code></li>
+                    <li><code>this.count++</code> → <code>count.value++</code></li>
+                    <li><code>computed: { doubled() { return this.count * 2 } }</code> → <code>const doubled = computed(() => count.value * 2)</code></li>
+                    <li>Always return what you need: <code>return { count, doubled, increment }</code></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp, ref, computed } = Vue;
+        
+        const app = createApp({
+            setup() {
+                // Converted from data()
+                const count = ref(0);
+                const message = ref('Hello');
+                
+                // Converted from computed
+                const doubled = computed(() => {
+                    return count.value * 2;
+                });
+                
+                // Converted from methods
+                const increment = () => {
+                    count.value++;
+                };
+                
+                const updateMessage = (newMsg) => {
+                    message.value = newMsg;
+                };
+                
+                return {
+                    count,
+                    message,
+                    doubled,
+                    increment,
+                    updateMessage
+                }
+            }
+        });
+        
+        app.mount('#demo');
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route Guards Exercise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .exercise-box {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .requirements {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #ff9800;
+            margin: 20px 0;
+        }
+        .hint {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+        .code-block {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            border: 1px solid #ddd;
+        }
+        nav {
+            background: #42b983;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 8px 15px;
+            border-radius: 3px;
+        }
+        nav a:hover, nav a.router-link-active {
+            background: rgba(255,255,255,0.2);
+        }
+        .page-content {
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            min-height: 200px;
+            background: white;
+        }
+        .auth-box {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #ffc107;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        .nav-link {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background: #e3f2fd;
+            color: #1976d2;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .nav-link:hover {
+            background: #bbdefb;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-link">
+        <a href="index.html">← Back to Lesson 20</a>
+    </div>
+
+    <div class="exercise-box">
+        <h1>✏️ Exercise: Authentication with Route Guards</h1>
+        
+        <div class="requirements">
+            <h2>📋 Requirements</h2>
+            <p><strong>Your Task:</strong> Build a complete authentication system with route guards.</p>
+            
+            <h3>Part 1: Authentication Store</h3>
+            <ol>
+                <li>Create an authentication store with:
+                    <ul>
+                        <li>State: <code>isAuthenticated</code> (boolean) and <code>user</code> (object)</li>
+                        <li>Method: <code>login(user)</code> - sets authenticated to true</li>
+                        <li>Method: <code>logout()</code> - sets authenticated to false</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <h3>Part 2: Create Routes</h3>
+            <ol>
+                <li>Create routes:
+                    <ul>
+                        <li><code>/</code> - Home (public)</li>
+                        <li><code>/login</code> - Login page</li>
+                        <li><code>/dashboard</code> - Dashboard (protected, requires auth)</li>
+                        <li><code>/profile</code> - User profile (protected, requires auth)</li>
+                    </ul>
+                </li>
+                <li>Mark protected routes with <code>meta: { requiresAuth: true }</code></li>
+            </ol>
+            
+            <h3>Part 3: Global Route Guard</h3>
+            <ol>
+                <li>Add a <code>beforeEach</code> guard</li>
+                <li>Check if route requires authentication (<code>to.meta.requiresAuth</code>)</li>
+                <li>If protected and not authenticated, redirect to <code>/login</code></li>
+                <li>Otherwise, allow navigation</li>
+            </ol>
+            
+            <h3>Part 4: Login Functionality</h3>
+            <ol>
+                <li>Create a Login component with a login button</li>
+                <li>On login, call the store's login method</li>
+                <li>After login, redirect to <code>/dashboard</code></li>
+            </ol>
+            
+            <h3>Part 5: Component Guard (Bonus)</h3>
+            <ol>
+                <li>Add a <code>beforeRouteLeave</code> guard to a form component</li>
+                <li>Warn user if they have unsaved changes</li>
+                <li>Cancel navigation if user chooses to stay</li>
+            </ol>
+        </div>
+        
+        <div class="hint">
+            <h3>💡 Hints</h3>
+            <ul>
+                <li>Use <code>router.beforeEach()</code> for global guard</li>
+                <li>Check <code>to.meta.requiresAuth</code> to see if route is protected</li>
+                <li>Use <code>next('/login')</code> to redirect</li>
+                <li>Use <code>next()</code> to allow navigation</li>
+                <li>Always call <code>next()</code> in your guards!</li>
+            </ul>
+        </div>
+        
+        <div class="exercise-box">
+            <h2>🎯 Your Solution Area</h2>
+            <p>Build your authentication system with route guards below:</p>
+            
+            <div id="app">
+
+                <div class="auth-box" v-if="!authStore.isAuthenticated">
+                    <p>You are not logged in. <router-link to="/login">Login</router-link></p>
+                </div>
+
+                <div class="auth-box" v-else>
+                    <p>Welcome! You are logged in. <button @click="logout">Logout</button></p>
+                </div>
+
+                <nav>
+                    <router-link to="/">Home</router-link>
+                    <router-link to="/login">Login</router-link>
+                    <router-link to="/dashboard">Dashboard</router-link>
+                    <router-link to="/profile">Profile</router-link>
+                </nav>
+                <!-- TODO: Add authentication status display -->
+                <router-view></router-view>
+                
+                <!-- TODO: Add navigation -->
+                
+                <!-- TODO: Add router-view -->
+            </div>
+        </div>
+        
+        <div class="code-block">// Starter code structure
+const { createApp, reactive } = Vue;
+const { createRouter, createWebHashHistory } = VueRouter;
+
+// TODO: Create auth store
+const authStore = {
+    state: reactive({
+        // Your state here
+    }),
+    // Your methods here
+};
+
+// TODO: Create components
+const Login = {
+    template: `...`,
+    methods: {
+        handleLogin() {
+            // Login and redirect
+        }
+    }
+};
+
+// TODO: Define routes with meta
+const routes = [
+    { path: '/', component: Home },
+    { path: '/login', component: Login },
+    { 
+        path: '/dashboard', 
+        component: Dashboard,
+        meta: { requiresAuth: true }
+    }
+];
+
+// TODO: Create router
+const router = createRouter({
+    history: createWebHashHistory(),
+    routes
+});
+
+// TODO: Add beforeEach guard
+router.beforeEach((to, from, next) => {
+    // Your guard logic here
+});
+
+const app = createApp({});
+app.use(router);
+app.mount('#app');</div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue-router@4/dist/vue-router.global.js"></script>
+    <script>
+
+        const { createApp, reactive } = Vue;
+        const { createRouter, createWebHashHistory } = VueRouter;
+        
+
+        const authStore = {
+            state: reactive({
+                isAuthenticated: false,
+                user: null
+            }),
+
+            login(user) {
+                this.state.isAuthenticated = true;
+                this.state.user = user;
+            },
+
+            logout() {
+                this.state.isAuthenticated = false;
+                this.state.user = null;
+            }
+        }
+
+        const Home = {
+            template: '<div><h2>Home</h2><p>Welcome to the home page. Anyone can access this page.</p></div>'
+        }
+
+        const Login = {
+            template: '<div><h2>🔐 Login</h2><p>Please log in to access protected pages.</p><button @click="handleLogin">Login</button></div>',
+            methods: {
+                handleLogin () {
+                    authStore.login({
+                        name: 'john doe',
+                        email: 'john@example.com'
+                    });
+                    this.$router.push('/dashboard');
+                }
+            }
+        }
+
+        const Dashboard = {
+            template: '<div><h2>Dashboard</h2><p>Welcome to the dashboard. Only authenticated users can access this page.</p><p>Welcome, {{ authStore.user ? authStore.user.name : "Guest" }}!</p></div>',
+            data() {
+                return {
+                    authStore: authStore.state
+                }
+            }
+        }
+
+        const Profile = {
+            template: '<div><h2>Profile</h2><p>This is your profile page.</p><p v-if="authStore.user">Name: {{ authStore.user.name }}<br>Email: {{ authStore.user.email }}</p></div>',
+            data() {
+                return {
+                    authStore: authStore.state
+                }
+            }
+        }
+
+        const routes = [
+            {path: '/', component: Home },
+            {path: '/login', component: Login },
+            {
+                path: '/dashboard',
+                component: Dashboard,
+                meta: { requiresAuth: true}
+            },
+            {
+                path: '/profile',
+                component: Profile,
+                meta: { requiresAuth:true }
+            }
+        ]
+
+         const router = createRouter({
+            history: createWebHashHistory(),
+            routes
+        });
+
+        router.beforeEach((to, from,next) => {
+            if (to.meta.requiresAuth && !authStore.state.isAuthenticated){
+                next('/login');
+            } else {
+                next();
+            }
+        });
+
+ 
+
+        const app = createApp({
+            data() {
+                return {
+                    authStore: authStore.state
+                }
+            },
+            methods: {
+                logout() {
+                    authStore.logout();
+                    this.$router.push('/');
+                }
+            }
+        })
+
+        app.use(router);
+        app.mount('#app');
+
+        
+        // YOUR CODE HERE
+        // 1. Create authentication store
+        // 2. Create routes with meta fields
+        // 3. Add beforeEach guard for authentication
+        // 4. Create login component
+        // 5. Test protected routes
+        
+    </script>
+</body>
+</html>
+

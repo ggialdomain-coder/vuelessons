@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 22: Composables & Reusability</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .theory {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .exercise {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        .demo-box {
+            border: 2px solid #42b983;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .link-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .link-box a {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link-box a:hover {
+            text-decoration: underline;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Lesson 22: Composables & Reusability</h1>
+    
+    <div class="link-box">
+        <p><strong>📖 Tutorial:</strong> <a href="composables-tutorial.html">Step-by-step Composables Tutorial</a></p>
+        <p><strong>✏️ Exercise:</strong> <a href="composables-exercise.html">Create Reusable Composables</a></p>
+    </div>
+    
+    <div class="theory">
+        <h2>🎓 Theory: Composables</h2>
+        
+        <h3>What are Composables?</h3>
+        <p>Composables are reusable functions that contain reactive state and logic. They're like custom hooks that can be shared across components.</p>
+        
+        <h3>Why Use Composables?</h3>
+        <ul>
+            <li>✅ Reuse logic across multiple components</li>
+            <li>✅ Better code organization</li>
+            <li>✅ Easier to test</li>
+            <li>✅ Share stateful logic</li>
+        </ul>
+        
+        <h3>Creating a Composable:</h3>
+        <pre><code>// useCounter.js - A reusable composable
+function useCounter(initialValue = 0) {
+    const count = ref(initialValue);
+    
+    const increment = () => {
+        count.value++;
+    };
+    
+    const decrement = () => {
+        count.value--;
+    };
+    
+    return {
+        count,
+        increment,
+        decrement
+    };
+}
+
+// Use in component
+export default {
+    setup() {
+        const { count, increment, decrement } = useCounter(10);
+        return { count, increment, decrement };
+    }
+}</code></pre>
+        
+        <h3>Key Concepts:</h3>
+        <ul>
+            <li><strong>Composable Function:</strong> A function that returns reactive state and methods</li>
+            <li><strong>Naming:</strong> Usually starts with "use" (e.g., useCounter, useAuth)</li>
+            <li><strong>Reusability:</strong> Can be used in multiple components</li>
+            <li><strong>Stateful:</strong> Can contain reactive state</li>
+        </ul>
+    </div>
+
+    <div class="practice">
+        <h2>💻 Practice: Using a Counter Composable</h2>
+        
+        <div id="app">
+            <div class="demo-box">
+                <h3>Counter 1</h3>
+                <p>Count: {{ count1 }}</p>
+                <button @click="increment1">+</button>
+                <button @click="decrement1">-</button>
+            </div>
+            
+            <div class="demo-box">
+                <h3>Counter 2</h3>
+                <p>Count: {{ count2 }}</p>
+                <button @click="increment2">+</button>
+                <button @click="decrement2">-</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>✏️ Exercise</h2>
+        <p><strong>Task:</strong> Create reusable composables:</p>
+        <ol>
+            <li>Create a <code>useCounter</code> composable with count, increment, decrement</li>
+            <li>Create a <code>useToggle</code> composable for boolean state</li>
+            <li>Use both composables in a component</li>
+            <li>Test that they work independently</li>
+        </ol>
+        <p><strong>Hint:</strong> Composables are just functions that return reactive state and methods. Use them in <code>setup()</code>!</p>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp, ref } = Vue;
+        
+        // Composable function
+        function useCounter(initialValue = 0) {
+            const count = ref(initialValue);
+            
+            const increment = () => {
+                count.value++;
+            };
+            
+            const decrement = () => {
+                count.value--;
+            };
+            
+            return { count, increment, decrement };
+        }
+        
+        const app = createApp({
+            setup() {
+                // Use composable multiple times
+                const { count: count1, increment: increment1, decrement: decrement1 } = useCounter(0);
+                const { count: count2, increment: increment2, decrement: decrement2 } = useCounter(10);
+                
+                return {
+                    count1, increment1, decrement1,
+                    count2, increment2, decrement2
+                };
+            }
+        });
+        
+        app.mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Styling Exercise - Notification System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f6f9fc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        h1 {
+            color: #42b983;
+            text-align: center;
+        }
+        .hints {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .hints h3 {
+            margin-top: 0;
+            color: #ff9800;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        .notification-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .notification-controls button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .btn-success {
+            background: #4caf50;
+            color: white;
+        }
+        .btn-error {
+            background: #f44336;
+            color: white;
+        }
+        .btn-warning {
+            background: #ff9800;
+            color: white;
+        }
+        .btn-info {
+            background: #2196f3;
+            color: white;
+        }
+        .notification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .notification {
+            padding: 15px 20px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .notification-close {
+            background: rgba(255,255,255,0.3);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .notification-close:hover {
+            background: rgba(255,255,255,0.5);
+        }
+        .todo {
+            background: #fff3cd;
+            padding: 5px 10px;
+            border-radius: 3px;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Notification System Exercise</h1>
+        <p style="text-align: center; color: #666;">Build a notification system with dynamic styling! Practice using :class and :style bindings.</p>
+        
+        <div class="hints">
+            <h3>📋 Requirements:</h3>
+            <ol>
+                <li>Create a <code>notifications</code> array in data (each notification has: <code>id</code>, <code>message</code>, <code>type</code>)</li>
+                <li>Use <code>v-for</code> to render notifications (don't forget <code>:key</code>!)</li>
+                <li>Use <code>:class</code> with object syntax to apply CSS classes based on notification type</li>
+                <li>Use <code>:style</code> with object syntax to apply dynamic colors based on type</li>
+                <li>Create methods: <code>addNotification(type, message)</code> and <code>removeNotification(id)</code></li>
+                <li>Add buttons to create different notification types (success, error, warning, info)</li>
+                <li>Each notification should have a close button to dismiss it</li>
+            </ol>
+            
+            <h3>💡 Hints:</h3>
+            <ul>
+                <li>Notification types: <code>'success'</code>, <code>'error'</code>, <code>'warning'</code>, <code>'info'</code></li>
+                <li>Use <code>:class="{ success: notification.type === 'success', error: notification.type === 'error', ... }"</code></li>
+                <li>Use <code>:style="{ backgroundColor: getColor(notification.type), color: 'white' }"</code></li>
+                <li>Create a method <code>getColor(type)</code> that returns color based on type</li>
+                <li>Or use a computed property to return style objects</li>
+                <li>For IDs, use <code>Date.now()</code> or <code>Math.random()</code></li>
+                <li>To remove: <code>this.notifications = this.notifications.filter(n => n.id !== id)</code></li>
+            </ul>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- YOUR CODE STARTS HERE -->
+        <!-- ============================================ -->
+        
+        <div id="app">
+            <h2 style="color: #42b983; text-align: center;">Notification System</h2>
+           
+            <div class="notification-controls">
+                <button class="btn-success" @click="addNotification('success', 'Operation successful!')"></button>
+                <button class="btn-error" @click="addNotification('error', 'Something went wrong!')"></button>
+                <button class="btn-warning" @click="addNotification('warning', 'Please check your input!')"></button>
+                <button class="btn-info" @click="addNotification('info', 'Here is some information!')"></button>
+                <!-- TODO: Add buttons to create notifications -->
+                <!-- 
+                Steps:
+                1. Add button for each type: success, error, warning, info
+                2. Use @click="addNotification('success', 'Operation successful!')"
+                3. Repeat for other types with different messages
+                -->
+            </div>
+            
+            <div class="notification-list">
+                <div v-for="notification in notifications"
+                :key="notification.id"
+                :class="{
+                    success: notification.type === 'success',
+                    error: notification.type === 'error',
+                    info: notification.type === 'info',
+
+                }"
+
+                :style ="{
+                    backgroundColor: getColor(notification.type)
+                }"
+                class="notification">
+                {{ notification.message }}
+                <button class="notfication-close"
+                @click="removeNotification(notification.id)"></button>
+            </div>
+
+                <!-- TODO: Notification list -->
+                <!-- 
+                Steps:
+                1. Use v-for="notification in notifications" :key="notification.id"
+                2. Use :class with object syntax to apply classes based on type
+                3. Use :style to apply dynamic background colors
+                4. Display notification.message
+                5. Add close button with @click="removeNotification(notification.id)"
+                -->
+            </div>
+            
+        </div>
+        
+        <!-- ============================================ -->
+        <!-- YOUR CODE ENDS HERE -->
+        <!-- ============================================ -->
+    </div>
+
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        // Create the Vue app
+        const app = createApp({
+            data() {
+                return {
+                    notifications: []
+                }
+            },
+            methods: {
+                addNotification (type, message) {
+                    this.notifications.push({
+                        id: Date.now(),
+                        message: message,
+                        type: type
+                    })
+                },
+                removeNotification(id) {
+                    this.notifications = this.notifications.filter(n => n.id !== id);
+                },
+                getColor(type) {
+                    const colors = {
+                        sucess: '#4caf50',
+                        error: '#f44336',
+                        warning: '#ff9800',
+                        info: '#2196f3'
+                    };
+                    return colors[type] || '#666';
+                }
+                // TODO: Add addNotification(type, message) method
+                // Steps:
+                // 1. Generate unique ID (Date.now())
+                // 2. Push new notification: { id, message, type }
+                
+                // TODO: Add removeNotification(id) method
+                // Steps:
+                // 1. Filter out notification with matching id
+                
+                // TODO: Add getColor(type) method (optional, for :style)
+                // Steps:
+                // 1. Return color string based on type
+                // 2. success: '#4caf50', error: '#f44336', warning: '#ff9800', info: '#2196f3'
+            }
+        });
+        
+        // Mount the app
+        app.mount('#app');
+    </script>
+</body>
+</html>
+

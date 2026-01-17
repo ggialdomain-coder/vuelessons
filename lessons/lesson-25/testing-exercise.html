@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing Vue Components Exercise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .exercise-box {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .requirements {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #ff9800;
+            margin: 20px 0;
+        }
+        .hint {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+        .code-block {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            border: 1px solid #ddd;
+        }
+        .nav-link {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background: #e3f2fd;
+            color: #1976d2;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .nav-link:hover {
+            background: #bbdefb;
+        }
+        .test-case {
+            background: #f9f9f9;
+            padding: 10px;
+            margin: 5px 0;
+            border-left: 3px solid #42b983;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-link">
+        <a href="index.html">← Back to Lesson 25</a>
+    </div>
+
+    <div class="exercise-box">
+        <h1>✏️ Exercise: Write Test Cases for Components</h1>
+        
+        <div class="requirements">
+            <h2>📋 Requirements</h2>
+            <p><strong>Your Task:</strong> Create a test plan and manually test a component.</p>
+            
+            <h3>Part 1: Create Test Plan</h3>
+            <ol>
+                <li>List all features of the component</li>
+                <li>Write test cases for each feature</li>
+                <li>Include happy path, edge cases, and error cases</li>
+            </ol>
+            
+            <h3>Part 2: Manual Testing</h3>
+            <ol>
+                <li>Test each feature manually</li>
+                <li>Document expected vs actual results</li>
+                <li>Note any bugs found</li>
+            </ol>
+            
+            <h3>Part 3: Test Case Examples</h3>
+            <ol>
+                <li>Component renders correctly</li>
+                <li>Buttons work when clicked</li>
+                <li>Input updates component state</li>
+                <li>Props are displayed</li>
+                <li>Events are emitted</li>
+            </ol>
+        </div>
+        
+        <div class="hint">
+            <h3>💡 Hints</h3>
+            <ul>
+                <li>Think about what the component should do</li>
+                <li>Test normal usage (happy path)</li>
+                <li>Test edge cases (empty data, null values)</li>
+                <li>Test error cases (invalid input)</li>
+                <li>Document your findings</li>
+            </ul>
+        </div>
+        
+        <div class="exercise-box">
+            <h2>🎯 Your Solution Area</h2>
+            <p>Create test cases for this component:</p>
+            
+            <div id="app">
+                <div class="test-case">
+                    <h3>Counter Component</h3>
+                    <p>Count: {{ count }}</p>
+                    <button @click="increment">Increment</button>
+                    <button @click="decrement">Decrement</button>
+                    <button @click="reset">Reset</button>
+                </div>
+            </div>
+            
+            <div class="code-block">// Write your test cases here:
+
+Test Case 1: Component Renders
+- Expected: Component displays "Count: 0"
+- Actual: 
+- Pass/Fail: 
+
+Test Case 2: Increment Button
+- Expected: Clicking increment increases count by 1
+- Actual:
+- Pass/Fail:
+
+Test Case 3: Decrement Button
+- Expected: Clicking decrement decreases count by 1
+- Actual:
+- Pass/Fail:
+
+Test Case 4: Reset Button
+- Expected: Clicking reset sets count to 0
+- Actual:
+- Pass/Fail:
+
+// Add more test cases...</div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp, ref } = Vue;
+        
+        const app = createApp({
+            setup() {
+                const count = ref(0);
+                const increment = () => {
+                    count.value++;
+                };
+                const decrement = () => {
+                    count.value--;
+                };
+                const reset = () => {
+                    count.value = 0;
+                };
+                return { count, increment, decrement, reset };
+            }
+        });
+        
+        app.mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+

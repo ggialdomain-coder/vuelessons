@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 4: Event Handling & Methods</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .theory {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .exercise {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        .demo-box {
+            border: 2px solid #42b983;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Lesson 4: Event Handling & Methods</h1>
+    
+    <div class="theory">
+        <h2>🎓 Theory: Events & Methods</h2>
+        <p>In Vue, you handle events using the <code>v-on</code> directive (or <code>@</code> shorthand) and define methods in the <code>methods</code> option.</p>
+        
+        <h3>Event Handling Syntax:</h3>
+        <pre><code>&lt;button v-on:click="methodName"&gt;Click me&lt;/button&gt;
+&lt;!-- Shorthand --&gt;
+&lt;button @click="methodName"&gt;Click me&lt;/button&gt;</code></pre>
+        
+        <h3>Passing Arguments:</h3>
+        <pre><code>&lt;button @click="sayHello('John')"&gt;Say Hello&lt;/button&gt;</code></pre>
+        
+        <h3>Accessing Event Object:</h3>
+        <pre><code>&lt;button @click="handleClick"&gt;Click&lt;/button&gt;
+// In methods:
+handleClick(event) {
+    console.log(event.target);
+}</code></pre>
+        
+        <h3>Event Modifiers:</h3>
+        <ul>
+            <li><code>.stop</code> - Stop event propagation</li>
+            <li><code>.prevent</code> - Prevent default behavior</li>
+            <li><code>.once</code> - Trigger only once</li>
+            <li><code>.enter</code> - Only trigger on Enter key</li>
+        </ul>
+    </div>
+
+    <div class="practice">
+        <h2>💻 Practice: Event Handling</h2>
+        
+        <div id="app">
+            <div class="demo-box">
+                <h3>1. Simple Click Event</h3>
+                <p>Counter: {{ counter }}</p>
+                <button @click="increment">Increment</button>
+                <button @click="decrement">Decrement</button>
+            </div>
+            
+            <div class="demo-box">
+                <h3>2. Method with Parameters</h3>
+                <button @click="greet('Alice')">Greet Alice</button>
+                <button @click="greet('Bob')">Greet Bob</button>
+                <p>{{ greeting }}</p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>3. Inline Handlers</h3>
+                <button @click="counter++">Add 1</button>
+                <button @click="counter--">Subtract 1</button>
+                <p>Counter: {{ counter }}</p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>4. Event Object</h3>
+                <button @click="showEventInfo">Click me (check console!)</button>
+                <p>Last clicked: {{ lastEvent }}</p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>5. Event Modifiers</h3>
+                <form @submit.prevent="handleSubmit">
+                    <input v-model="formData" placeholder="Type and press Enter">
+                    <button type="submit">Submit</button>
+                </form>
+                <p>Submitted: {{ submitted }}</p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>6. Keyboard Events</h3>
+                <input 
+                    @keyup.enter="onEnter" 
+                    @keyup.esc="onEscape"
+                    v-model="inputText"
+                    placeholder="Press Enter or Escape">
+                <p>Last action: {{ lastAction }}</p>
+                <p>Input: {{ inputText }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>✏️ Exercise</h2>
+        <p><strong>Task:</strong> Create a simple game:</p>
+        <ol>
+            <li>Display a random number between 1-100</li>
+            <li>User can guess the number</li>
+            <li>Show "Too high", "Too low", or "Correct!"</li>
+            <li>Track number of guesses</li>
+            <li>Add a "New Game" button to reset</li>
+            <li>Prevent form submission with Enter key</li>
+        </ol>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        createApp({
+            data() {
+                return {
+                    counter: 0,
+                    greeting: '',
+                    lastEvent: '',
+                    formData: '',
+                    submitted: false,
+                    inputText: '',
+                    lastAction: ''
+                }
+            },
+            methods: {
+                increment() {
+                    this.counter++;
+                },
+                decrement() {
+                    this.counter--;
+                },
+                greet(name) {
+                    this.greeting = `Hello, ${name}!`;
+                },
+                showEventInfo(event) {
+                    this.lastEvent = `Button clicked at ${new Date().toLocaleTimeString()}`;
+                    console.log('Event object:', event);
+                    console.log('Target:', event.target);
+                },
+                handleSubmit() {
+                    this.submitted = true;
+                    alert(`Form submitted with: ${this.formData}`);
+                },
+                onEnter() {
+                    this.lastAction = 'Enter pressed';
+                },
+                onEscape() {
+                    this.lastAction = 'Escape pressed';
+                    this.inputText = '';
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+
+

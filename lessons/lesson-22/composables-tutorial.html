@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Composables Tutorial - Step by Step</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .step {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .step h2 {
+            color: #42b983;
+            border-bottom: 2px solid #42b983;
+            padding-bottom: 10px;
+        }
+        .explanation {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #42b983;
+        }
+        .code-block {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            word-wrap: break-word;
+            border: 1px solid #ddd;
+        }
+        .code-explanation {
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 3px solid #ffc107;
+            font-size: 0.9em;
+        }
+        .demo-app {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin: 20px 0;
+        }
+        .tip {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        .nav-link {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background: #e3f2fd;
+            color: #1976d2;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .nav-link:hover {
+            background: #bbdefb;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-link">
+        <a href="index.html">← Back to Lesson 22</a>
+    </div>
+
+    <h1>📖 Creating Reusable Composables - Step by Step Guide</h1>
+    <p style="background: #e3f2fd; padding: 15px; border-radius: 5px; margin: 20px 0;">
+        <strong>Goal:</strong> Learn how to create reusable composable functions that can be shared across multiple components.
+    </p>
+    
+    <div class="step">
+        <h2>Step 1: Understanding Composables</h2>
+        <div class="explanation">
+            <p><strong>Composables</strong> are reusable functions that contain reactive state and logic. They allow you to extract and share logic between components.</p>
+            <p><strong>Benefits:</strong></p>
+            <ul>
+                <li>Reuse the same logic in multiple components</li>
+                <li>Better code organization</li>
+                <li>Easier to test</li>
+                <li>Share stateful logic</li>
+            </ul>
+            <div class="tip">
+                <strong>💡 Tip:</strong> Composables follow a naming convention - they usually start with "use" (e.g., useCounter, useToggle, useAuth).
+            </div>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 2: Create a useCounter Composable</h2>
+        <div class="explanation">
+            <p>Let's create our first composable: a reusable counter that can be used in any component.</p>
+        </div>
+        
+        <div class="code-block">const { ref } = Vue;
+
+// Composable function (usually starts with "use")
+function useCounter(initialValue = 0) {
+    // Create reactive state
+    const count = ref(initialValue);
+    
+    // Define methods
+    const increment = () => {
+        count.value++;
+    };
+    
+    const decrement = () => {
+        count.value--;
+    };
+    
+    const reset = () => {
+        count.value = initialValue;
+    };
+    
+    // Return everything to use in component
+    return {
+        count,
+        increment,
+        decrement,
+        reset
+    };
+}</div>
+        
+        <div class="code-explanation">
+            <strong>Code Explanation:</strong>
+            <ul>
+                <li><code>function useCounter(initialValue = 0)</code> - Composable function with optional parameter (defaults to 0)</li>
+                <li><code>const count = ref(initialValue)</code> - Creates reactive state with the initial value</li>
+                <li><code>increment()</code>, <code>decrement()</code>, <code>reset()</code> - Methods that modify the state</li>
+                <li><code>count.value++</code> - Use <code>.value</code> when modifying refs in JavaScript</li>
+                <li><code>return { count, increment, decrement, reset }</code> - Returns everything the component needs</li>
+                <li>Naming convention: Composables usually start with "use" (e.g., useCounter, useAuth)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 3: Using the Composable in a Component</h2>
+        <div class="explanation">
+            <p>Now let's use the composable in your component's <code>setup()</code> function.</p>
+        </div>
+        
+        <div class="code-block">const app = createApp({
+    setup() {
+        // Use the composable
+        const { count, increment, decrement, reset } = useCounter(10);
+        
+        // Return to use in template
+        return {
+            count,
+            increment,
+            decrement,
+            reset
+        }
+    }
+});</div>
+        
+        <div class="code-explanation">
+            <strong>Code Explanation:</strong>
+            <ul>
+                <li><code>const { count, increment, ... } = useCounter(10)</code> - Destructures the returned object</li>
+                <li><code>useCounter(10)</code> - Calls composable with initial value of 10</li>
+                <li>Each component gets its own independent state</li>
+                <li>Must return everything you want to use in the template</li>
+                <li>In templates, Vue automatically unwraps refs (no .value needed)</li>
+            </ul>
+        </div>
+        
+        <div class="tip">
+            <strong>Remember:</strong> You must return all values from setup() that you want to use in the template!
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 4: Using Composables Multiple Times</h2>
+        <div class="explanation">
+            <p>You can use the same composable multiple times in one component, each with its own independent state.</p>
+        </div>
+        
+        <div class="code-block">const app = createApp({
+    setup() {
+        // First counter
+        const { count: count1, increment: increment1, decrement: decrement1 } = useCounter(0);
+        
+        // Second counter (independent state)
+        const { count: count2, increment: increment2, decrement: decrement2 } = useCounter(10);
+        
+        return {
+            count1, increment1, decrement1,
+            count2, increment2, decrement2
+        }
+    }
+});</div>
+        
+        <div class="code-explanation">
+            <strong>Code Explanation:</strong>
+            <ul>
+                <li><code>count: count1</code> - Renames count to count1 when destructuring</li>
+                <li><code>increment: increment1</code> - Renames increment to increment1</li>
+                <li>Each call to <code>useCounter()</code> creates independent state</li>
+                <li>Both counters work independently - changing one doesn't affect the other</li>
+                <li>This is why composables are powerful - one function, multiple independent instances!</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 5: Create a useToggle Composable</h2>
+        <div class="explanation">
+            <p>Let's create another composable for toggling boolean values (useful for modals, dropdowns, etc.).</p>
+        </div>
+        
+        <div class="code-block">function useToggle(initialValue = false) {
+    const isOpen = ref(initialValue);
+    
+    const toggle = () => {
+        isOpen.value = !isOpen.value;
+    };
+    
+    const open = () => {
+        isOpen.value = true;
+    };
+    
+    const close = () => {
+        isOpen.value = false;
+    };
+    
+    return {
+        isOpen,
+        toggle,
+        open,
+        close
+    };
+}</div>
+        
+        <div class="code-explanation">
+            <strong>Code Explanation:</strong>
+            <ul>
+                <li><code>useToggle(initialValue = false)</code> - Starts with false by default</li>
+                <li><code>const isOpen = ref(false)</code> - Reactive boolean state</li>
+                <li><code>toggle()</code> - Switches between true/false using <code>!isOpen.value</code></li>
+                <li><code>open()</code> - Sets to true</li>
+                <li><code>close()</code> - Sets to false</li>
+                <li>Useful for modals, dropdowns, accordions, showing/hiding elements, etc.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 6: Using Multiple Composables</h2>
+        <div class="explanation">
+            <p>You can use multiple composables in the same component. They work independently!</p>
+        </div>
+        
+        <div class="code-block">const app = createApp({
+    setup() {
+        // Use counter composable
+        const { count, increment, decrement, reset } = useCounter(0);
+        
+        // Use toggle composable
+        const { isOpen, toggle, open, close } = useToggle(false);
+        
+        return {
+            count,
+            increment,
+            decrement,
+            reset,
+            isOpen,
+            toggle,
+            open,
+            close
+        }
+    }
+});</div>
+        
+        <div class="code-explanation">
+            <strong>Code Explanation:</strong>
+            <ul>
+                <li>You can use multiple composables in the same component</li>
+                <li>Each composable provides its own state and methods</li>
+                <li>They work independently - the counter and toggle don't interfere with each other</li>
+                <li>Return all of them to use in template</li>
+                <li>This is the power of composables - mix and match reusable logic!</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 7: Live Demo - Multiple Composables</h2>
+        <div class="demo-app">
+            <h3>Try It Out!</h3>
+            <p>See both composables working together:</p>
+            <div id="demo">
+                <div style="padding: 20px; border: 2px solid #42b983; border-radius: 5px; margin: 10px 0;">
+                    <h3>Counter Composable</h3>
+                    <p>Count: {{ count }}</p>
+                    <button @click="increment">+</button>
+                    <button @click="decrement">-</button>
+                    <button @click="reset">Reset</button>
+                </div>
+                
+                <div style="padding: 20px; border: 2px solid #42b983; border-radius: 5px; margin: 10px 0;">
+                    <h3>Toggle Composable</h3>
+                    <p>Status: <strong>{{ isOpen ? 'Open' : 'Closed' }}</strong></p>
+                    <button @click="toggle">Toggle</button>
+                    <button @click="open">Open</button>
+                    <button @click="close">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 8: Common Composable Patterns</h2>
+        <div class="explanation">
+            <p>Here are some common patterns you might use:</p>
+            
+            <h4>Pattern 1: useMouse (Track mouse position)</h4>
+            <div class="code-block">function useMouse() {
+    const x = ref(0);
+    const y = ref(0);
+    
+    const updatePosition = (e) => {
+        x.value = e.clientX;
+        y.value = e.clientY;
+    };
+    
+    // Add event listener in onMounted
+    onMounted(() => {
+        window.addEventListener('mousemove', updatePosition);
+    });
+    
+    // Clean up in onUnmounted
+    onUnmounted(() => {
+        window.removeEventListener('mousemove', updatePosition);
+    });
+    
+    return { x, y };
+}</div>
+            
+            <h4>Pattern 2: useLocalStorage (Persist data)</h4>
+            <div class="code-block">function useLocalStorage(key, initialValue) {
+    const stored = localStorage.getItem(key);
+    const value = ref(stored ? JSON.parse(stored) : initialValue);
+    
+    const setValue = (newValue) => {
+        value.value = newValue;
+        localStorage.setItem(key, JSON.stringify(newValue));
+    };
+    
+    return { value, setValue };
+}</div>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>🎓 Key Concepts You Learned</h2>
+        <div class="explanation">
+            <ol>
+                <li><strong>Composables:</strong> Reusable functions that return reactive state and methods</li>
+                <li><strong>Naming:</strong> Usually start with "use" (useCounter, useToggle)</li>
+                <li><strong>Reusability:</strong> Can be used in multiple components</li>
+                <li><strong>Independent State:</strong> Each use creates separate state</li>
+                <li><strong>Return:</strong> Must return what you want to use in components</li>
+                <li><strong>Multiple Composables:</strong> Can use many composables in one component</li>
+                <li><strong>.value:</strong> Use when accessing/modifying refs in JavaScript, not in templates</li>
+            </ol>
+        </div>
+        
+        <div class="tip">
+            <strong>Next Steps:</strong> Now that you understand composables, try the <a href="composables-exercise.html">exercise</a> to practice creating your own!
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp, ref } = Vue;
+        
+        function useCounter(initialValue = 0) {
+            const count = ref(initialValue);
+            
+            const increment = () => {
+                count.value++;
+            };
+            
+            const decrement = () => {
+                count.value--;
+            };
+            
+            const reset = () => {
+                count.value = initialValue;
+            };
+            
+            return { count, increment, decrement, reset };
+        }
+        
+        function useToggle(initialValue = false) {
+            const isOpen = ref(initialValue);
+            
+            const toggle = () => {
+                isOpen.value = !isOpen.value;
+            };
+            
+            const open = () => {
+                isOpen.value = true;
+            };
+            
+            const close = () => {
+                isOpen.value = false;
+            };
+            
+            return { isOpen, toggle, open, close };
+        }
+        
+        const app = createApp({
+            setup() {
+                const { count, increment, decrement, reset } = useCounter(0);
+                const { isOpen, toggle, open, close } = useToggle(false);
+                
+                return {
+                    count,
+                    increment,
+                    decrement,
+                    reset,
+                    isOpen,
+                    toggle,
+                    open,
+                    close
+                };
+            }
+        });
+        
+        app.mount('#demo');
+    </script>
+</body>
+</html>

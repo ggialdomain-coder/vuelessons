@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deployment Exercise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .exercise-box {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .requirements {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #ff9800;
+            margin: 20px 0;
+        }
+        .hint {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+        .code-block {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            border: 1px solid #ddd;
+        }
+        .nav-link {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background: #e3f2fd;
+            color: #1976d2;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .nav-link:hover {
+            background: #bbdefb;
+        }
+        .checklist-item {
+            background: #f9f9f9;
+            padding: 10px;
+            margin: 5px 0;
+            border-left: 3px solid #42b983;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-link">
+        <a href="index.html">← Back to Lesson 26</a>
+    </div>
+
+    <div class="exercise-box">
+        <h1>✏️ Exercise: Prepare Your App for Deployment</h1>
+        
+        <div class="requirements">
+            <h2>📋 Requirements</h2>
+            <p><strong>Your Task:</strong> Prepare a Vue component for production deployment by identifying and fixing issues.</p>
+            
+            <h3>Part 1: Identify Production Issues</h3>
+            <ol>
+                <li>Find all <code>console.log()</code> statements</li>
+                <li>Find debug code and comments</li>
+                <li>Identify unoptimized code</li>
+                <li>Check for development-only code</li>
+            </ol>
+            
+            <h3>Part 2: Create Pre-Deployment Checklist</h3>
+            <ol>
+                <li>Create a checklist of items to verify</li>
+                <li>Mark items as complete when done</li>
+                <li>Document any issues found</li>
+                <li>Plan deployment strategy</li>
+            </ol>
+            
+            <h3>Part 3: Environment Configuration</h3>
+            <ol>
+                <li>Identify hardcoded values</li>
+                <li>Create environment variable list</li>
+                <li>Document API endpoints</li>
+                <li>Prepare configuration for production</li>
+            </ol>
+        </div>
+        
+        <div class="hint">
+            <h3>💡 Hints</h3>
+            <ul>
+                <li>Look for <code>console.log()</code>, <code>debugger</code>, and TODO comments</li>
+                <li>Check for hardcoded URLs and API endpoints</li>
+                <li>Verify all features work correctly</li>
+                <li>Optimize images and assets</li>
+                <li>Test in different browsers</li>
+            </ul>
+        </div>
+        
+        <div class="exercise-box">
+            <h2>🎯 Your Solution Area</h2>
+            <p>Review this component and prepare it for deployment:</p>
+            
+            <div id="app">
+                <div class="exercise-box">
+                    <h3>Todo App Component</h3>
+                    <div style="margin: 20px 0;">
+                        <input 
+                            v-model="newTodo" 
+                            @keyup.enter="addTodo"
+                            placeholder="Add a todo..."
+                            style="padding: 8px; width: 300px; margin-right: 10px;"
+                        />
+                        <button @click="addTodo">Add Todo</button>
+                    </div>
+                    <ul style="list-style: none; padding: 0;">
+                        <li 
+                            v-for="(todo, index) in todos" 
+                            :key="index"
+                            class="checklist-item"
+                        >
+                            <input 
+                                type="checkbox" 
+                                :checked="todo.done"
+                                @change="toggleTodo(index)"
+                            />
+                            <span :style="{ textDecoration: todo.done ? 'line-through' : 'none' }">
+                                {{ todo.text }}
+                            </span>
+                            <button @click="removeTodo(index)" style="margin-left: auto; background: #f44336; font-size: 12px; padding: 5px 10px;">
+                                Remove
+                            </button>
+                        </li>
+                    </ul>
+                    <p style="margin-top: 20px;">
+                        <strong>Total:</strong> {{ todos.length }} | 
+                        <strong>Completed:</strong> {{ completedCount }} | 
+                        <strong>Remaining:</strong> {{ remainingCount }}
+                    </p>
+                </div>
+            </div>
+            
+            <div class="code-block">// TODO: Review this code and identify issues:
+
+const { createApp, ref, computed } = Vue;
+
+// Debug: Check initial state
+console.log('App initialized');
+
+const app = createApp({
+    setup() {
+        // TODO: Move this to environment variable
+        const API_URL = 'http://localhost:3000/api';
+        
+        const todos = ref([
+            { text: 'Learn Vue.js', done: false },
+            { text: 'Build an app', done: false }
+        ]);
+        
+        const newTodo = ref('');
+        
+        // Debug function - remove in production
+        console.log('Current todos:', todos.value);
+        
+        const addTodo = () => {
+            if (newTodo.value.trim()) {
+                todos.value.push({
+                    text: newTodo.value,
+                    done: false
+                });
+                newTodo.value = '';
+                console.log('Todo added'); // Remove this
+            }
+        };
+        
+        const toggleTodo = (index) => {
+            todos.value[index].done = !todos.value[index].done;
+            console.log('Todo toggled:', todos.value[index]); // Remove this
+        };
+        
+        const removeTodo = (index) => {
+            todos.value.splice(index, 1);
+            console.log('Todo removed'); // Remove this
+        };
+        
+        // Computed properties
+        const completedCount = computed(() => {
+            return todos.value.filter(t => t.done).length;
+        });
+        
+        const remainingCount = computed(() => {
+            return todos.value.filter(t => !t.done).length;
+        });
+        
+        // Debug
+        console.log('Component setup complete');
+        
+        return {
+            todos,
+            newTodo,
+            addTodo,
+            toggleTodo,
+            removeTodo,
+            completedCount,
+            remainingCount
+        };
+    }
+});
+
+app.mount('#app');
+
+// Your Task: Identify and document all issues above
+// 1. Console.log statements:
+//    - Line X: ...
+//    - Line Y: ...
+//
+// 2. TODO comments:
+//    - Line X: ...
+//
+// 3. Hardcoded values:
+//    - Line X: ...
+//
+// 4. Other issues:
+//    - ...</div>
+            
+            <div class="exercise-box" style="margin-top: 30px;">
+                <h3>📝 Pre-Deployment Checklist</h3>
+                <div id="checklist-app">
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check1" />
+                        <label for="check1">Remove all console.log() statements</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check2" />
+                        <label for="check2">Remove debugger statements</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check3" />
+                        <label for="check3">Remove TODO comments</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check4" />
+                        <label for="check4">Replace hardcoded URLs with environment variables</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check5" />
+                        <label for="check5">Test all features work correctly</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check6" />
+                        <label for="check6">Optimize images and assets</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check7" />
+                        <label for="check7">Test in different browsers</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check8" />
+                        <label for="check8">Verify responsive design on mobile</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check9" />
+                        <label for="check9">Check for accessibility issues</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check10" />
+                        <label for="check10">Prepare deployment configuration</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp, ref, computed } = Vue;
+
+        // TODO: Review this code and identify issues
+        // Debug: Check initial state
+        console.log('App initialized');
+
+        const app = createApp({
+            setup() {
+                // TODO: Move this to environment variable
+                const API_URL = 'http://localhost:3000/api';
+                
+                const todos = ref([
+                    { text: 'Learn Vue.js', done: false },
+                    { text: 'Build an app', done: false }
+                ]);
+                
+                const newTodo = ref('');
+                
+                // Debug function - remove in production
+                console.log('Current todos:', todos.value);
+                
+                const addTodo = () => {
+                    if (newTodo.value.trim()) {
+                        todos.value.push({
+                            text: newTodo.value,
+                            done: false
+                        });
+                        newTodo.value = '';
+                        console.log('Todo added'); // Remove this
+                    }
+                };
+                
+                const toggleTodo = (index) => {
+                    todos.value[index].done = !todos.value[index].done;
+                    console.log('Todo toggled:', todos.value[index]); // Remove this
+                };
+                
+                const removeTodo = (index) => {
+                    todos.value.splice(index, 1);
+                    console.log('Todo removed'); // Remove this
+                };
+                
+                // Computed properties
+                const completedCount = computed(() => {
+                    return todos.value.filter(t => t.done).length;
+                });
+                
+                const remainingCount = computed(() => {
+                    return todos.value.filter(t => !t.done).length;
+                });
+                
+                // Debug
+                console.log('Component setup complete');
+                
+                return {
+                    todos,
+                    newTodo,
+                    addTodo,
+                    toggleTodo,
+                    removeTodo,
+                    completedCount,
+                    remainingCount
+                };
+            }
+        });
+        
+        app.mount('#app');
+    </script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ShopVue - Shopping Cart">
+    <title>ShopVue - Cart</title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/css/main.css?v=14">
+</head>
+<body>
+    <!-- Vue App Mount Point -->
+    <div id="app">
+        <!-- Header Component -->
+        <header-component 
+            :cart-count="cartCount"
+            :current-page="currentPage"
+            :logo-image="logoImage"
+            :is-logged-in="isLoggedIn"
+            :user-email="userEmail"
+            @navigate="handleNavigate"
+            @search="handleSearch"
+            @login="handleLogin"
+            @logout="handleLogout"
+            @open-account="openAccountSidebar"
+            @change-address="handleChangeAddress"
+        ></header-component>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <h1 class="page-title">Shopping Cart</h1>
+                <p class="page-subtitle">Review your items before checkout</p>
+            </section>
+
+            <!-- Cart Section -->
+            <section class="cart-section">
+                <div v-if="cartItems.length === 0" class="cart-empty">
+                    <h2>Your cart is empty</h2>
+                    <p>Add some products to your cart to get started!</p>
+                    <button @click="handleNavigate('products')" class="btn-primary">
+                        Continue Shopping
+                    </button>
+                </div>
+
+                <div v-else class="cart-container">
+                    <!-- Cart Items -->
+                    <div class="cart-items-section">
+                        <div class="cart-header">
+                            <h2>Cart Items ({{ cartItems.length }})</h2>
+                            <button @click="clearCart" class="btn-clear-cart">Clear Cart</button>
+                        </div>
+
+                        <div class="cart-items-list">
+                            <div 
+                                v-for="item in cartItems" 
+                                :key="item.id" 
+                                class="cart-item-row"
+                            >
+                                <div class="cart-item-image">
+                                    <img :src="item.image" :alt="item.name" @error="handleImageError">
+                                </div>
+                                <div class="cart-item-info">
+                                    <h3 class="cart-item-name">{{ item.name }}</h3>
+                                    <div class="cart-item-price">{{ formatPrice(item.price) }} KWD</div>
+                                </div>
+                                <div class="cart-item-quantity">
+                                    <label>Quantity:</label>
+                                    <div class="qty-controls">
+                                        <button @click="updateQuantity(item, item.quantity - 1)" class="qty-btn">-</button>
+                                        <input 
+                                            type="number" 
+                                            :value="item.quantity" 
+                                            @change="updateQuantity(item, parseInt($event.target.value) || 1)"
+                                            min="1"
+                                            class="qty-input"
+                                        >
+                                        <button @click="updateQuantity(item, item.quantity + 1)" class="qty-btn">+</button>
+                                    </div>
+                                </div>
+                                <div class="cart-item-total">
+                                    <span class="item-total-label">Total:</span>
+                                    <span class="item-total-value">{{ formatPrice(item.price * item.quantity) }} KWD</span>
+                                </div>
+                                <button @click="removeItem(item)" class="cart-item-remove" aria-label="Remove">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cart Summary -->
+                    <div class="cart-summary">
+                        <h3>Order Summary</h3>
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span>{{ formatPrice(subtotal) }} KWD</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Tax (10%):</span>
+                            <span>{{ formatPrice(tax) }} KWD</span>
+                        </div>
+                        <div class="summary-divider"></div>
+                        <div class="summary-row summary-total">
+                            <span>Total:</span>
+                            <span>{{ formatPrice(total) }} KWD</span>
+                        </div>
+                        <button @click="proceedToCheckout" class="btn-checkout">
+                            Proceed to Checkout
+                        </button>
+                        <button @click="handleNavigate('products')" class="btn-continue-shopping">
+                            Continue Shopping
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer Component -->
+        <footer-component 
+            @navigate="handleNavigate"
+            @social-click="handleSocialClick"
+        ></footer-component>
+
+        <!-- Account Sidebar -->
+        <account-sidebar
+            :show="showAccountSidebar"
+            :user-data="userData"
+            @close="closeAccountSidebar"
+            @navigate-account="handleNavigateAccount"
+            @logout="handleLogout"
+        ></account-sidebar>
+    </div>
+
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <!-- API Service (must load before components) -->
+    <script src="assets/js/services/api.js?v=3"></script>
+    
+    <!-- Components (must load before app.js) -->
+    <script src="assets/js/components/Header.js?v=6"></script>
+    <script src="assets/js/components/Footer.js?v=3"></script>
+    <script src="assets/js/components/AccountSidebar.js?v=1"></script>
+    
+    <!-- Cart App -->
+    <script src="assets/js/cart-app.js?v=2"></script>
+</body>
+</html>
+

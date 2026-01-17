@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>State Management Tutorial - Step by Step</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .step {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .step h2 {
+            color: #42b983;
+            border-bottom: 2px solid #42b983;
+            padding-bottom: 10px;
+        }
+        .explanation {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #42b983;
+        }
+        .code-block {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            word-wrap: break-word;
+            border: 1px solid #ddd;
+        }
+        .demo-app {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin: 20px 0;
+        }
+        .tip {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        .warning {
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #dc3545;
+            margin: 15px 0;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        .demo-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #42b983;
+            border-radius: 8px;
+        }
+        .demo-section h3 {
+            color: #42b983;
+            margin-top: 0;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        .component-box {
+            border: 2px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .product-item {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cart-item {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-link {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background: #e3f2fd;
+            color: #1976d2;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .nav-link:hover {
+            background: #bbdefb;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-link">
+        <a href="index.html">← Back to Lesson 16</a>
+    </div>
+
+    <h1>📖 Building a Shopping Cart with State Management</h1>
+    <p style="background: #e3f2fd; padding: 15px; border-radius: 5px; margin: 20px 0;">
+        <strong>Goal:</strong> Build a shopping cart system where ProductList and CartDisplay components share the same cart state using a store.
+    </p>
+    
+    <div class="step">
+        <h2>Step 1: Understanding the Problem</h2>
+        <div class="explanation">
+            <p><strong>Challenge:</strong> We need two components to share the same shopping cart data:</p>
+            <ul>
+                <li><strong>ProductList</strong> - displays products and adds them to cart</li>
+                <li><strong>CartDisplay</strong> - shows cart items and allows removal</li>
+            </ul>
+            <p>When you add an item in ProductList, it should immediately appear in CartDisplay. This requires shared state!</p>
+        </div>
+        
+        <div class="code-block">// Without state management - components can't share data
+&lt;ProductList /&gt;  // Has its own cart
+&lt;CartDisplay /&gt;   // Has its own cart (different!)
+
+// With state management - both use the same store
+&lt;ProductList /&gt;  // Uses cartStore
+&lt;CartDisplay /&gt;  // Uses cartStore (same data!)</div>
+    </div>
+
+    <div class="step">
+        <h2>Step 2: Create the Cart Store - Part 1 (State)</h2>
+        <div class="explanation">
+            <p>First, create the store structure with reactive state. We need:</p>
+            <ul>
+                <li><code>items</code> - array to store cart items</li>
+                <li><code>total</code> - number to store total price</li>
+            </ul>
+        </div>
+        
+        <div class="code-block">const { reactive } = Vue;
+
+// Create the cart store
+const cartStore = {
+    // State - reactive data that components will share
+    state: reactive({
+        items: [],    // Array of cart items
+        total: 0      // Total price of all items
+    })
+};</div>
+        
+        <div class="tip">
+            <strong>💡 Important:</strong> <code>reactive()</code> makes the state reactive, so Vue automatically updates all components when the state changes!
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 3: Create the Cart Store - Part 2 (Methods)</h2>
+        <div class="explanation">
+            <p>Now add methods to update the cart state. We need:</p>
+            <ul>
+                <li><code>addItem(product)</code> - adds a product to cart</li>
+                <li><code>removeItem(itemId)</code> - removes an item from cart</li>
+                <li><code>clearCart()</code> - empties the cart</li>
+                <li><code>calculateTotal()</code> - calculates and updates total price</li>
+            </ul>
+        </div>
+        
+        <div class="code-block">const cartStore = {
+    state: reactive({
+        items: [],
+        total: 0
+    }),
+    
+    // Add product to cart
+    addItem(product) {
+        this.state.items.push({
+            id: Date.now(),  // Unique ID for each item
+            name: product.name,
+            price: product.price
+        });
+        this.calculateTotal();  // Update total after adding
+    },
+    
+    // Remove item from cart
+    removeItem(itemId) {
+        const index = this.state.items.findIndex(item => item.id === itemId);
+        if (index > -1) {
+            this.state.items.splice(index, 1);
+            this.calculateTotal();  // Update total after removing
+        }
+    },
+    
+    // Clear all items from cart
+    clearCart() {
+        this.state.items = [];
+        this.state.total = 0;
+    },
+    
+    // Calculate total price
+    calculateTotal() {
+        this.state.total = this.state.items.reduce((sum, item) => {
+            return sum + item.price;
+        }, 0);
+    }
+};</div>
+        
+        <div class="tip">
+            <strong>💡 Note:</strong> We use <code>this.state</code> to access the state, and always call <code>calculateTotal()</code> after adding or removing items.
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 4: Create ProductList Component</h2>
+        <div class="explanation">
+            <p>Create a component that displays products and adds them to the cart when clicked.</p>
+        </div>
+        
+        <div class="code-block">app.component('ProductList', {
+    template: `
+        &lt;div class="component-box"&gt;
+            &lt;h3&gt;Products&lt;/h3&gt;
+            &lt;div v-for="product in products" :key="product.id" class="product-item"&gt;
+                &lt;div&gt;
+                    &lt;strong&gt;{{ product.name }}&lt;/strong&gt; - ${{ product.price }}
+                &lt;/div&gt;
+                &lt;button @click="addToCart(product)"&gt;Add to Cart&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    `,
+    data() {
+        return {
+            products: [
+                { id: 1, name: 'Laptop', price: 999 },
+                { id: 2, name: 'Mouse', price: 25 },
+                { id: 3, name: 'Keyboard', price: 75 },
+                { id: 4, name: 'Monitor', price: 200 }
+            ]
+        }
+    },
+    methods: {
+        addToCart(product) {
+            // Use store method to add item
+            cartStore.addItem(product);
+        }
+    }
+});</div>
+        
+        <div class="tip">
+            <strong>💡 Key Points:</strong>
+            <ul>
+                <li>Component has its own <code>products</code> data</li>
+                <li>Uses <code>v-for</code> to display products</li>
+                <li>Calls <code>cartStore.addItem()</code> when button is clicked</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 5: Create CartDisplay Component</h2>
+        <div class="explanation">
+            <p>Create a component that displays cart items from the store, shows total, and allows removal.</p>
+        </div>
+        
+        <div class="code-block">app.component('CartDisplay', {
+    template: `
+        &lt;div class="component-box"&gt;
+            &lt;h3&gt;Shopping Cart&lt;/h3&gt;
+            
+            &lt;!-- Show message when cart is empty --&gt;
+            &lt;div v-if="store.items.length === 0"&gt;
+                &lt;p&gt;Cart is empty&lt;/p&gt;
+            &lt;/div&gt;
+            
+            &lt;!-- Show cart items when not empty --&gt;
+            &lt;div v-else&gt;
+                &lt;div v-for="item in store.items" :key="item.id" class="cart-item"&gt;
+                    &lt;div&gt;
+                        {{ item.name }} - ${{ item.price }}
+                    &lt;/div&gt;
+                    &lt;button @click="removeFromCart(item.id)"&gt;Remove&lt;/button&gt;
+                &lt;/div&gt;
+                
+                &lt;div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #ddd;"&gt;
+                    &lt;p&gt;&lt;strong&gt;Total: ${{ store.total }}&lt;/strong&gt;&lt;/p&gt;
+                    &lt;button @click="clearCart"&gt;Clear Cart&lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    `,
+    data() {
+        return {
+            // Access store state
+            store: cartStore.state
+        }
+    },
+    methods: {
+        removeFromCart(itemId) {
+            cartStore.removeItem(itemId);
+        },
+        clearCart() {
+            cartStore.clearCart();
+        }
+    }
+});</div>
+        
+        <div class="tip">
+            <strong>💡 Key Points:</strong>
+            <ul>
+                <li>Accesses store state via <code>data() { return { store: cartStore.state } }</li>
+                <li>Uses <code>v-if</code> to show empty message</li>
+                <li>Uses <code>v-for</code> to display cart items</li>
+                <li>Calls store methods to remove items or clear cart</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 6: Put It All Together</h2>
+        <div class="explanation">
+            <p>Create the main app and use both components. They will automatically share the same cart state!</p>
+        </div>
+        
+        <div class="code-block">const { createApp, reactive } = Vue;
+
+// Create store (from steps 2-3)
+const cartStore = {
+    state: reactive({
+        items: [],
+        total: 0
+    }),
+    addItem(product) { /* ... */ },
+    removeItem(itemId) { /* ... */ },
+    clearCart() { /* ... */ },
+    calculateTotal() { /* ... */ }
+};
+
+// Create app
+const app = createApp({
+    data() {
+        return {
+            // You can also access store here if needed
+            store: cartStore.state
+        }
+    }
+});
+
+// Register components (from steps 4-5)
+app.component('ProductList', { /* ... */ });
+app.component('CartDisplay', { /* ... */ });
+
+// Mount app
+app.mount('#app');</div>
+        
+        <div class="code-block">&lt;!-- HTML --&gt;
+&lt;div id="app"&gt;
+    &lt;ProductList&gt;&lt;/ProductList&gt;
+    &lt;CartDisplay&gt;&lt;/CartDisplay&gt;
+&lt;/div&gt;</div>
+    </div>
+
+    <div class="step">
+        <h2>Step 7: Live Demo - Complete Shopping Cart</h2>
+        <div class="demo-section">
+            <h3>Try It Out!</h3>
+            <p>Add items from the product list - they'll appear in the cart automatically!</p>
+            <div id="demo">
+                <product-list></product-list>
+                <cart-display></cart-display>
+            </div>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 8: How It Works</h2>
+        <div class="explanation">
+            <h4>1. Shared State</h4>
+            <p>Both components access <code>cartStore.state</code>, so they see the same data.</p>
+            
+            <h4>2. Reactivity</h4>
+            <p>When <code>cartStore.addItem()</code> modifies <code>state.items</code>, Vue automatically updates CartDisplay because it's watching <code>store.items</code>.</p>
+            
+            <h4>3. Store Methods</h4>
+            <p>Components call store methods (like <code>addItem</code>, <code>removeItem</code>) instead of modifying state directly. This keeps the code organized.</p>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>Step 9: Key Takeaways</h2>
+        <div class="explanation">
+            <h4>✅ What You Learned:</h4>
+            <ul>
+                <li>Use <code>Vue.reactive()</code> to create reactive state</li>
+                <li>Store state in a central store object</li>
+                <li>Access store state in components via <code>data() { return { store: cartStore.state } }</code></li>
+                <li>Call store methods from component methods</li>
+                <li>Multiple components can share the same state</li>
+                <li>Changes to store state automatically update all components</li>
+            </ul>
+            
+            <h4>🎯 For Your Exercise:</h4>
+            <p>You now have all the knowledge to build the shopping cart! Remember:</p>
+            <ul>
+                <li>Create <code>cartStore</code> with state and methods</li>
+                <li>Create <code>ProductList</code> component to add items</li>
+                <li>Create <code>CartDisplay</code> component to show cart</li>
+                <li>Both components use the same <code>cartStore.state</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>🎓 Summary</h2>
+        <div class="explanation">
+            <p>You've learned how to:</p>
+            <ol>
+                <li>Create a reactive store with <code>Vue.reactive()</code></li>
+                <li>Add methods to update store state</li>
+                <li>Access store state in components</li>
+                <li>Share state between multiple components</li>
+                <li>Build a complete shopping cart system</li>
+            </ol>
+            <p><strong>Ready for the exercise?</strong> You have everything you need! Good luck! 🚀</p>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp, reactive } = Vue;
+        
+        // Create the cart store
+        const cartStore = {
+            state: reactive({
+                items: [],
+                total: 0
+            }),
+            
+            addItem(product) {
+                this.state.items.push({
+                    id: Date.now(),
+                    name: product.name,
+                    price: product.price
+                });
+                this.calculateTotal();
+            },
+            
+            removeItem(itemId) {
+                const index = this.state.items.findIndex(item => item.id === itemId);
+                if (index > -1) {
+                    this.state.items.splice(index, 1);
+                    this.calculateTotal();
+                }
+            },
+            
+            clearCart() {
+                this.state.items = [];
+                this.state.total = 0;
+            },
+            
+            calculateTotal() {
+                this.state.total = this.state.items.reduce((sum, item) => {
+                    return sum + item.price;
+                }, 0);
+            }
+        };
+        
+        // Create app
+        const app = createApp({
+            data() {
+                return {
+                    store: cartStore.state
+                }
+            }
+        });
+        
+        // ProductList component
+        app.component('product-list', {
+            template: '<div class="component-box">' +
+                '<h3>🛍️ Products</h3>' +
+                '<div v-for="product in products" :key="product.id" class="product-item">' +
+                    '<div>' +
+                        '<strong>{{ product.name }}</strong> - ${{ product.price }}' +
+                    '</div>' +
+                    '<button @click="addToCart(product)">Add to Cart</button>' +
+                '</div>' +
+            '</div>',
+            data() {
+                return {
+                    products: [
+                        { id: 1, name: 'Laptop', price: 999 },
+                        { id: 2, name: 'Mouse', price: 25 },
+                        { id: 3, name: 'Keyboard', price: 75 },
+                        { id: 4, name: 'Monitor', price: 200 }
+                    ]
+                }
+            },
+            methods: {
+                addToCart(product) {
+                    cartStore.addItem(product);
+                }
+            }
+        });
+        
+        // CartDisplay component
+        app.component('cart-display', {
+            template: '<div class="component-box">' +
+                '<h3>🛒 Shopping Cart</h3>' +
+                '<div v-if="store.items.length === 0">' +
+                    '<p>Cart is empty</p>' +
+                '</div>' +
+                '<div v-else>' +
+                    '<div v-for="item in store.items" :key="item.id" class="cart-item">' +
+                        '<div>{{ item.name }} - ${{ item.price }}</div>' +
+                        '<button @click="removeFromCart(item.id)">Remove</button>' +
+                    '</div>' +
+                    '<div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #ddd;">' +
+                        '<p><strong>Total: ${{ store.total }}</strong></p>' +
+                        '<button @click="clearCart">Clear Cart</button>' +
+                    '</div>' +
+                '</div>' +
+            '</div>',
+            data() {
+                return {
+                    store: cartStore.state
+                }
+            },
+            methods: {
+                removeFromCart(itemId) {
+                    cartStore.removeItem(itemId);
+                },
+                clearCart() {
+                    cartStore.clearCart();
+                }
+            }
+        });
+        
+        // Mount the app
+        app.mount('#demo');
+    </script>
+</body>
+</html>

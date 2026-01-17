@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game Tutorial - Step by Step</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .step {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .step h2 {
+            color: #42b983;
+            border-bottom: 2px solid #42b983;
+            padding-bottom: 10px;
+        }
+        .explanation {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #42b983;
+        }
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+        .game-app {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin: 20px 0;
+            text-align: center;
+        }
+        .tip {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        input[type="number"] {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 18px;
+            width: 150px;
+            text-align: center;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        .message {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .message.correct {
+            background: #d4edda;
+            color: #155724;
+        }
+        .message.too-high {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .message.too-low {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .stats {
+            margin: 20px 0;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎮 Building a Number Guessing Game - Step by Step Tutorial</h1>
+    <p style="font-size: 1.1em; color: #666;">Let's build a number guessing game! This will teach you event handling, methods, and form handling in Vue.</p>
+
+    <!-- STEP 1 -->
+    <div class="step">
+        <h2>Step 1: Set Up the Data Structure</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Define all the data our game needs to track.</p>
+            <p><strong>Key concept:</strong> We need to store the secret number, user's guess, feedback message, and guess count.</p>
+        </div>
+        
+        <div class="code-block">
+data() {
+    return {
+        secretNumber: 0,      // The number to guess
+        userGuess: '',        // User's input
+        message: '',          // Feedback message
+        guessCount: 0,        // Number of guesses
+        gameStarted: false    // Track if game is active
+    }
+}
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>secretNumber</code> - The random number the user needs to guess (1-100)</li>
+                <li><code>userGuess</code> - What the user types in the input field</li>
+                <li><code>message</code> - Feedback like "Too high", "Too low", or "Correct!"</li>
+                <li><code>guessCount</code> - How many times the user has guessed</li>
+                <li><code>gameStarted</code> - Whether a game is currently active</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step">
+        <h2>Step 2: Generate Random Number Method</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create a method that generates a random number between 1 and 100.</p>
+            <p><strong>Key concept:</strong> Methods are functions defined in the <code>methods</code> option.</p>
+        </div>
+        
+        <div class="code-block">
+methods: {
+    startNewGame() {
+        // Generate random number between 1 and 100
+        this.secretNumber = Math.floor(Math.random() * 100) + 1;
+        
+        // Reset game state
+        this.userGuess = '';
+        this.message = '';
+        this.guessCount = 0;
+        this.gameStarted = true;
+        
+        // For testing (remove in production)
+        console.log('Secret number:', this.secretNumber);
+    }
+}
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>Math.random()</code> - Returns a number between 0 and 1</li>
+                <li><code>Math.random() * 100</code> - Gives us 0 to 99.999...</li>
+                <li><code>Math.floor(...)</code> - Rounds down to whole number (0-99)</li>
+                <li><code>+ 1</code> - Shifts range to 1-100</li>
+                <li>We reset all game state when starting a new game</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Tip:</strong> We use <code>console.log</code> to see the secret number for testing. In a real game, you'd remove this!
+        </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step">
+        <h2>Step 3: Create the Guess Method</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create a method that checks the user's guess and provides feedback.</p>
+            <p><strong>Key concept:</strong> Methods can access data using <code>this</code> and update it.</p>
+        </div>
+        
+        <div class="code-block">
+methods: {
+    makeGuess() {
+        // Convert userGuess to a number
+        const guess = Number(this.userGuess);
+        
+        // Increment guess count
+        this.guessCount++;
+        
+        // Check the guess and provide feedback
+        if (guess === this.secretNumber) {
+            this.message = 'Correct! 🎉';
+        } else if (guess > this.secretNumber) {
+            this.message = 'Too high! ⬇️';
+        } else {
+            this.message = 'Too low! ⬆️';
+        }
+        
+        // Clear the input field
+        this.userGuess = '';
+    }
+}
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>Number(this.userGuess)</code> - Converts string input to number</li>
+                <li><code>this.guessCount++</code> - Increments the guess counter</li>
+                <li>We use <code>if/else if/else</code> to check the guess</li>
+                <li>Update <code>this.message</code> with appropriate feedback</li>
+                <li>Clear the input field after each guess</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step">
+        <h2>Step 4: Add the HTML Structure</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create the UI with buttons and input field.</p>
+            <p><strong>Key concept:</strong> Use <code>@click</code> for button clicks and <code>@submit.prevent</code> for form submission.</p>
+        </div>
+        
+        <div class="code-block">
+&lt;div id="app"&gt;
+    &lt;h2&gt;Number Guessing Game&lt;/h2&gt;
+    &lt;p&gt;I'm thinking of a number between 1 and 100. Can you guess it?&lt;/p&gt;
+    
+    &lt;button @click="startNewGame"&gt;
+        New Game
+    &lt;/button&gt;
+    
+    &lt;form @submit.prevent="makeGuess" v-if="gameStarted"&gt;
+        &lt;input 
+            type="number" 
+            v-model.number="userGuess" 
+            placeholder="Enter your guess"
+            min="1"
+            max="100"&gt;
+        &lt;button type="submit"&gt;
+            Guess
+        &lt;/button&gt;
+    &lt;/form&gt;
+    
+    &lt;div v-if="message" class="message"&gt;
+        {{ message }}
+    &lt;/div&gt;
+    
+    &lt;p v-if="guessCount > 0"&gt;
+        Guesses: {{ guessCount }}
+    &lt;/p&gt;
+&lt;/div&gt;
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>@click="startNewGame"</code> - Calls method when button is clicked</li>
+                <li><code>@submit.prevent="makeGuess"</code> - Prevents form submission and calls method</li>
+                <li><code>.prevent</code> - Event modifier that prevents default form behavior</li>
+                <li><code>v-model.number</code> - Automatically converts input to number</li>
+                <li><code>v-if="gameStarted"</code> - Only show form when game is active</li>
+                <li><code>v-if="message"</code> - Only show message when it exists</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step">
+        <h2>Step 5: Add Dynamic Styling Based on Message</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Use <code>:class</code> to style the message differently based on the feedback.</p>
+        </div>
+        
+        <div class="code-block">
+&lt;div 
+    v-if="message" 
+    class="message"
+    :class="{
+        'correct': message.includes('Correct'),
+        'too-high': message.includes('high'),
+        'too-low': message.includes('low')
+    }"&gt;
+    {{ message }}
+&lt;/div&gt;
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>:class</code> - Dynamically adds CSS classes</li>
+                <li><code>message.includes('Correct')</code> - Checks if message contains "Correct"</li>
+                <li>Different classes are applied based on the message content</li>
+                <li>This gives visual feedback (green for correct, red for too high, yellow for too low)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step">
+        <h2>Step 6: Complete Working Game</h2>
+        <p>Here's the complete number guessing game with all features:</p>
+        
+        <div class="game-app" id="app">
+            <h2 style="color: #42b983; margin-top: 0;">🎮 Number Guessing Game</h2>
+            <p>I'm thinking of a number between 1 and 100. Can you guess it?</p>
+            
+            <button @click="startNewGame">New Game</button>
+            
+            <form @submit.prevent="makeGuess" v-if="gameStarted" style="margin: 20px 0;">
+                <input 
+                    type="number" 
+                    v-model.number="userGuess" 
+                    placeholder="Enter your guess (1-100)"
+                    min="1"
+                    max="100"
+                    required>
+                <button type="submit">Guess</button>
+            </form>
+            
+            <div 
+                v-if="message" 
+                class="message"
+                :class="{
+                    'correct': message.includes('Correct'),
+                    'too-high': message.includes('high'),
+                    'too-low': message.includes('low')
+                }">
+                {{ message }}
+            </div>
+            
+            <div class="stats" v-if="guessCount > 0">
+                <p><strong>Number of guesses: {{ guessCount }}</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FINAL CODE -->
+    <div class="step">
+        <h2>📝 Complete JavaScript Code</h2>
+        <div class="code-block">
+const { createApp } = Vue;
+
+createApp({
+    data() {
+        return {
+            secretNumber: 0,
+            userGuess: '',
+            message: '',
+            guessCount: 0,
+            gameStarted: false
+        }
+    },
+    methods: {
+        startNewGame() {
+            // Generate random number between 1 and 100
+            this.secretNumber = Math.floor(Math.random() * 100) + 1;
+            
+            // Reset game state
+            this.userGuess = '';
+            this.message = '';
+            this.guessCount = 0;
+            this.gameStarted = true;
+            
+            // For testing (remove in production)
+            console.log('Secret number:', this.secretNumber);
+        },
+        
+        makeGuess() {
+            // Convert input to number
+            const guess = Number(this.userGuess);
+            
+            // Validate input
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                this.message = 'Please enter a number between 1 and 100!';
+                return;
+            }
+            
+            // Increment guess count
+            this.guessCount++;
+            
+            // Check the guess and provide feedback
+            if (guess === this.secretNumber) {
+                this.message = 'Correct! 🎉';
+            } else if (guess > this.secretNumber) {
+                this.message = 'Too high! ⬇️';
+            } else {
+                this.message = 'Too low! ⬆️';
+            }
+            
+            // Clear input field
+            this.userGuess = '';
+        }
+    }
+}).mount('#app');
+        </div>
+    </div>
+
+    <!-- KEY CONCEPTS -->
+    <div class="step">
+        <h2>🎓 Key Concepts You Learned</h2>
+        <div class="explanation">
+            <ol>
+                <li><strong>@click:</strong> Handle button click events</li>
+                <li><strong>@submit.prevent:</strong> Handle form submission and prevent default behavior</li>
+                <li><strong>methods:</strong> Define functions that can be called from the template</li>
+                <li><strong>this:</strong> Access data and other methods within methods</li>
+                <li><strong>Math.random():</strong> Generate random numbers</li>
+                <li><strong>Number():</strong> Convert strings to numbers</li>
+                <li><strong>v-model.number:</strong> Two-way binding with automatic number conversion</li>
+                <li><strong>:class:</strong> Dynamic CSS classes based on conditions</li>
+                <li><strong>Event modifiers:</strong> .prevent, .enter, etc. to modify event behavior</li>
+            </ol>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp } = Vue;
+        
+        createApp({
+            data() {
+                return {
+                    secretNumber: 0,
+                    userGuess: '',
+                    message: '',
+                    guessCount: 0,
+                    gameStarted: false
+                }
+            },
+            methods: {
+                startNewGame() {
+                    // Generate random number between 1 and 100
+                    this.secretNumber = Math.floor(Math.random() * 100) + 1;
+                    
+                    // Reset game state
+                    this.userGuess = '';
+                    this.message = '';
+                    this.guessCount = 0;
+                    this.gameStarted = true;
+                    
+                    // For testing (remove in production)
+                    console.log('Secret number:', this.secretNumber);
+                },
+                
+                makeGuess() {
+                    // Convert input to number
+                    const guess = Number(this.userGuess);
+                    
+                    // Validate input
+                    if (isNaN(guess) || guess < 1 || guess > 100) {
+                        this.message = 'Please enter a number between 1 and 100!';
+                        return;
+                    }
+                    
+                    // Increment guess count
+                    this.guessCount++;
+                    
+                    // Check the guess and provide feedback
+                    if (guess === this.secretNumber) {
+                        this.message = 'Correct! 🎉';
+                    } else if (guess > this.secretNumber) {
+                        this.message = 'Too high! ⬇️';
+                    } else {
+                        this.message = 'Too low! ⬆️';
+                    }
+                    
+                    // Clear input field
+                    this.userGuess = '';
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
+

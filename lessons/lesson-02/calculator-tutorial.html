@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator Tutorial - Step by Step</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .step {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .step h2 {
+            color: #42b983;
+            border-bottom: 2px solid #42b983;
+            padding-bottom: 10px;
+        }
+        .explanation {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #42b983;
+        }
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .calculator {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin: 20px 0;
+        }
+        input {
+            padding: 12px;
+            margin: 10px 5px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 150px;
+        }
+        input:focus {
+            outline: none;
+            border-color: #42b983;
+        }
+        .result {
+            background: #f0f0f0;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+            background: #ffe0e0;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .tip {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧮 Building a Vue Calculator - Step by Step Tutorial</h1>
+    <p style="font-size: 1.1em; color: #666;">Let's build a calculator together! I'll explain each step so you understand how Vue works.</p>
+
+    <!-- STEP 1 -->
+    <div class="step">
+        <h2>Step 1: Set Up the Basic Structure</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> First, we need to create a Vue app and set up the HTML structure.</p>
+            <p><strong>Key concept:</strong> We'll use <code>v-model</code> to create two-way data binding with input fields.</p>
+        </div>
+        
+        <div class="code-block">
+&lt;div id="app"&gt;
+    &lt;h2&gt;Simple Calculator&lt;/h2&gt;
+    &lt;input type="number" v-model="number1" placeholder="First number"&gt;
+    &lt;input type="number" v-model="number2" placeholder="Second number"&gt;
+&lt;/div&gt;
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>v-model="number1"</code> creates a two-way binding - when you type, it updates the data, and when data changes, the input updates</li>
+                <li><code>type="number"</code> ensures only numbers can be entered</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step">
+        <h2>Step 2: Add Data Properties</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Define the data that our calculator needs.</p>
+        </div>
+        
+        <div class="code-block">
+data() {
+    return {
+        number1: 0,  // First number from input
+        number2: 0   // Second number from input
+    }
+}
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>number1</code> and <code>number2</code> store the values from the input fields</li>
+                <li>They start at 0, but will update automatically when the user types (thanks to v-model!)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step">
+        <h2>Step 3: Display Calculations Using JavaScript Expressions</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Use Vue's template syntax to perform calculations directly in the HTML.</p>
+            <p><strong>Key concept:</strong> You can write JavaScript expressions inside <code>{{ }}</code>!</p>
+        </div>
+        
+        <div class="code-block">
+&lt;div class="result"&gt;
+    &lt;p&gt;Sum: {{ number1 + number2 }}&lt;/p&gt;
+    &lt;p&gt;Difference: {{ number1 - number2 }}&lt;/p&gt;
+    &lt;p&gt;Product: {{ number1 * number2 }}&lt;/p&gt;
+    &lt;p&gt;Quotient: {{ number1 / number2 }}&lt;/p&gt;
+&lt;/div&gt;
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>{{ number1 + number2 }}</code> - Vue automatically calculates this whenever number1 or number2 changes!</li>
+                <li>This is called <strong>reactivity</strong> - the UI updates automatically when data changes</li>
+                <li>No need to manually update the DOM - Vue does it for you!</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step">
+        <h2>Step 4: Handle Division by Zero</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Use a conditional expression to show an error when dividing by zero.</p>
+            <p><strong>Key concept:</strong> Ternary operator <code>condition ? valueIfTrue : valueIfFalse</code></p>
+        </div>
+        
+        <div class="code-block">
+&lt;p&gt;Quotient: 
+    {{ number2 !== 0 ? (number1 / number2).toFixed(2) : 'Cannot divide by zero!' }}
+&lt;/p&gt;
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>number2 !== 0</code> checks if the second number is NOT zero</li>
+                <li>If true: calculate and show the division result (with 2 decimal places using <code>toFixed(2)</code>)</li>
+                <li>If false: show the error message</li>
+                <li>This is a <strong>ternary operator</strong> - a shorthand if/else</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step">
+        <h2>Step 5: Complete Working Calculator</h2>
+        <p>Here's the complete calculator with all the concepts combined:</p>
+        
+        <div class="calculator" id="app">
+            <h2 style="color: #42b983; margin-top: 0;">🧮 Simple Calculator</h2>
+            
+            <div>
+                <input type="number" v-model.number="number1" placeholder="First number">
+                <input type="number" v-model.number="number2" placeholder="Second number">
+            </div>
+            
+            <div class="result">
+                <p><strong>Sum:</strong> {{ number1 + number2 }}</p>
+                <p><strong>Difference:</strong> {{ number1 - number2 }}</p>
+                <p><strong>Product:</strong> {{ number1 * number2 }}</p>
+                <p><strong>Quotient:</strong> 
+                    <span v-if="number2 !== 0">{{ (number1 / number2).toFixed(2) }}</span>
+                    <span v-else class="error">⚠️ Cannot divide by zero!</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Pro Tip:</strong> Notice I used <code>v-model.number</code> instead of just <code>v-model</code>. 
+            The <code>.number</code> modifier automatically converts the input value to a number type, which is important for calculations!
+        </div>
+    </div>
+
+    <!-- FINAL CODE -->
+    <div class="step">
+        <h2>📝 Complete Code</h2>
+        <p>Here's the complete JavaScript code:</p>
+        <div class="code-block">
+const { createApp } = Vue;
+
+createApp({
+    data() {
+        return {
+            number1: 0,
+            number2: 0
+        }
+    }
+}).mount('#app');
+        </div>
+    </div>
+
+    <!-- KEY CONCEPTS -->
+    <div class="step">
+        <h2>🎓 Key Concepts You Learned</h2>
+        <div class="explanation">
+            <ol>
+                <li><strong>v-model:</strong> Two-way data binding - connects input fields to data</li>
+                <li><strong>v-model.number:</strong> Automatically converts input to number type</li>
+                <li><strong>{{ }}:</strong> Interpolation - displays data and executes JavaScript expressions</li>
+                <li><strong>Reactivity:</strong> Vue automatically updates the UI when data changes</li>
+                <li><strong>Ternary Operator:</strong> <code>condition ? valueIfTrue : valueIfFalse</code></li>
+                <li><strong>v-if / v-else:</strong> Conditionally show/hide elements</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- PRACTICE -->
+    <div class="step">
+        <h2>🚀 Your Turn!</h2>
+        <p>Now try building this yourself! Here's what to do:</p>
+        <ol>
+            <li>Create a new HTML file</li>
+            <li>Copy the structure above</li>
+            <li>Add the Vue script tag</li>
+            <li>Write the data() function with number1 and number2</li>
+            <li>Test it by typing different numbers!</li>
+        </ol>
+        <div class="tip">
+            <strong>Challenge:</strong> Can you add a button that clears both numbers? 
+            (Hint: create a method that sets both to 0)
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp } = Vue;
+        
+        createApp({
+            data() {
+                return {
+                    number1: 0,
+                    number2: 0
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
+
+

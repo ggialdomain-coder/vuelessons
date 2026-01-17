@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 10: Lifecycle Hooks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .theory {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .exercise {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        .demo-box {
+            border: 2px solid #42b983;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .link-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .link-box a {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link-box a:hover {
+            text-decoration: underline;
+        }
+        .lifecycle-stage {
+            padding: 10px;
+            margin: 5px 0;
+            border-left: 4px solid #42b983;
+            background: #f0f0f0;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        .log-box {
+            background: #2d2d2d;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            max-height: 200px;
+            overflow-y: auto;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Lesson 10: Lifecycle Hooks</h1>
+    
+    <div class="link-box">
+        <p><strong>📖 Tutorial:</strong> <a href="lifecycle-tutorial.html">Step-by-step Lifecycle Hooks Tutorial</a></p>
+        <p><strong>✏️ Exercise:</strong> <a href="lifecycle-exercise.html">Build a Timer Component with Lifecycle Hooks</a></p>
+    </div>
+    
+    <div class="theory">
+        <h2>🎓 Theory: Component Lifecycle</h2>
+        
+        <h3>What is a Lifecycle?</h3>
+        <p>Every Vue component goes through a lifecycle: it's created, mounted to the DOM, updated when data changes, and eventually unmounted (removed).</p>
+        
+        <h3>Lifecycle Stages:</h3>
+        <div class="lifecycle-stage">
+            <strong>1. Created</strong> - Component instance is created (data is available, but DOM not yet mounted)
+        </div>
+        <div class="lifecycle-stage">
+            <strong>2. Mounted</strong> - Component is added to the DOM (can access DOM elements)
+        </div>
+        <div class="lifecycle-stage">
+            <strong>3. Updated</strong> - Component re-renders when data changes
+        </div>
+        <div class="lifecycle-stage">
+            <strong>4. Unmounted</strong> - Component is removed from the DOM
+        </div>
+        
+        <h3>Common Lifecycle Hooks:</h3>
+        <pre><code>export default {
+    created() {
+        // Component created, data available
+        // Good for: API calls, setup
+        console.log('Component created');
+    },
+    mounted() {
+        // Component mounted to DOM
+        // Good for: DOM manipulation, timers, event listeners
+        console.log('Component mounted');
+    },
+    updated() {
+        // Component updated (data changed)
+        // Good for: Reacting to data changes
+        console.log('Component updated');
+    },
+    unmounted() {
+        // Component removed
+        // Good for: Cleanup (clear timers, remove listeners)
+        console.log('Component unmounted');
+    }
+}</code></pre>
+        
+        <h3>When to Use Each Hook:</h3>
+        <ul>
+            <li><strong>created()</strong>: API calls, initialize data, setup before DOM</li>
+            <li><strong>mounted()</strong>: DOM manipulation, start timers, add event listeners</li>
+            <li><strong>updated()</strong>: React to data changes, log updates</li>
+            <li><strong>unmounted()</strong>: Cleanup timers, remove event listeners, cancel requests</li>
+        </ul>
+        
+        <h3>Important Notes:</h3>
+        <ul>
+            <li>Hooks are called automatically by Vue</li>
+            <li>You don't call them manually</li>
+            <li>Use them to run code at specific lifecycle stages</li>
+            <li>Always clean up in <code>unmounted()</code> to prevent memory leaks!</li>
+        </ul>
+    </div>
+
+    <div class="practice">
+        <h2>💻 Practice: Lifecycle Hooks</h2>
+        
+        <div id="app">
+            <div class="demo-box">
+                <h3>1. Lifecycle Hook Demo</h3>
+                <p>Count: {{ count }}</p>
+                <button @click="count++">Increment</button>
+                <button @click="showComponent = !showComponent">Toggle Component</button>
+                <div v-if="showComponent">
+                    <lifecycle-demo></lifecycle-demo>
+                </div>
+                <div class="log-box" id="lifecycle-logs"></div>
+            </div>
+            
+            <div class="demo-box">
+                <h3>2. Timer Component</h3>
+                <timer-component v-if="showTimer"></timer-component>
+                <button @click="showTimer = !showTimer">
+                    {{ showTimer ? 'Stop Timer' : 'Start Timer' }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>✏️ Exercise</h2>
+        <p><strong>Task:</strong> Create a Timer component using lifecycle hooks:</p>
+        <ol>
+            <li>Create a Timer component that counts up from 0</li>
+            <li>Use <code>mounted()</code> to start a timer (setInterval)</li>
+            <li>Use <code>unmounted()</code> to clear the timer (clearInterval)</li>
+            <li>Display the elapsed time in seconds</li>
+            <li>Add a button to toggle the timer on/off</li>
+        </ol>
+        <p><strong>Hint:</strong> Store the interval ID in <code>data()</code>, start it in <code>mounted()</code>, and clear it in <code>unmounted()</code>!</p>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        const app = createApp({
+            data() {
+                return {
+                    count: 0,
+                    showComponent: true,
+                    showTimer: true
+                }
+            }
+        });
+        
+        // Lifecycle demo component
+        app.component('LifecycleDemo', {
+            template: `<div><p>Lifecycle Demo Component (check console!)</p></div>`,
+            created() {
+                const logEl = document.getElementById('lifecycle-logs');
+                if (logEl) {
+                    logEl.innerHTML += '<div>✓ created() - Component created</div>';
+                }
+                console.log('LifecycleDemo: created');
+            },
+            mounted() {
+                const logEl = document.getElementById('lifecycle-logs');
+                if (logEl) {
+                    logEl.innerHTML += '<div>✓ mounted() - Component mounted to DOM</div>';
+                }
+                console.log('LifecycleDemo: mounted');
+            },
+            updated() {
+                const logEl = document.getElementById('lifecycle-logs');
+                if (logEl) {
+                    logEl.innerHTML += '<div>✓ updated() - Component updated</div>';
+                }
+                console.log('LifecycleDemo: updated');
+            },
+            unmounted() {
+                const logEl = document.getElementById('lifecycle-logs');
+                if (logEl) {
+                    logEl.innerHTML += '<div>✓ unmounted() - Component removed</div>';
+                }
+                console.log('LifecycleDemo: unmounted');
+            }
+        });
+        
+        // Timer component
+        app.component('TimerComponent', {
+            template: `
+                <div>
+                    <h4>Timer: {{ seconds }} seconds</h4>
+                </div>
+            `,
+            data() {
+                return {
+                    seconds: 0,
+                    intervalId: null
+                }
+            },
+            mounted() {
+                console.log('Timer: mounted - starting timer');
+                this.intervalId = setInterval(() => {
+                    this.seconds++;
+                }, 1000);
+            },
+            unmounted() {
+                console.log('Timer: unmounted - clearing timer');
+                if (this.intervalId) {
+                    clearInterval(this.intervalId);
+                }
+            }
+        });
+        
+        app.mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

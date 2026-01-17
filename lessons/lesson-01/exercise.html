@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 1: Exercise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .exercise-area {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+    </style>
+</head>
+<body>
+    <h1>✏️ Lesson 1: Exercise</h1>
+    
+    <div class="exercise-area">
+        <h2>Your Task:</h2>
+        <p>Complete the Vue app below with the following requirements:</p>
+        <ol>
+            <li>Add an <code>age</code> variable with your age</li>
+            <li>Add a <code>hobby</code> variable with your favorite hobby</li>
+            <li>Display both in the template</li>
+            <li>Add a button that changes the greeting when clicked</li>
+        </ol>
+        
+        <!-- TODO: Complete this Vue app -->
+        <div id="app">
+            <h3>{{ greeting }}</h3>
+            <p>My name is: <strong>{{ name }}</strong></p>
+            <p>I'm learning: <strong>{{ learning }}</strong></p>
+            
+            <!-- Add your age and hobby here -->
+            
+            <!-- Add a button here that changes the greeting -->
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        createApp({
+            data() {
+                return {
+                    greeting: 'Hello, Vue!',
+                    name: 'Your Name',
+                    learning: 'Vue.js'
+                    // TODO: Add age and hobby here
+                }
+            },
+            // TODO: Add methods here for the button
+        }).mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

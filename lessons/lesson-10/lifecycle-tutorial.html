@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a Timer Component with Lifecycle Hooks - Step by Step</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .step {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .step h2 {
+            color: #42b983;
+            border-bottom: 2px solid #42b983;
+            padding-bottom: 10px;
+        }
+        .explanation {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #42b983;
+        }
+        .code-block {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            word-wrap: break-word;
+            border: 1px solid #ddd;
+        }
+        .demo-app {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin: 20px 0;
+        }
+        .tip {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        .warning {
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #dc3545;
+            margin: 15px 0;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        .lifecycle-stage {
+            padding: 10px;
+            margin: 5px 0;
+            border-left: 4px solid #42b983;
+            background: #f0f0f0;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+    </style>
+</head>
+<body>
+    <h1>⏱️ Building a Timer Component with Lifecycle Hooks - Step by Step Tutorial</h1>
+    <p style="font-size: 1.1em; color: #666;">Learn how to use lifecycle hooks to create a timer component! This tutorial will guide you through building exactly what you need for the exercise.</p>
+
+    <!-- STEP 1 -->
+    <div class="step">
+        <h2>Step 1: Understanding What We're Building</h2>
+        <div class="explanation">
+            <p><strong>Goal:</strong> Create a Timer component that counts up from 0, starts when mounted, and stops when unmounted.</p>
+            <p><strong>What we need:</strong></p>
+            <ul>
+                <li>Timer component that displays elapsed time</li>
+                <li>Use <code>mounted()</code> to start the timer (setInterval)</li>
+                <li>Use <code>unmounted()</code> to stop the timer (clearInterval)</li>
+                <li>Store interval ID in component data</li>
+            </ul>
+        </div>
+        
+        <div class="explanation">
+            <p><strong>What are Lifecycle Hooks?</strong></p>
+            <ul>
+                <li>✅ Functions that run automatically at specific stages of component lifecycle</li>
+                <li>✅ <code>created()</code> - Component created (data available, no DOM yet)</li>
+                <li>✅ <code>mounted()</code> - Component added to DOM (can access DOM)</li>
+                <li>✅ <code>updated()</code> - Component re-rendered (data changed)</li>
+                <li>✅ <code>unmounted()</code> - Component removed from DOM (cleanup time!)</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Why Lifecycle Hooks?</strong> They let you run code at the perfect moment - start timers when component appears, clean them up when it's removed!
+        </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step">
+        <h2>Step 2: Create Timer Component Structure</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create the basic Timer component with data for seconds and interval ID.</p>
+            <p><strong>Key concept:</strong> We need to store the interval ID so we can clear it later.</p>
+        </div>
+        
+        <div class="code-block">
+app.component('Timer', {
+    template: `
+        &lt;div&gt;
+            &lt;h3&gt;Timer: {{ seconds }} seconds&lt;/h3&gt;
+        &lt;/div&gt;
+    `,
+    data() {
+        return {
+            seconds: 0,
+            intervalId: null
+        }
+    }
+});
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>seconds</code> - Tracks elapsed time (starts at 0)</li>
+                <li><code>intervalId</code> - Stores the interval ID returned by setInterval</li>
+                <li>We need the interval ID to clear it in unmounted()</li>
+                <li>Template displays the seconds count</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step">
+        <h2>Step 3: Start Timer in mounted() Hook</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Use the <code>mounted()</code> hook to start the timer when component is added to DOM.</p>
+            <p><strong>Key concept:</strong> <code>mounted()</code> runs once when component is added to the page.</p>
+        </div>
+        
+        <div class="code-block">
+app.component('Timer', {
+    template: `
+        &lt;div&gt;
+            &lt;h3&gt;Timer: {{ seconds }} seconds&lt;/h3&gt;
+        &lt;/div&gt;
+    `,
+    data() {
+        return {
+            seconds: 0,
+            intervalId: null
+        }
+    },
+    mounted() {
+        console.log('Timer mounted - starting timer');
+        this.intervalId = setInterval(() => {
+            this.seconds++;
+        }, 1000);
+    }
+});
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>mounted()</code> - Runs automatically when component is added to DOM</li>
+                <li><code>setInterval(() => { this.seconds++; }, 1000)</code> - Runs every 1000ms (1 second)</li>
+                <li><code>this.intervalId =</code> - Saves the interval ID so we can clear it later</li>
+                <li><code>this.seconds++</code> - Increments seconds counter</li>
+                <li>Timer starts automatically when component appears!</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Why mounted()?</strong> We start the timer here because the component is now in the DOM and visible to the user.
+        </div>
+
+        <div class="demo-app">
+            <h3>Live Demo (timer starts on mount):</h3>
+            <div id="demo1">
+                <timer></timer>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step">
+        <h2>Step 4: Clean Up Timer in unmounted() Hook</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Use the <code>unmounted()</code> hook to stop the timer when component is removed.</p>
+            <p><strong>Key concept:</strong> Always clean up timers/intervals to prevent memory leaks!</p>
+        </div>
+        
+        <div class="code-block">
+app.component('Timer', {
+    template: `
+        &lt;div&gt;
+            &lt;h3&gt;Timer: {{ seconds }} seconds&lt;/h3&gt;
+        &lt;/div&gt;
+    `,
+    data() {
+        return {
+            seconds: 0,
+            intervalId: null
+        }
+    },
+    mounted() {
+        console.log('Timer mounted - starting timer');
+        this.intervalId = setInterval(() => {
+            this.seconds++;
+        }, 1000);
+    },
+    unmounted() {
+        console.log('Timer unmounted - clearing timer');
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+        }
+    }
+});
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>unmounted()</code> - Runs automatically when component is removed from DOM</li>
+                <li><code>clearInterval(this.intervalId)</code> - Stops the timer</li>
+                <li><code>if (this.intervalId)</code> - Safety check (make sure interval exists)</li>
+                <li>This prevents memory leaks - timer stops when component is removed!</li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ CRITICAL:</strong> Always clean up timers, event listeners, and subscriptions in <code>unmounted()</code>! Otherwise, they keep running even after the component is gone, causing memory leaks.
+        </div>
+
+        <div class="demo-app">
+            <h3>Live Demo (timer stops on unmount):</h3>
+            <div id="demo2">
+                <button @click="showTimer = !showTimer">
+                    {{ showTimer ? 'Stop Timer' : 'Start Timer' }}
+                </button>
+                <timer v-if="showTimer"></timer>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step">
+        <h2>Step 5: Complete Working Code</h2>
+        <p>Here's the complete code for the Timer component:</p>
+        
+        <div class="code-block">
+&lt;script src="https://unpkg.com/vue@3/dist/vue.global.js"&gt;&lt;/script&gt;
+
+&lt;script&gt;
+    const { createApp } = Vue;
+    
+    const app = createApp({
+        data() {
+            return {
+                showTimer: true
+            }
+        }
+    });
+    
+    app.component('Timer', {
+        template: `
+            &lt;div&gt;
+                &lt;h3&gt;Timer: {{ seconds }} seconds&lt;/h3&gt;
+            &lt;/div&gt;
+        `,
+        data() {
+            return {
+                seconds: 0,
+                intervalId: null
+            }
+        },
+        mounted() {
+            console.log('Timer mounted - starting timer');
+            this.intervalId = setInterval(() => {
+                this.seconds++;
+            }, 1000);
+        },
+        unmounted() {
+            console.log('Timer unmounted - clearing timer');
+            if (this.intervalId) {
+                clearInterval(this.intervalId);
+            }
+        }
+    });
+    
+    app.mount('#app');
+&lt;/script&gt;
+
+&lt;!-- HTML --&gt;
+&lt;div id="app"&gt;
+    &lt;button @click="showTimer = !showTimer"&gt;
+        {{ showTimer ? 'Stop Timer' : 'Start Timer' }}
+    &lt;/button&gt;
+    &lt;timer v-if="showTimer"&gt;&lt;/timer&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- KEY CONCEPTS -->
+    <div class="step">
+        <h2>🎓 Key Concepts You Learned</h2>
+        <div class="explanation">
+            <h3>Lifecycle Hooks:</h3>
+            <ul>
+                <li>✅ <code>created()</code> - Component created (data available, no DOM)</li>
+                <li>✅ <code>mounted()</code> - Component added to DOM (can access DOM)</li>
+                <li>✅ <code>updated()</code> - Component re-rendered (data changed)</li>
+                <li>✅ <code>unmounted()</code> - Component removed (cleanup time!)</li>
+            </ul>
+            
+            <h3>When to Use:</h3>
+            <ul>
+                <li>✅ <code>mounted()</code> - Start timers, DOM manipulation, add listeners</li>
+                <li>✅ <code>unmounted()</code> - Clean up timers, remove listeners, cancel requests</li>
+                <li>✅ <code>created()</code> - API calls, setup before DOM</li>
+                <li>✅ <code>updated()</code> - React to data changes</li>
+            </ul>
+            
+            <h3>Important Rules:</h3>
+            <ul>
+                <li>⚠️ Always clean up in <code>unmounted()</code> - clear timers, remove listeners</li>
+                <li>⚠️ Store interval IDs in data so you can clear them later</li>
+                <li>⚠️ Hooks are called automatically - you don't call them manually</li>
+                <li>⚠️ Use <code>mounted()</code> for DOM-related code</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Ready for the Exercise?</strong> You now have everything you need! Go to the exercise page and build your Timer component. Remember:
+            <ol>
+                <li>Create Timer component with seconds counter</li>
+                <li>Store intervalId in data</li>
+                <li>Start timer in <code>mounted()</code> with setInterval</li>
+                <li>Clear timer in <code>unmounted()</code> with clearInterval</li>
+                <li>Add toggle button to show/hide timer</li>
+            </ol>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        (function() {
+            function initDemo() {
+                if (typeof Vue === 'undefined') {
+                    setTimeout(initDemo, 100);
+                    return;
+                }
+                
+                const { createApp } = Vue;
+                
+                // Demo 1: Timer starts on mount
+                const demo1El = document.getElementById('demo1');
+                if (demo1El) {
+                    const app1 = createApp({});
+                    app1.component('Timer', {
+                        template: `
+                            <div>
+                                <h3>Timer: {{ seconds }} seconds</h3>
+                            </div>
+                        `,
+                        data() {
+                            return {
+                                seconds: 0,
+                                intervalId: null
+                            }
+                        },
+                        mounted() {
+                            console.log('Timer mounted - starting timer');
+                            this.intervalId = setInterval(() => {
+                                this.seconds++;
+                            }, 1000);
+                        },
+                        unmounted() {
+                            console.log('Timer unmounted - clearing timer');
+                            if (this.intervalId) {
+                                clearInterval(this.intervalId);
+                            }
+                        }
+                    });
+                    app1.mount('#demo1');
+                }
+                
+                // Demo 2: Timer with toggle
+                const demo2El = document.getElementById('demo2');
+                if (demo2El) {
+                    const app2 = createApp({
+                        data() {
+                            return {
+                                showTimer: true
+                            }
+                        }
+                    });
+                    app2.component('Timer', {
+                        template: `
+                            <div>
+                                <h3>Timer: {{ seconds }} seconds</h3>
+                            </div>
+                        `,
+                        data() {
+                            return {
+                                seconds: 0,
+                                intervalId: null
+                            }
+                        },
+                        mounted() {
+                            console.log('Timer mounted - starting timer');
+                            this.intervalId = setInterval(() => {
+                                this.seconds++;
+                            }, 1000);
+                        },
+                        unmounted() {
+                            console.log('Timer unmounted - clearing timer');
+                            if (this.intervalId) {
+                                clearInterval(this.intervalId);
+                            }
+                        }
+                    });
+                    app2.mount('#demo2');
+                }
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initDemo);
+            } else {
+                initDemo();
+            }
+        })();
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

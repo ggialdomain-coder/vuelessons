@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 12: Dynamic Components</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .theory {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .exercise {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        .demo-box {
+            border: 2px solid #42b983;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .link-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .link-box a {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link-box a:hover {
+            text-decoration: underline;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        .tab-button {
+            background: #ddd;
+            color: #333;
+        }
+        .tab-button.active {
+            background: #42b983;
+            color: white;
+        }
+        .component-box {
+            border: 2px solid #42b983;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Lesson 12: Dynamic Components</h1>
+    
+    <div class="link-box">
+        <p><strong>📖 Tutorial:</strong> <a href="dynamic-components-tutorial.html">Step-by-step Dynamic Components Tutorial</a></p>
+        <p><strong>✏️ Exercise:</strong> <a href="dynamic-components-exercise.html">Build a Tab Component</a></p>
+    </div>
+    
+    <div class="theory">
+        <h2>🎓 Theory: Dynamic Components</h2>
+        
+        <h3>What are Dynamic Components?</h3>
+        <p>Dynamic components allow you to switch between different components dynamically using the <code>&lt;component&gt;</code> element with the <code>:is</code> attribute.</p>
+        
+        <h3>Basic Syntax:</h3>
+        <pre><code>// Switch component based on data
+&lt;component :is="currentComponent"&gt;&lt;/component&gt;
+
+// In data
+data() {
+    return {
+        currentComponent: 'HomeComponent'
+    }
+}</code></pre>
+        
+        <h3>Use Cases:</h3>
+        <ul>
+            <li>✅ Tab interfaces - switch between different tab content</li>
+            <li>✅ Modal dialogs - show different modal types</li>
+            <li>✅ Multi-step forms - show different form steps</li>
+            <li>✅ Dynamic content based on user selection</li>
+        </ul>
+        
+        <h3>Component Registration:</h3>
+        <pre><code>// Register components
+components: {
+    HomeComponent,
+    AboutComponent,
+    ContactComponent
+}
+
+// Use dynamically
+&lt;component :is="selectedTab"&gt;&lt;/component&gt;</code></pre>
+        
+        <h3>Keep-Alive:</h3>
+        <p>Use <code>&lt;keep-alive&gt;</code> to preserve component state when switching:</p>
+        <pre><code>&lt;keep-alive&gt;
+    &lt;component :is="currentComponent"&gt;&lt;/component&gt;
+&lt;/keep-alive&gt;</code></pre>
+        <p>This prevents components from being destroyed when switching, preserving their data and state.</p>
+    </div>
+
+    <div class="practice">
+        <h2>💻 Practice: Dynamic Components</h2>
+        
+        <div id="app">
+            <div class="demo-box">
+                <h3>1. Basic Dynamic Component</h3>
+                <button @click="currentView = 'Home'">Home</button>
+                <button @click="currentView = 'About'">About</button>
+                <button @click="currentView = 'Contact'">Contact</button>
+                <div class="component-box">
+                    <component :is="currentView + 'View'"></component>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>✏️ Exercise</h2>
+        <p><strong>Task:</strong> Create a tab component system:</p>
+        <ol>
+            <li>Create three tab components: HomeTab, ProductsTab, ContactTab</li>
+            <li>Use <code>&lt;component :is="activeTab"&gt;</code> to switch between tabs</li>
+            <li>Add tab buttons to switch between components</li>
+            <li>Highlight the active tab button</li>
+            <li>Each tab should display different content</li>
+        </ol>
+        <p><strong>Hint:</strong> Use <code>v-for</code> to render tab buttons and <code>:class</code> to highlight the active tab!</p>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        // Define components
+        const HomeView = {
+            template: '<div><h3>🏠 Home</h3><p>Welcome to the home page!</p></div>'
+        };
+        
+        const AboutView = {
+            template: '<div><h3>ℹ️ About</h3><p>This is the about page.</p></div>'
+        };
+        
+        const ContactView = {
+            template: '<div><h3>📧 Contact</h3><p>Get in touch with us!</p></div>'
+        };
+        
+        const app = createApp({
+            data() {
+                return {
+                    currentView: 'Home'
+                }
+            },
+            components: {
+                HomeView,
+                AboutView,
+                ContactView
+            }
+        });
+        
+        app.mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

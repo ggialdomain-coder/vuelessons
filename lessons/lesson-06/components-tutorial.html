@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a Product Card Component - Step by Step</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .step {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .step h2 {
+            color: #42b983;
+            border-bottom: 2px solid #42b983;
+            padding-bottom: 10px;
+        }
+        .explanation {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #42b983;
+        }
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+        .demo-app {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin: 20px 0;
+        }
+        .tip {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        .warning {
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #dc3545;
+            margin: 15px 0;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: inline-block;
+            min-width: 250px;
+            vertical-align: top;
+        }
+        .card h3 {
+            color: #42b983;
+            margin-top: 0;
+        }
+        .card button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .card button:hover {
+            background: #35a372;
+        }
+        .price {
+            font-size: 1.5em;
+            color: #42b983;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .products-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🛍️ Building a Product Card Component - Step by Step Tutorial</h1>
+    <p style="font-size: 1.1em; color: #666;">Learn how to build a reusable Product Card component! This tutorial will guide you through creating exactly what you need for the exercise.</p>
+
+    <!-- STEP 1 -->
+    <div class="step">
+        <h2>Step 1: Understanding What We're Building</h2>
+        <div class="explanation">
+            <p><strong>Goal:</strong> Create a ProductCard component that displays product information and has a "Buy Now" button.</p>
+            <p><strong>What the component needs:</strong></p>
+            <ul>
+                <li>Product name (heading)</li>
+                <li>Product price (formatted to 2 decimal places)</li>
+                <li>Product description</li>
+                <li>"Buy Now" button that shows an alert</li>
+            </ul>
+        </div>
+        
+        <div class="explanation">
+            <p><strong>Why components?</strong></p>
+            <ul>
+                <li>✅ Write once, use many times - create the component once, use it for multiple products</li>
+                <li>✅ Each instance is independent - each product card has its own data</li>
+                <li>✅ Easy to maintain - change the component once, all instances update</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step">
+        <h2>Step 2: Set Up the Vue App</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create the main Vue app that will hold our component.</p>
+            <p><strong>Key concept:</strong> We need to create the app first, then register components to it.</p>
+        </div>
+        
+        <div class="code-block">
+&lt;script src="https://unpkg.com/vue@3/dist/vue.global.js"&gt;&lt;/script&gt;
+
+&lt;script&gt;
+    const { createApp } = Vue;
+    
+    const app = createApp({
+        data() {
+            return {
+                message: 'Product Store'
+            }
+        }
+    });
+    
+    // We'll register our component here
+    
+    app.mount('#app');
+&lt;/script&gt;
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>createApp()</code> - Creates a new Vue application instance</li>
+                <li>We pass an object with <code>data()</code> function (even if it's just a placeholder)</li>
+                <li><code>app.mount('#app')</code> - Connects Vue to the HTML element with id="app"</li>
+                <li>We'll register components before mounting</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step">
+        <h2>Step 3: Register the ProductCard Component</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Register the component with Vue using <code>app.component()</code>.</p>
+            <p><strong>Key concept:</strong> Component names use PascalCase, but we'll use kebab-case in templates.</p>
+        </div>
+        
+        <div class="code-block">
+app.component('ProductCard', {
+    // Component definition will go here
+});
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>app.component()</code> - Registers a component globally</li>
+                <li>First parameter: <code>'ProductCard'</code> - Component name in PascalCase</li>
+                <li>Second parameter: Component definition object (we'll fill this in next steps)</li>
+                <li>After registration, we can use <code>&lt;product-card&gt;&lt;/product-card&gt;</code> in HTML</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Naming:</strong> Vue automatically converts PascalCase to kebab-case, so <code>'ProductCard'</code> becomes <code>&lt;product-card&gt;</code> in templates.
+        </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step">
+        <h2>Step 4: Add the Template</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create the HTML structure for the product card.</p>
+            <p><strong>Key concept:</strong> The <code>template</code> property contains the HTML that will be rendered.</p>
+        </div>
+        
+        <div class="code-block">
+app.component('ProductCard', {
+    template: `
+        &lt;div class="card"&gt;
+            &lt;h3&gt;{{ product.name }}&lt;/h3&gt;
+            &lt;p class="price"&gt;${{ product.price.toFixed(2) }}&lt;/p&gt;
+            &lt;p&gt;{{ product.description }}&lt;/p&gt;
+            &lt;button @click="buy"&gt;Buy Now&lt;/button&gt;
+        &lt;/div&gt;
+    `
+});
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>template</code> - The HTML structure (use backticks for multi-line strings)</li>
+                <li><code>{{ product.name }}</code> - Displays the product name (we'll add data next)</li>
+                <li><code>{{ product.price.toFixed(2) }}</code> - Formats price to 2 decimal places</li>
+                <li><code>{{ product.description }}</code> - Displays the description</li>
+                <li><code>@click="buy"</code> - Calls the <code>buy()</code> method when button is clicked</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Template Syntax:</strong> Use double curly braces <code>{{ }}</code> to display data, and <code>@click</code> for button clicks.
+        </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step">
+        <h2>Step 5: Add Component Data</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Add the <code>data()</code> function to store product information.</p>
+            <p><strong>Key concept:</strong> <code>data()</code> MUST be a function that returns an object!</p>
+        </div>
+        
+        <div class="code-block">
+app.component('ProductCard', {
+    template: `
+        &lt;div class="card"&gt;
+            &lt;h3&gt;{{ product.name }}&lt;/h3&gt;
+            &lt;p class="price"&gt;${{ product.price.toFixed(2) }}&lt;/p&gt;
+            &lt;p&gt;{{ product.description }}&lt;/p&gt;
+            &lt;button @click="buy"&gt;Buy Now&lt;/button&gt;
+        &lt;/div&gt;
+    `,
+    data() {
+        return {
+            product: {
+                name: 'Vue.js Book',
+                price: 29.99,
+                description: 'Learn Vue.js the easy way!'
+            }
+        }
+    }
+});
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ CRITICAL:</strong> <code>data()</code> must be a function, not an object!<br>
+            ✅ <code>data() { return { product: {...} } }</code><br>
+            ❌ <code>data: { product: {...} }</code><br>
+            <strong>Why?</strong> Each component instance needs its own data. If it's an object, all instances would share the same data!
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>data()</code> - Function that returns an object with component data</li>
+                <li><code>product</code> - Object containing name, price, and description</li>
+                <li>Each time you use <code>&lt;product-card&gt;</code>, it gets its own copy of this data</li>
+                <li>Access in template: <code>{{ product.name }}</code></li>
+                <li>Access in methods: <code>this.product.name</code></li>
+            </ul>
+        </div>
+
+        <div class="demo-app">
+            <h3>Live Demo (with data only, no button action yet):</h3>
+            <div id="demo1">
+                <product-card></product-card>
+            </div>
+            <p><small>Note: Button won't work yet - we'll add the method in the next step!</small></p>
+        </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step">
+        <h2>Step 6: Add the Buy Method</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Add a method that shows an alert when the "Buy Now" button is clicked.</p>
+            <p><strong>Key concept:</strong> Methods are functions defined in the <code>methods</code> option.</p>
+        </div>
+        
+        <div class="code-block">
+app.component('ProductCard', {
+    template: `
+        &lt;div class="card"&gt;
+            &lt;h3&gt;{{ product.name }}&lt;/h3&gt;
+            &lt;p class="price"&gt;${{ product.price.toFixed(2) }}&lt;/p&gt;
+            &lt;p&gt;{{ product.description }}&lt;/p&gt;
+            &lt;button @click="buy"&gt;Buy Now&lt;/button&gt;
+        &lt;/div&gt;
+    `,
+    data() {
+        return {
+            product: {
+                name: 'Vue.js Book',
+                price: 29.99,
+                description: 'Learn Vue.js the easy way!'
+            }
+        }
+    },
+    methods: {
+        buy() {
+            alert(`Added ${this.product.name} to cart!`);
+        }
+    }
+});
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>methods</code> - Object containing component methods</li>
+                <li><code>buy()</code> - Method that runs when button is clicked</li>
+                <li><code>this.product.name</code> - Access component data using <code>this</code></li>
+                <li><code>alert()</code> - Shows a browser alert with the product name</li>
+                <li>Template uses <code>@click="buy"</code> to call this method</li>
+            </ul>
+        </div>
+
+        <div class="demo-app">
+            <h3>Live Demo (complete component):</h3>
+            <div id="demo2">
+                <product-card></product-card>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="step">
+        <h2>Step 7: Use the Component Multiple Times</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Use the ProductCard component multiple times in the HTML.</p>
+            <p><strong>Key concept:</strong> Each component instance is independent and has its own data.</p>
+        </div>
+        
+        <div class="code-block">
+&lt;div id="app"&gt;
+    &lt;h2&gt;Our Products&lt;/h2&gt;
+    &lt;div class="products-container"&gt;
+        &lt;product-card&gt;&lt;/product-card&gt;
+        &lt;product-card&gt;&lt;/product-card&gt;
+        &lt;product-card&gt;&lt;/product-card&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li>Use <code>&lt;product-card&gt;&lt;/product-card&gt;</code> in your HTML</li>
+                <li>Each instance is independent - they all have their own data</li>
+                <li>Currently, all instances show the same product (we'll learn to pass different data in Lesson 7 with props!)</li>
+                <li>You can use the component as many times as you want</li>
+            </ul>
+        </div>
+
+        <div class="demo-app">
+            <h3>Live Demo (multiple instances):</h3>
+            <div id="demo3">
+                <h2 style="color: #42b983; text-align: center;">Our Products</h2>
+                <div class="products-container">
+                    <product-card></product-card>
+                    <product-card></product-card>
+                    <product-card></product-card>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 8 -->
+    <div class="step">
+        <h2>Step 8: Complete Working Code</h2>
+        <p>Here's the complete code for the ProductCard component:</p>
+        
+        <div class="code-block">
+&lt;script src="https://unpkg.com/vue@3/dist/vue.global.js"&gt;&lt;/script&gt;
+
+&lt;script&gt;
+    const { createApp } = Vue;
+    
+    const app = createApp({
+        data() {
+            return {
+                message: 'Product Store'
+            }
+        }
+    });
+    
+    // Register ProductCard component
+    app.component('ProductCard', {
+        template: `
+            &lt;div class="card"&gt;
+                &lt;h3&gt;{{ product.name }}&lt;/h3&gt;
+                &lt;p class="price"&gt;${{ product.price.toFixed(2) }}&lt;/p&gt;
+                &lt;p&gt;{{ product.description }}&lt;/p&gt;
+                &lt;button @click="buy"&gt;Buy Now&lt;/button&gt;
+            &lt;/div&gt;
+        `,
+        data() {
+            return {
+                product: {
+                    name: 'Vue.js Book',
+                    price: 29.99,
+                    description: 'Learn Vue.js the easy way!'
+                }
+            }
+        },
+        methods: {
+            buy() {
+                alert(`Added ${this.product.name} to cart!`);
+            }
+        }
+    });
+    
+    app.mount('#app');
+&lt;/script&gt;
+        </div>
+    </div>
+
+    <!-- KEY CONCEPTS -->
+    <div class="step">
+        <h2>🎓 Key Concepts You Learned</h2>
+        <div class="explanation">
+            <h3>Component Structure:</h3>
+            <ul>
+                <li>✅ <code>app.component('ComponentName', { ... })</code> - Register a component</li>
+                <li>✅ <code>template</code> - HTML structure of the component</li>
+                <li>✅ <code>data()</code> - Must be a function that returns an object</li>
+                <li>✅ <code>methods</code> - Functions that handle actions</li>
+            </ul>
+            
+            <h3>Template Syntax:</h3>
+            <ul>
+                <li>✅ <code>{{ variable }}</code> - Display data</li>
+                <li>✅ <code>{{ product.price.toFixed(2) }}</code> - Format numbers</li>
+                <li>✅ <code>@click="methodName"</code> - Handle button clicks</li>
+            </ul>
+            
+            <h3>Accessing Data:</h3>
+            <ul>
+                <li>✅ In template: <code>{{ product.name }}</code></li>
+                <li>✅ In methods: <code>this.product.name</code></li>
+            </ul>
+            
+            <h3>Critical Rules:</h3>
+            <ul>
+                <li>⚠️ <code>data()</code> must be a function (not an object!)</li>
+                <li>⚠️ Component names use PascalCase: <code>'ProductCard'</code></li>
+                <li>⚠️ Use kebab-case in templates: <code>&lt;product-card&gt;</code></li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Ready for the Exercise?</strong> You now have everything you need! Go to the exercise page and build your ProductCard component. Remember:
+            <ol>
+                <li>Register the component with <code>app.component()</code></li>
+                <li>Add template with name, price, description, and button</li>
+                <li>Add <code>data()</code> function with product object</li>
+                <li>Add <code>buy()</code> method that shows alert</li>
+                <li>Use the component at least 3 times in your HTML</li>
+            </ol>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        // Wait for DOM to be ready
+        document.addEventListener('DOMContentLoaded', function() {
+            const { createApp } = Vue;
+            
+            // Demo 1: Component with data only (button won't work - no method yet)
+            const app1 = createApp({});
+            app1.component('ProductCard', {
+                template: `
+                    <div class="card">
+                        <h3>{{ product.name }}</h3>
+                        <p class="price">${{ product.price.toFixed(2) }}</p>
+                        <p>{{ product.description }}</p>
+                        <button disabled style="opacity: 0.5;">Buy Now (method not added yet)</button>
+                    </div>
+                `,
+                data() {
+                    return {
+                        product: {
+                            name: 'Vue.js Book',
+                            price: 29.99,
+                            description: 'Learn Vue.js the easy way!'
+                        }
+                    }
+                }
+            });
+            app1.mount('#demo1');
+            
+            // Demo 2: Complete component
+            const app2 = createApp({});
+            app2.component('ProductCard', {
+                template: `
+                    <div class="card">
+                        <h3>{{ product.name }}</h3>
+                        <p class="price">${{ product.price.toFixed(2) }}</p>
+                        <p>{{ product.description }}</p>
+                        <button @click="buy">Buy Now</button>
+                    </div>
+                `,
+                data() {
+                    return {
+                        product: {
+                            name: 'Vue.js Book',
+                            price: 29.99,
+                            description: 'Learn Vue.js the easy way!'
+                        }
+                    }
+                },
+                methods: {
+                    buy() {
+                        alert(`Added ${this.product.name} to cart!`);
+                    }
+                }
+            });
+            app2.mount('#demo2');
+            
+            // Demo 3: Multiple instances
+            const app3 = createApp({});
+            app3.component('ProductCard', {
+                template: `
+                    <div class="card">
+                        <h3>{{ product.name }}</h3>
+                        <p class="price">${{ product.price.toFixed(2) }}</p>
+                        <p>{{ product.description }}</p>
+                        <button @click="buy">Buy Now</button>
+                    </div>
+                `,
+                data() {
+                    return {
+                        product: {
+                            name: 'Vue.js Book',
+                            price: 29.99,
+                            description: 'Learn Vue.js the easy way!'
+                        }
+                    }
+                },
+                methods: {
+                    buy() {
+                        alert(`Added ${this.product.name} to cart!`);
+                    }
+                }
+            });
+            app3.mount('#demo3');
+        });
+    </script>
+</body>
+</html>

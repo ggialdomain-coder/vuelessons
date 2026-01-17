@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game Exercise - Build It Yourself!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f6f9fc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        h1 {
+            color: #42b983;
+            text-align: center;
+        }
+        .hints {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .hints h3 {
+            margin-top: 0;
+            color: #ff9800;
+        }
+        input[type="number"] {
+            padding: 12px;
+            margin: 10px 5px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 200px;
+        }
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #42b983;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        .message {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .message.correct {
+            background: #d4edda;
+            color: #155724;
+        }
+        .message.too-high {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .message.too-low {
+            background: #fff3cd;
+            color: #856404;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Number Guessing Game Exercise</h1>
+        <p style="text-align: center; color: #666;">Build your number guessing game here! Follow the requirements below.</p>
+        
+        <div class="hints">
+            <h3>📋 Requirements:</h3>
+            <ol>
+                <li>Display a random number between 1-100 (generate when "New Game" is clicked)</li>
+                <li>User can guess the number (input field and submit button)</li>
+                <li>Show "Too high", "Too low", or "Correct!" messages</li>
+                <li>Track number of guesses</li>
+                <li>Add a "New Game" button to reset everything</li>
+                <li>Prevent form submission with Enter key (use <code>@submit.prevent</code>)</li>
+            </ol>
+            
+            <h3>💡 Hints:</h3>
+            <ul>
+                <li>Use <code>Math.floor(Math.random() * 100) + 1</code> to generate random number</li>
+                <li>Create <code>startNewGame()</code> method to initialize the game</li>
+                <li>Create <code>makeGuess()</code> method to check the guess</li>
+                <li>Use <code>@click</code> for button events</li>
+                <li>Use <code>@submit.prevent</code> for form submission</li>
+                <li>Use <code>v-model.number</code> for the number input</li>
+                <li>Use <code>:class</code> to style messages differently (correct/too-high/too-low)</li>
+                <li>Convert user input to number with <code>Number()</code></li>
+            </ul>
+        </div>
+
+        <!-- YOUR CODE STARTS HERE -->
+        <div id="app">
+            <h2 style="color: #42b983; text-align: center;">Number Guessing Game</h2>
+            <p style="text-align: center;">I'm thinking of a number between 1 and 100. Can you guess it?</p>
+            <button @click="startNewGame">New Game</button>
+
+            <form  @submit.prevent="makeGuess" v-if="gameStarted">
+                <input type="number" v-modal.number ="userGuess" min="1" max="100" required>
+                <button type="submit">Guess</button>
+            </form>
+
+            <div v-if="message" class="message" :class="{'correct': message.includes('Correct'), 'too-high': message.includes('high'), 'too-low': message.includes('low')}">{{message}}</div>
+
+            <p v-if="guessCount > 0">
+                Guesses: {{guessCount}}
+            </p>
+            
+            <!-- TODO: Add "New Game" button -->
+            <!-- Use @click="startNewGame" -->
+            
+            <!-- TODO: Add form for guessing -->
+            <!-- 
+            Steps:
+            1. Create form with @submit.prevent="makeGuess"
+            2. Add input with v-model.number="userGuess" and type="number"
+            3. Add submit button
+            4. Use v-if to show form only when game is started
+            -->
+            
+            <!-- TODO: Display message -->
+            <!-- 
+            Steps:
+            1. Use v-if to show message when it exists
+            2. Use :class to add dynamic classes (correct/too-high/too-low)
+            3. Display {{ message }}
+            -->
+            
+            <!-- TODO: Display guess count -->
+            <!-- Show "Guesses: X" when guessCount > 0 -->
+            
+        </div>
+        <!-- YOUR CODE ENDS HERE -->
+    </div>
+
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        createApp({
+            data() {
+                return {
+                    secretNumber: 0,
+                    userGuess: '',
+                    feedbackMessage: '',
+                    guessCount: 0,
+                    gameStarted: true
+                    // TODO: Add your data properties here
+                    // You'll need:
+                    // - secretNumber (the number to guess)
+                    // - userGuess (user's input)
+                    // - message (feedback message)
+                    // - guessCount (number of guesses)
+                    // - gameStarted (whether game is active)
+                }
+            },
+            methods: {
+                startNewGame() {
+                    this.secretNumber = Math.floor(Math.random() * 100) + 1;
+                    this.userGuess = '';
+                    this.message = '';
+                    this.guessCount = 0;
+                    this.gameStarted = true;
+
+                    console.log('secret number:', this.secretNumber)
+                },
+                makeGuess() {
+                    const guess = Number(this.userGuess);
+                    this.guessCount++;
+                    if (guess == this.secretNumber) {
+                        this.message = "correct!";
+                    } else if (guess > this.secretNumber) {
+                        this.message = "too high!";
+                    } else {
+                        this.message="too low";
+                    }
+
+                    this.userGuess ='';
+                }
+                // TODO: Create startNewGame() method
+                // It should:
+                // 1. Generate random number between 1-100
+                // 2. Reset userGuess, message, guessCount
+                // 3. Set gameStarted to true
+                
+                // TODO: Create makeGuess() method
+                // It should:
+                // 1. Convert userGuess to number
+                // 2. Increment guessCount
+                // 3. Compare guess with secretNumber
+                // 4. Set message to "Correct!", "Too high!", or "Too low!"
+                // 5. Clear userGuess
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teleport & Suspense Exercise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .exercise-box {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .requirements {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #ff9800;
+            margin: 20px 0;
+        }
+        .hint {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+        .code-block {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            border: 1px solid #ddd;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        .nav-link {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background: #e3f2fd;
+            color: #1976d2;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .nav-link:hover {
+            background: #bbdefb;
+        }
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 1000;
+            max-width: 400px;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-link">
+        <a href="index.html">← Back to Lesson 23</a>
+    </div>
+
+    <div class="exercise-box">
+        <h1>✏️ Exercise: Build Modal with Teleport</h1>
+        
+        <div class="requirements">
+            <h2>📋 Requirements</h2>
+            <p><strong>Your Task:</strong> Build a modal system using Teleport.</p>
+            
+            <h3>Part 1: Create Modal Component</h3>
+            <ol>
+                <li>Create a Modal component that:
+                    <ul>
+                        <li>Accepts <code>isOpen</code> prop (boolean)</li>
+                        <li>Displays modal title and message</li>
+                        <li>Has a close button</li>
+                        <li>Emits 'close' event when closed</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <h3>Part 2: Use Teleport</h3>
+            <ol>
+                <li>Wrap modal content in <code>&lt;Teleport to="body"&gt;</code></li>
+                <li>Add overlay background (dark semi-transparent)</li>
+                <li>Position modal in center of screen</li>
+                <li>Close modal when clicking overlay</li>
+            </ol>
+            
+            <h3>Part 3: Add Functionality</h3>
+            <ol>
+                <li>Add "Open Modal" button in main component</li>
+                <li>Control modal visibility with reactive state</li>
+                <li>Test that modal renders at body level</li>
+            </ol>
+        </div>
+        
+        <div class="hint">
+            <h3>💡 Hints</h3>
+            <ul>
+                <li>Use <code>&lt;Teleport to="body"&gt;</code> to render at body level</li>
+                <li>Use <code>@click.stop</code> to prevent modal clicks from closing</li>
+                <li>Overlay should have <code>position: fixed</code> and cover full screen</li>
+                <li>Modal should be centered with <code>transform: translate(-50%, -50%)</code></li>
+            </ul>
+        </div>
+        
+        <div class="exercise-box">
+            <h2>🎯 Your Solution Area</h2>
+            <p>Build your modal with Teleport below:</p>
+            
+            <div id="app">
+                
+                    <button @click="showModal = true">Open Modal</button>
+                    <Teleport to="body">   
+                        <div v-if="showModal" class="overlay" @click="showModal = false">
+                            <div class="modal" @click.stop>
+                                <h3>Modal Title</h3>
+                                <p>This is a modal messgae</p>
+                                <button @click="showModal = false">close</button>
+                            </div>
+
+                        </div> 
+                    </Teleport>
+            </div>
+        </div>
+        
+        <div class="code-block">// Starter code structure
+const { createApp, ref } = Vue;
+
+// TODO: Create Modal component
+const Modal = {
+    template: '<Teleport to="body">' +
+        // Your modal HTML here
+    '</Teleport>',
+    props: {
+        isOpen: Boolean
+    },
+    emits: ['close']
+};
+
+// TODO: Use in app
+const app = createApp({
+    setup() {
+        const showModal = ref(false);
+        // Your code here
+        return {
+            showModal
+        }
+    }
+});
+
+app.component('Modal', Modal);
+app.mount('#app');</div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp, ref } = Vue;
+
+        const app = createApp({
+            setup() {
+                const showModal = ref(false);
+                const closeModal = () => {
+                    showModal.value = false;
+                };
+                return {
+                    showModal,
+                    closeModal
+                }
+            }
+        })
+
+        app.mount('#app');
+        // YOUR CODE HERE
+        // 1. Create Modal component with Teleport
+        // 2. Add overlay and modal content
+        // 3. Add open/close functionality
+        
+        
+    </script>
+</body>
+</html>
+
+
+
+

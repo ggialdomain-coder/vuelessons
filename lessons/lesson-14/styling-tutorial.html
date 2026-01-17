@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a Notification System with Dynamic Styling - Step by Step</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .step {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .step h2 {
+            color: #42b983;
+            border-bottom: 2px solid #42b983;
+            padding-bottom: 10px;
+        }
+        .explanation {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #42b983;
+        }
+        .code-block {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            word-wrap: break-word;
+            border: 1px solid #ddd;
+        }
+        .demo-app {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin: 20px 0;
+        }
+        .tip {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        .warning {
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #dc3545;
+            margin: 15px 0;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        .notification-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .notification-controls button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .btn-success {
+            background: #4caf50;
+            color: white;
+        }
+        .btn-error {
+            background: #f44336;
+            color: white;
+        }
+        .btn-warning {
+            background: #ff9800;
+            color: white;
+        }
+        .btn-info {
+            background: #2196f3;
+            color: white;
+        }
+        .notification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .notification {
+            padding: 15px 20px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .notification-close {
+            background: rgba(255,255,255,0.3);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .notification-close:hover {
+            background: rgba(255,255,255,0.5);
+        }
+        .success {
+            background: #4caf50;
+            color: white;
+        }
+        .error {
+            background: #f44336;
+            color: white;
+        }
+        .warning {
+            background: #ff9800;
+            color: white;
+        }
+        .info {
+            background: #2196f3;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 Building a Notification System with Dynamic Styling - Step by Step Tutorial</h1>
+    <p style="font-size: 1.1em; color: #666;">Learn how to build a notification system using :class and :style bindings! This tutorial will guide you through building exactly what you need for the exercise.</p>
+    
+    <div class="warning" style="margin-top: 20px;">
+        <strong>📝 Note:</strong> This tutorial is designed to match the exercise requirements exactly. Follow each step in order to build the notification system step by step.
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step">
+        <h2>Step 1: Understanding Dynamic Styling</h2>
+        <div class="explanation">
+            <p><strong>Goal:</strong> Build a notification system where each notification has different styling based on its type (success, error, warning, info).</p>
+            <p><strong>What is Dynamic Styling?</strong></p>
+            <ul>
+                <li>✅ Apply CSS classes conditionally using <code>:class</code></li>
+                <li>✅ Apply inline styles dynamically using <code>:style</code></li>
+                <li>✅ Change appearance based on component data</li>
+                <li>✅ Create interactive, responsive UIs</li>
+            </ul>
+        </div>
+        
+        <div class="explanation">
+            <p><strong>Two Main Approaches:</strong></p>
+            <ul>
+                <li><code>:class</code> - Bind CSS classes (better for predefined styles)</li>
+                <li><code>:style</code> - Bind inline styles (better for dynamic values like colors)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step">
+        <h2>Step 2: Set Up Data Structure</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create the notifications array. Each notification needs an <code>id</code>, <code>message</code>, and <code>type</code>.</p>
+            <p><strong>Key concept:</strong> The <code>type</code> will determine the styling!</p>
+        </div>
+        
+        <div class="code-block">
+data() {
+    return {
+        notifications: []
+    }
+}
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>notifications</code> - Array to store all notifications</li>
+                <li>Each notification will have: <code>id</code> (unique identifier), <code>message</code> (text to display), <code>type</code> (success, error, warning, info)</li>
+                <li>We start with an empty array - notifications will be added dynamically</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step">
+        <h2>Step 3: Create Methods - addNotification</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create a method to add new notifications with unique IDs.</p>
+            <p><strong>Key concept:</strong> Generate unique IDs and push new notifications to the array.</p>
+        </div>
+        
+        <div class="code-block">
+methods: {
+    addNotification(type, message) {
+        this.notifications.push({
+            id: Date.now(),
+            message: message,
+            type: type
+        });
+    }
+}
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>addNotification(type, message)</code> - Method that takes type and message as parameters</li>
+                <li><code>Date.now()</code> - Generates unique ID using current timestamp</li>
+                <li><code>this.notifications.push()</code> - Adds new notification to the array</li>
+                <li>Each notification object has: <code>id</code>, <code>message</code>, <code>type</code></li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Notification Types:</strong> Use <code>'success'</code>, <code>'error'</code>, <code>'warning'</code>, or <code>'info'</code> as type values.
+        </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step">
+        <h2>Step 4: Create Methods - removeNotification</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create a method to remove notifications by ID.</p>
+            <p><strong>Key concept:</strong> Use <code>filter()</code> to create a new array without the notification to remove.</p>
+        </div>
+        
+        <div class="code-block">
+methods: {
+    addNotification(type, message) {
+        this.notifications.push({
+            id: Date.now(),
+            message: message,
+            type: type
+        });
+    },
+    removeNotification(id) {
+        this.notifications = this.notifications.filter(n => n.id !== id);
+    }
+}
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>removeNotification(id)</code> - Method that takes notification ID as parameter</li>
+                <li><code>filter(n => n.id !== id)</code> - Creates new array with all notifications except the one with matching ID</li>
+                <li>This removes the notification from the list</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step">
+        <h2>Step 5: Create Methods - getColor (for :style)</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create a helper method that returns color based on notification type. This will be used with <code>:style</code> binding.</p>
+            <p><strong>Key concept:</strong> Return different colors for different notification types.</p>
+        </div>
+        
+        <div class="code-block">
+methods: {
+    addNotification(type, message) {
+        this.notifications.push({
+            id: Date.now(),
+            message: message,
+            type: type
+        });
+    },
+    removeNotification(id) {
+        this.notifications = this.notifications.filter(n => n.id !== id);
+    },
+    getColor(type) {
+        const colors = {
+            success: '#4caf50',
+            error: '#f44336',
+            warning: '#ff9800',
+            info: '#2196f3'
+        };
+        return colors[type] || '#666';
+    }
+}
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>getColor(type)</code> - Method that returns color string based on type</li>
+                <li><code>colors</code> object - Maps each type to its color</li>
+                <li><code>colors[type]</code> - Gets color for the given type</li>
+                <li><code>|| '#666'</code> - Default color if type doesn't match</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Alternative:</strong> You can also use a computed property or inline the colors directly in <code>:style</code> binding.
+        </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step">
+        <h2>Step 6: Add Buttons to Create Notifications</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Add buttons in the HTML template that call <code>addNotification</code> with different types and messages.</p>
+            <p><strong>Key concept:</strong> Each button triggers a different notification type. This matches the exercise requirement to "Add buttons to create different notification types".</p>
+        </div>
+        
+        <div class="code-block">
+&lt;div class="notification-controls"&gt;
+    &lt;button 
+        class="btn-success" 
+        @click="addNotification('success', 'Operation successful!')"&gt;
+        Success
+    &lt;/button&gt;
+    &lt;button 
+        class="btn-error" 
+        @click="addNotification('error', 'Something went wrong!')"&gt;
+        Error
+    &lt;/button&gt;
+    &lt;button 
+        class="btn-warning" 
+        @click="addNotification('warning', 'Please check your input!')"&gt;
+        Warning
+    &lt;/button&gt;
+    &lt;button 
+        class="btn-info" 
+        @click="addNotification('info', 'Here is some information!')"&gt;
+        Info
+    &lt;/button&gt;
+&lt;/div&gt;
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li>Four buttons, one for each notification type (success, error, warning, info)</li>
+                <li><code>@click="addNotification('success', '...')"</code> - Calls method with type and message</li>
+                <li>Each button has a different CSS class (<code>btn-success</code>, <code>btn-error</code>, etc.) for styling</li>
+                <li>Clicking a button adds a new notification to the array</li>
+                <li>This matches the exercise requirement: "Add buttons to create different notification types"</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="step">
+        <h2>Step 7: Render Notifications with v-for, :key, and :class</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Use <code>v-for</code> to render notifications, always include <code>:key</code>, and use <code>:class</code> to apply CSS classes based on type.</p>
+            <p><strong>Key concept:</strong> Use object syntax with <code>:class</code> to conditionally apply classes. This matches the exercise requirement: "Use :class with object syntax to apply CSS classes based on notification type".</p>
+        </div>
+        
+        <div class="code-block">
+&lt;div class="notification-list"&gt;
+    &lt;div 
+        v-for="notification in notifications" 
+        :key="notification.id"
+        :class="{
+            success: notification.type === 'success',
+            error: notification.type === 'error',
+            warning: notification.type === 'warning',
+            info: notification.type === 'info'
+        }"
+        class="notification"&gt;
+        {{ notification.message }}
+    &lt;/div&gt;
+&lt;/div&gt;
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>v-for="notification in notifications"</code> - Loops through notifications array (matches exercise requirement)</li>
+                <li><code>:key="notification.id"</code> - Always use key with v-for! (matches exercise requirement: "don't forget :key!")</li>
+                <li><code>:class="{ success: notification.type === 'success', error: notification.type === 'error', warning: notification.type === 'warning', info: notification.type === 'info' }"</code> - Object syntax for conditional classes</li>
+                <li>If <code>notification.type === 'success'</code> is true, the <code>success</code> class is applied</li>
+                <li>Same logic for error, warning, and info types</li>
+                <li><code>class="notification"</code> - Base class always applied</li>
+                <li>This matches the exercise requirement: "Use :class with object syntax to apply CSS classes based on notification type"</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Object Syntax:</strong> <code>:class="{ className: condition }</code> applies <code>className</code> only when <code>condition</code> is true.
+        </div>
+    </div>
+
+    <!-- STEP 8 -->
+    <div class="step">
+        <h2>Step 8: Add :style Binding for Dynamic Colors</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Add <code>:style</code> binding to apply dynamic background colors. This works alongside <code>:class</code>.</p>
+            <p><strong>Key concept:</strong> Use object syntax with <code>:style</code> to set inline styles dynamically. This matches the exercise requirement: "Use :style with object syntax to apply dynamic colors based on type".</p>
+        </div>
+        
+        <div class="code-block">
+&lt;div 
+    v-for="notification in notifications" 
+    :key="notification.id"
+    :class="{
+        success: notification.type === 'success',
+        error: notification.type === 'error',
+        warning: notification.type === 'warning',
+        info: notification.type === 'info'
+    }"
+    :style="{
+        backgroundColor: getColor(notification.type),
+        color: 'white'
+    }"
+    class="notification"&gt;
+    {{ notification.message }}
+&lt;/div&gt;
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>:style="{ backgroundColor: getColor(notification.type), color: 'white' }"</code> - Object syntax for inline styles</li>
+                <li><code>getColor(notification.type)</code> - Calls method to get color based on type (uses the <code>getColor</code> method we created in Step 5)</li>
+                <li><code>backgroundColor</code> - CSS property (camelCase in Vue)</li>
+                <li><code>color: 'white'</code> - Always white text</li>
+                <li>You can use either <code>:class</code> or <code>:style</code>, or both together!</li>
+                <li>This matches the exercise requirement: "Use :style with object syntax to apply dynamic colors based on type"</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 CSS Properties:</strong> In <code>:style</code>, use camelCase (e.g., <code>backgroundColor</code>) or kebab-case with quotes (e.g., <code>'background-color'</code>).
+        </div>
+    </div>
+
+    <!-- STEP 9 -->
+    <div class="step">
+        <h2>Step 9: Add Close Button to Each Notification</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Add a close button to each notification that calls <code>removeNotification</code>.</p>
+            <p><strong>Key concept:</strong> Each notification should be dismissible. This matches the exercise requirement: "Each notification should have a close button to dismiss it".</p>
+        </div>
+        
+        <div class="code-block">
+&lt;div 
+    v-for="notification in notifications" 
+    :key="notification.id"
+    :class="{
+        success: notification.type === 'success',
+        error: notification.type === 'error',
+        warning: notification.type === 'warning',
+        info: notification.type === 'info'
+    }"
+    :style="{
+        backgroundColor: getColor(notification.type),
+        color: 'white'
+    }"
+    class="notification"&gt;
+    &lt;span&gt;{{ notification.message }}&lt;/span&gt;
+    &lt;button 
+        class="notification-close" 
+        @click="removeNotification(notification.id)"&gt;
+        ×
+    &lt;/button&gt;
+&lt;/div&gt;
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li>Wrapped message in <code>&lt;span&gt;</code> for layout (to separate message from close button)</li>
+                <li><code>@click="removeNotification(notification.id)"</code> - Calls method with notification's ID (uses the <code>removeNotification</code> method we created in Step 4)</li>
+                <li><code>×</code> - Close symbol (you can use 'X' or any icon)</li>
+                <li>Clicking the button removes that specific notification from the array</li>
+                <li>This matches the exercise requirement: "Each notification should have a close button to dismiss it"</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 10 -->
+    <div class="step">
+        <h2>Step 10: Complete Working Code</h2>
+        <p>Here's the complete code for the notification system that matches your exercise:</p>
+        
+        <div class="code-block">
+&lt;script src="https://unpkg.com/vue@3/dist/vue.global.js"&gt;&lt;/script&gt;
+
+&lt;script&gt;
+    const { createApp } = Vue;
+    
+    const app = createApp({
+        data() {
+            return {
+                notifications: []
+            }
+        },
+        methods: {
+            addNotification(type, message) {
+                this.notifications.push({
+                    id: Date.now(),
+                    message: message,
+                    type: type
+                });
+            },
+            removeNotification(id) {
+                this.notifications = this.notifications.filter(n => n.id !== id);
+            },
+            getColor(type) {
+                const colors = {
+                    success: '#4caf50',
+                    error: '#f44336',
+                    warning: '#ff9800',
+                    info: '#2196f3'
+                };
+                return colors[type] || '#666';
+            }
+        }
+    });
+    
+    app.mount('#app');
+&lt;/script&gt;
+
+&lt;!-- HTML --&gt;
+&lt;div id="app"&gt;
+    &lt;h2&gt;Notification System&lt;/h2&gt;
+    
+    &lt;div class="notification-controls"&gt;
+        &lt;button 
+            class="btn-success" 
+            @click="addNotification('success', 'Operation successful!')"&gt;
+            Success
+        &lt;/button&gt;
+        &lt;button 
+            class="btn-error" 
+            @click="addNotification('error', 'Something went wrong!')"&gt;
+            Error
+        &lt;/button&gt;
+        &lt;button 
+            class="btn-warning" 
+            @click="addNotification('warning', 'Please check your input!')"&gt;
+            Warning
+        &lt;/button&gt;
+        &lt;button 
+            class="btn-info" 
+            @click="addNotification('info', 'Here is some information!')"&gt;
+            Info
+        &lt;/button&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="notification-list"&gt;
+        &lt;div 
+            v-for="notification in notifications" 
+            :key="notification.id"
+            :class="{
+                success: notification.type === 'success',
+                error: notification.type === 'error',
+                warning: notification.type === 'warning',
+                info: notification.type === 'info'
+            }"
+            :style="{
+                backgroundColor: getColor(notification.type),
+                color: 'white'
+            }"
+            class="notification"&gt;
+            &lt;span&gt;{{ notification.message }}&lt;/span&gt;
+            &lt;button 
+                class="notification-close" 
+                @click="removeNotification(notification.id)"&gt;
+                ×
+            &lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- STEP 11 -->
+    <div class="step">
+        <h2>Step 11: Full Working Demo</h2>
+        <p>See the complete notification system in action:</p>
+        
+        <div class="demo-app">
+            <h3>Complete Notification System:</h3>
+            <div id="demo">
+                <h2 style="color: #42b983; text-align: center;">Notification System</h2>
+                
+                <div class="notification-controls">
+                    <button 
+                        class="btn-success" 
+                        @click="addNotification('success', 'Operation successful!')">
+                        Success
+                    </button>
+                    <button 
+                        class="btn-error" 
+                        @click="addNotification('error', 'Something went wrong!')">
+                        Error
+                    </button>
+                    <button 
+                        class="btn-warning" 
+                        @click="addNotification('warning', 'Please check your input!')">
+                        Warning
+                    </button>
+                    <button 
+                        class="btn-info" 
+                        @click="addNotification('info', 'Here is some information!')">
+                        Info
+                    </button>
+                </div>
+                
+                <div class="notification-list">
+                    <div 
+                        v-for="notification in notifications" 
+                        :key="notification.id"
+                        :class="{
+                            success: notification.type === 'success',
+                            error: notification.type === 'error',
+                            warning: notification.type === 'warning',
+                            info: notification.type === 'info'
+                        }"
+                        :style="{
+                            backgroundColor: getColor(notification.type),
+                            color: 'white'
+                        }"
+                        class="notification">
+                        <span>{{ notification.message }}</span>
+                        <button 
+                            class="notification-close" 
+                            @click="removeNotification(notification.id)">
+                            ×
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KEY CONCEPTS -->
+    <div class="step">
+        <h2>🎓 Key Concepts You Learned</h2>
+        <div class="explanation">
+            <h3>:class Binding:</h3>
+            <ul>
+                <li>✅ Use object syntax: <code>:class="{ className: condition }"</code></li>
+                <li>✅ Apply classes conditionally based on data</li>
+                <li>✅ Can combine multiple classes in one object</li>
+                <li>✅ Better for predefined CSS classes</li>
+            </ul>
+            
+            <h3>:style Binding:</h3>
+            <ul>
+                <li>✅ Use object syntax: <code>:style="{ property: value }"</code></li>
+                <li>✅ Apply inline styles dynamically</li>
+                <li>✅ Use camelCase for CSS properties (e.g., <code>backgroundColor</code>)</li>
+                <li>✅ Better for dynamic values (colors, sizes)</li>
+            </ul>
+            
+            <h3>Notification System Pattern:</h3>
+            <ul>
+                <li>✅ Each notification has: <code>id</code>, <code>message</code>, <code>type</code></li>
+                <li>✅ Use <code>v-for</code> with <code>:key</code> to render list</li>
+                <li>✅ Use <code>:class</code> or <code>:style</code> to style based on type</li>
+                <li>✅ Create methods: <code>addNotification(type, message)</code>, <code>removeNotification(id)</code></li>
+                <li>✅ Use <code>filter()</code> to remove items from array</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Ready for the Exercise?</strong> You now have everything you need! This tutorial matches the exercise requirements exactly. Here's how each step maps to the exercise:
+            <ol>
+                <li><strong>Create notifications array</strong> (Step 2) - Matches: "Create a notifications array in data (each notification has: id, message, type)"</li>
+                <li><strong>Add buttons</strong> (Step 6) - Matches: "Add buttons to create different notification types (success, error, warning, info)"</li>
+                <li><strong>Create addNotification method</strong> (Step 3) - Matches: "Create methods: addNotification(type, message)"</li>
+                <li><strong>Create removeNotification method</strong> (Step 4) - Matches: "Create methods: removeNotification(id)"</li>
+                <li><strong>Create getColor method</strong> (Step 5) - Matches: "Create a method getColor(type) that returns color based on type"</li>
+                <li><strong>Render with v-for and :key</strong> (Step 7) - Matches: "Use v-for to render notifications (don't forget :key!)"</li>
+                <li><strong>Use :class with object syntax</strong> (Step 7) - Matches: "Use :class with object syntax to apply CSS classes based on notification type"</li>
+                <li><strong>Use :style with object syntax</strong> (Step 8) - Matches: "Use :style with object syntax to apply dynamic colors based on type"</li>
+                <li><strong>Add close button</strong> (Step 9) - Matches: "Each notification should have a close button to dismiss it"</li>
+            </ol>
+            <p><strong>Go to the exercise page and build your notification system following these steps!</strong></p>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        (function() {
+            function initDemo() {
+                if (typeof Vue === 'undefined') {
+                    setTimeout(initDemo, 100);
+                    return;
+                }
+                
+                const { createApp } = Vue;
+                
+                const app = createApp({
+                    data() {
+                        return {
+                            notifications: []
+                        }
+                    },
+                    methods: {
+                        addNotification(type, message) {
+                            this.notifications.push({
+                                id: Date.now(),
+                                message: message,
+                                type: type
+                            });
+                        },
+                        removeNotification(id) {
+                            this.notifications = this.notifications.filter(n => n.id !== id);
+                        },
+                        getColor(type) {
+                            const colors = {
+                                success: '#4caf50',
+                                error: '#f44336',
+                                warning: '#ff9800',
+                                info: '#2196f3'
+                            };
+                            return colors[type] || '#666';
+                        }
+                    }
+                });
+                
+                app.mount('#demo');
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initDemo);
+            } else {
+                initDemo();
+            }
+        })();
+    </script>
+</body>
+</html>
+

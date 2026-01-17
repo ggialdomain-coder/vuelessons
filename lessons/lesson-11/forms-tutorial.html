@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a Registration Form with v-model - Step by Step</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .step {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .step h2 {
+            color: #42b983;
+            border-bottom: 2px solid #42b983;
+            padding-bottom: 10px;
+        }
+        .explanation {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #42b983;
+        }
+        .code-block {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            word-wrap: break-word;
+            border: 1px solid #ddd;
+        }
+        .demo-app {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin: 20px 0;
+        }
+        .tip {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        .warning {
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #dc3545;
+            margin: 15px 0;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            padding: 10px;
+            margin: 5px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 400px;
+            font-size: 16px;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #42b983;
+        }
+        input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #28a745;
+        }
+        .submitted-data {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>📝 Building a Registration Form with v-model - Step by Step Tutorial</h1>
+    <p style="font-size: 1.1em; color: #666;">Learn how to build a registration form with validation! This tutorial will guide you through building exactly what you need for the exercise.</p>
+
+    <!-- STEP 1 -->
+    <div class="step">
+        <h2>Step 1: Understanding What We're Building</h2>
+        <div class="explanation">
+            <p><strong>Goal:</strong> Create a registration form with validation that collects user information and validates it before submission.</p>
+            <p><strong>What we need:</strong></p>
+            <ul>
+                <li>Form fields: name, email, password, age, country, terms checkbox</li>
+                <li>v-model binding for each field</li>
+                <li>Form validation (check if fields are valid)</li>
+                <li>Error messages for invalid fields</li>
+                <li>Form submission handler</li>
+            </ul>
+        </div>
+        
+        <div class="explanation">
+            <p><strong>What is v-model?</strong></p>
+            <ul>
+                <li>✅ Two-way data binding - automatically syncs input value with component data</li>
+                <li>✅ Works with: text, number, email, password, checkbox, radio, select, textarea</li>
+                <li>✅ Much easier than manually handling input events!</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 v-model is shorthand for:</strong> <code>v-bind:value</code> + <code>@input</code> event handler. Vue does all the work for you!
+        </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step">
+        <h2>Step 2: Set Up Form Data</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create data properties for all form fields.</p>
+            <p><strong>Key concept:</strong> Each form field needs a corresponding data property.</p>
+        </div>
+        
+        <div class="code-block">
+data() {
+    return {
+        name: '',
+        email: '',
+        password: '',
+        age: null,
+        country: '',
+        terms: false,
+        submitted: false
+    }
+}
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>name</code>, <code>email</code>, <code>password</code> - Strings (start empty)</li>
+                <li><code>age</code> - Number (start as null)</li>
+                <li><code>country</code> - String (start empty)</li>
+                <li><code>terms</code> - Boolean (start as false)</li>
+                <li><code>submitted</code> - Boolean to track if form was submitted</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step">
+        <h2>Step 3: Create Form Fields with v-model</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create form inputs and bind them with v-model.</p>
+            <p><strong>Key concept:</strong> Use <code>v-model</code> to bind each input to data.</p>
+        </div>
+        
+        <div class="code-block">
+&lt;form @submit.prevent="handleSubmit"&gt;
+    &lt;div class="form-group"&gt;
+        &lt;label&gt;Name:&lt;/label&gt;
+        &lt;input v-model="name" type="text" placeholder="Enter your name"&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="form-group"&gt;
+        &lt;label&gt;Email:&lt;/label&gt;
+        &lt;input v-model="email" type="email" placeholder="Enter your email"&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="form-group"&gt;
+        &lt;label&gt;Password:&lt;/label&gt;
+        &lt;input v-model="password" type="password" placeholder="Enter password"&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="form-group"&gt;
+        &lt;label&gt;Age:&lt;/label&gt;
+        &lt;input v-model.number="age" type="number" placeholder="Enter your age"&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="form-group"&gt;
+        &lt;label&gt;Country:&lt;/label&gt;
+        &lt;select v-model="country"&gt;
+            &lt;option value=""&gt;Select a country&lt;/option&gt;
+            &lt;option value="us"&gt;USA&lt;/option&gt;
+            &lt;option value="uk"&gt;UK&lt;/option&gt;
+            &lt;option value="ca"&gt;Canada&lt;/option&gt;
+        &lt;/select&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="form-group"&gt;
+        &lt;label&gt;
+            &lt;input v-model="terms" type="checkbox"&gt;
+            I agree to the terms and conditions
+        &lt;/label&gt;
+    &lt;/div&gt;
+    
+    &lt;button type="submit"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>v-model="name"</code> - Binds text input to name data</li>
+                <li><code>v-model="email"</code> - Binds email input to email data</li>
+                <li><code>v-model.number="age"</code> - Converts age to number automatically</li>
+                <li><code>v-model="country"</code> - Binds select dropdown to country data</li>
+                <li><code>v-model="terms"</code> - Binds checkbox to terms boolean</li>
+                <li><code>@submit.prevent</code> - Prevents form submission, calls handleSubmit</li>
+            </ul>
+        </div>
+
+        <div class="demo-app">
+            <h3>Live Demo (form fields with v-model):</h3>
+            <div id="demo1">
+                <form>
+                    <div class="form-group">
+                        <label>Name:</label>
+                        <input v-model="name" type="text" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input v-model="email" type="email" placeholder="Enter your email">
+                    </div>
+                    <p><small>Name: {{ name }} | Email: {{ email }}</small></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step">
+        <h2>Step 4: Add Form Validation</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create a computed property to check if the form is valid.</p>
+            <p><strong>Key concept:</strong> Use computed property to validate all fields at once.</p>
+        </div>
+        
+        <div class="code-block">
+computed: {
+    isFormValid() {
+        return this.name.length >= 2 &&
+               this.email.includes('@') && this.email.includes('.') &&
+               this.password.length >= 6 &&
+               this.age >= 18 && this.age <= 120 &&
+               this.country !== '' &&
+               this.terms === true;
+    }
+}
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>name.length >= 2</code> - Name must be at least 2 characters</li>
+                <li><code>email.includes('@') && email.includes('.')</code> - Basic email validation</li>
+                <li><code>password.length >= 6</code> - Password must be at least 6 characters</li>
+                <li><code>age >= 18 && age <= 120</code> - Age must be between 18-120</li>
+                <li><code>country !== ''</code> - Country must be selected</li>
+                <li><code>terms === true</code> - Terms must be checked</li>
+                <li>Returns <code>true</code> only if ALL validations pass</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step">
+        <h2>Step 5: Show Error Messages</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Display error messages for invalid fields using v-if.</p>
+            <p><strong>Key concept:</strong> Show errors conditionally based on validation.</p>
+        </div>
+        
+        <div class="code-block">
+&lt;div class="form-group"&gt;
+    &lt;label&gt;Name:&lt;/label&gt;
+    &lt;input v-model="name" type="text" placeholder="Enter your name"&gt;
+    &lt;span v-if="name && name.length < 2" class="error"&gt;
+        Name must be at least 2 characters
+    &lt;/span&gt;
+&lt;/div&gt;
+
+&lt;div class="form-group"&gt;
+    &lt;label&gt;Email:&lt;/label&gt;
+    &lt;input v-model="email" type="email" placeholder="Enter your email"&gt;
+    &lt;span v-if="email && !email.includes('@')" class="error"&gt;
+        Please enter a valid email
+    &lt;/span&gt;
+&lt;/div&gt;
+
+&lt;div class="form-group"&gt;
+    &lt;label&gt;Password:&lt;/label&gt;
+    &lt;input v-model="password" type="password" placeholder="Enter password"&gt;
+    &lt;span v-if="password && password.length < 6" class="error"&gt;
+        Password must be at least 6 characters
+    &lt;/span&gt;
+&lt;/div&gt;
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>v-if="name && name.length < 2"</code> - Shows error only if name exists and is too short</li>
+                <li><code>v-if="email && !email.includes('@')"</code> - Shows error if email exists but invalid</li>
+                <li>Check if field exists first (<code>name &&</code>) to avoid showing errors on empty fields</li>
+                <li>Error messages appear below each invalid field</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step">
+        <h2>Step 6: Handle Form Submission</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create the submit handler and disable button when form is invalid.</p>
+            <p><strong>Key concept:</strong> Only submit if form is valid, show submitted data.</p>
+        </div>
+        
+        <div class="code-block">
+// In template
+&lt;button type="submit" :disabled="!isFormValid"&gt;Submit&lt;/button&gt;
+
+// In methods
+methods: {
+    handleSubmit() {
+        if (this.isFormValid) {
+            this.submitted = true;
+            console.log('Form submitted:', {
+                name: this.name,
+                email: this.email,
+                age: this.age,
+                country: this.country
+            });
+        }
+    }
+}
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>:disabled="!isFormValid"</code> - Disables button when form is invalid</li>
+                <li><code>@submit.prevent="handleSubmit"</code> - Calls handler on form submit</li>
+                <li><code>this.submitted = true</code> - Marks form as submitted</li>
+                <li>Check <code>isFormValid</code> before processing</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="step">
+        <h2>Step 7: Display Submitted Data</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Show the submitted form data after successful submission.</p>
+            <p><strong>Key concept:</strong> Use v-if to show submitted data only when form is submitted.</p>
+        </div>
+        
+        <div class="code-block">
+&lt;div v-if="submitted" class="submitted-data"&gt;
+    &lt;h3&gt;Registration Successful!&lt;/h3&gt;
+    &lt;p&gt;&lt;strong&gt;Name:&lt;/strong&gt; {{ name }}&lt;/p&gt;
+    &lt;p&gt;&lt;strong&gt;Email:&lt;/strong&gt; {{ email }}&lt;/p&gt;
+    &lt;p&gt;&lt;strong&gt;Age:&lt;/strong&gt; {{ age }}&lt;/p&gt;
+    &lt;p&gt;&lt;strong&gt;Country:&lt;/strong&gt; {{ country }}&lt;/p&gt;
+&lt;/div&gt;
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>v-if="submitted"</code> - Only shows when form is submitted</li>
+                <li>Displays all submitted form data</li>
+                <li>Shows success message to user</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 8 -->
+    <div class="step">
+        <h2>Step 8: Complete Working Code</h2>
+        <p>Here's the complete code for the registration form:</p>
+        
+        <div class="code-block">
+&lt;script src="https://unpkg.com/vue@3/dist/vue.global.js"&gt;&lt;/script&gt;
+
+&lt;script&gt;
+    const { createApp } = Vue;
+    
+    const app = createApp({
+        data() {
+            return {
+                name: '',
+                email: '',
+                password: '',
+                age: null,
+                country: '',
+                terms: false,
+                submitted: false
+            }
+        },
+        computed: {
+            isFormValid() {
+                return this.name.length >= 2 &&
+                       this.email.includes('@') && this.email.includes('.') &&
+                       this.password.length >= 6 &&
+                       this.age >= 18 && this.age <= 120 &&
+                       this.country !== '' &&
+                       this.terms === true;
+            }
+        },
+        methods: {
+            handleSubmit() {
+                if (this.isFormValid) {
+                    this.submitted = true;
+                    console.log('Form submitted:', {
+                        name: this.name,
+                        email: this.email,
+                        age: this.age,
+                        country: this.country
+                    });
+                }
+            }
+        }
+    });
+    
+    app.mount('#app');
+&lt;/script&gt;
+
+&lt;!-- HTML --&gt;
+&lt;div id="app"&gt;
+    &lt;form @submit.prevent="handleSubmit"&gt;
+        &lt;div class="form-group"&gt;
+            &lt;label&gt;Name:&lt;/label&gt;
+            &lt;input v-model="name" type="text"&gt;
+            &lt;span v-if="name && name.length < 2" class="error"&gt;
+                Name must be at least 2 characters
+            &lt;/span&gt;
+        &lt;/div&gt;
+        &lt;!-- Add other fields... --&gt;
+        &lt;button type="submit" :disabled="!isFormValid"&gt;Submit&lt;/button&gt;
+    &lt;/form&gt;
+    
+    &lt;div v-if="submitted" class="submitted-data"&gt;
+        &lt;h3&gt;Registration Successful!&lt;/h3&gt;
+        &lt;p&gt;Name: {{ name }}&lt;/p&gt;
+        &lt;p&gt;Email: {{ email }}&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- KEY CONCEPTS -->
+    <div class="step">
+        <h2>🎓 Key Concepts You Learned</h2>
+        <div class="explanation">
+            <h3>v-model with Different Inputs:</h3>
+            <ul>
+                <li>✅ <code>v-model="name"</code> - Text inputs</li>
+                <li>✅ <code>v-model.number="age"</code> - Number inputs (auto-converts)</li>
+                <li>✅ <code>v-model="email"</code> - Email inputs</li>
+                <li>✅ <code>v-model="password"</code> - Password inputs</li>
+                <li>✅ <code>v-model="country"</code> - Select dropdowns</li>
+                <li>✅ <code>v-model="terms"</code> - Checkboxes (boolean)</li>
+            </ul>
+            
+            <h3>Form Validation:</h3>
+            <ul>
+                <li>✅ Use computed property to check if form is valid</li>
+                <li>✅ Show error messages with <code>v-if</code></li>
+                <li>✅ Disable submit button when invalid: <code>:disabled="!isFormValid"</code></li>
+                <li>✅ Check all validations in one computed property</li>
+            </ul>
+            
+            <h3>Form Submission:</h3>
+            <ul>
+                <li>✅ Use <code>@submit.prevent="handleSubmit"</code> on form</li>
+                <li>✅ <code>.prevent</code> prevents default form submission</li>
+                <li>✅ Check validation before processing</li>
+                <li>✅ Show success message after submission</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Ready for the Exercise?</strong> You now have everything you need! Go to the exercise page and build your registration form. Remember:
+            <ol>
+                <li>Create all form fields with v-model</li>
+                <li>Add validation in computed property</li>
+                <li>Show error messages with v-if</li>
+                <li>Disable submit button when invalid</li>
+                <li>Handle form submission</li>
+            </ol>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        (function() {
+            function initDemo() {
+                if (typeof Vue === 'undefined') {
+                    setTimeout(initDemo, 100);
+                    return;
+                }
+                
+                const { createApp } = Vue;
+                
+                // Demo 1: Basic form fields
+                const demo1El = document.getElementById('demo1');
+                if (demo1El) {
+                    const app1 = createApp({
+                        data() {
+                            return {
+                                name: '',
+                                email: ''
+                            }
+                        }
+                    });
+                    app1.mount('#demo1');
+                }
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initDemo);
+            } else {
+                initDemo();
+            }
+        })();
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

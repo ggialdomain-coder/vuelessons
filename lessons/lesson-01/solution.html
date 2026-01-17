@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 1: Solution</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .solution-area {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+    </style>
+</head>
+<body>
+    <h1>✅ Lesson 1: Solution</h1>
+    
+    <div class="solution-area">
+        <h2>Reference Solution:</h2>
+        
+        <div id="app">
+            <h3>{{ greeting }}</h3>
+            <p>My name is: <strong>{{ name }}</strong></p>
+            <p>I'm learning: <strong>{{ learning }}</strong></p>
+            <p>My age is: <strong>{{ age }}</strong></p>
+            <p>My favorite hobby is: <strong>{{ hobby }}</strong></p>
+            
+            <button @click="changeGreeting">Change Greeting</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        createApp({
+            data() {
+                return {
+                    greeting: 'Hello, Vue!',
+                    name: 'Your Name',
+                    learning: 'Vue.js',
+                    age: 25,  // Added age
+                    hobby: 'Coding'  // Added hobby
+                }
+            },
+            methods: {
+                changeGreeting() {
+                    // Array of different greetings
+                    const greetings = [
+                        'Hello, Vue!',
+                        'Hi there!',
+                        'Welcome!',
+                        'Greetings!',
+                        'Hey!'
+                    ];
+                    // Pick a random greeting
+                    this.greeting = greetings[Math.floor(Math.random() * greetings.length)];
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

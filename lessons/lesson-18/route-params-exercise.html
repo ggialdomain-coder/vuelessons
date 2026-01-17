@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route Parameters Exercise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .exercise-box {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .requirements {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #ff9800;
+            margin: 20px 0;
+        }
+        .hint {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+        .code-block {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            border: 1px solid #ddd;
+        }
+        nav {
+            background: #42b983;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 8px 15px;
+            border-radius: 3px;
+        }
+        nav a:hover, nav a.router-link-active {
+            background: rgba(255,255,255,0.2);
+        }
+        .page-content {
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            min-height: 200px;
+            background: white;
+        }
+        .nav-link {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background: #e3f2fd;
+            color: #1976d2;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .nav-link:hover {
+            background: #bbdefb;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-link">
+        <a href="index.html">← Back to Lesson 18</a>
+    </div>
+
+    <div class="exercise-box">
+        <h1>✏️ Exercise: Dynamic Routes with Parameters</h1>
+        
+        <div class="requirements">
+            <h2>📋 Requirements</h2>
+            <p><strong>Your Task:</strong> Build an application with dynamic routes using parameters and query strings.</p>
+            
+            <h3>Part 1: User Profile with Route Parameter</h3>
+            <ol>
+                <li>Create a route <code>/user/:id</code> that displays user information</li>
+                <li>Create a UserProfile component that shows:
+                    <ul>
+                        <li>User ID from route parameter</li>
+                        <li>User name (you can hardcode or use ID to generate)</li>
+                        <li>User email</li>
+                    </ul>
+                </li>
+                <li>Create a user list page with links to different users</li>
+            </ol>
+            
+            <h3>Part 2: Product Details with Route Parameter</h3>
+            <ol>
+                <li>Create a route <code>/product/:id</code></li>
+                <li>Create a ProductDetail component that:
+                    <ul>
+                        <li>Displays product ID from route parameter</li>
+                        <li>Shows product details (name, price, description)</li>
+                        <li>Has a "Back to Products" link</li>
+                    </ul>
+                </li>
+                <li>Create a products list page with links to product details</li>
+            </ol>
+            
+            <h3>Part 3: Search Page with Query Strings</h3>
+            <ol>
+                <li>Create a route <code>/search</code></li>
+                <li>Create a Search component that:
+                    <ul>
+                        <li>Displays search query from <code>$route.query.q</code></li>
+                        <li>Shows sort option from <code>$route.query.sort</code></li>
+                        <li>Shows all query parameters</li>
+                    </ul>
+                </li>
+                <li>Add navigation links with query strings like: <code>/search?q=vue&sort=price</code></li>
+            </ol>
+            
+            <h3>Part 4: Bonus - React to Route Changes</h3>
+            <ol>
+                <li>Add a watcher for <code>$route.params.id</code> in UserProfile</li>
+                <li>Log when the route parameter changes</li>
+                <li>Simulate loading data when route changes</li>
+            </ol>
+        </div>
+        
+        <div class="hint">
+            <h3>💡 Hints</h3>
+            <ul>
+                <li>Use <code>:paramName</code> in route path to define parameters</li>
+                <li>Access parameters with <code>$route.params.paramName</code></li>
+                <li>Access query strings with <code>$route.query.key</code></li>
+                <li>Use <code>:to</code> binding in router-link for dynamic paths</li>
+                <li>Watch <code>$route</code> to react to route changes</li>
+            </ul>
+        </div>
+        
+        <div class="exercise-box">
+            <h2>🎯 Your Solution Area</h2>
+            <p>Build your dynamic routes application below:</p>
+            
+            <div id="app">
+                <nav>
+                    <router-link to="/users">Users</router-link>
+                    <router-link to="/products">Products</router-link>
+                    <router-link :to="{ path: '/search', query: {q: 'vue', sort: 'price' }}">Search</router-link>
+                </nav>
+                
+                <div class="page-content">
+                    <router-view></router-view>
+                </div>
+            </div>
+        </div>
+        
+        <div class="code-block">// Starter code structure
+const { createApp } = Vue;
+const { createRouter, createWebHashHistory } = VueRouter;
+
+// TODO: Create components
+const UserProfile = {
+    template: `...`,
+    mounted() {
+        // Access $route.params.id here
+    }
+};
+
+const ProductDetail = {
+    template: `...`
+};
+
+const Search = {
+    template: `...`,
+    // Access $route.query here
+};
+
+// TODO: Define routes with parameters
+const routes = [
+    { path: '/user/:id', component: UserProfile },
+    // Add more routes...
+];
+
+// TODO: Create router and app
+const router = createRouter({
+    history: createWebHashHistory(),
+    routes
+});
+
+const app = createApp({});
+app.use(router);
+app.mount('#app');</div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue-router@4/dist/vue-router.global.js"></script>
+    <script>
+         const { createApp } = Vue;
+         const { createRouter, createWebHashHistory } = VueRouter;
+
+        const UserList = {
+            template: '<div>' +
+                '<h2>👥 Users</h2>' +
+                '<ul>' +
+                    '<li v-for="user in users" :key="user.id">' +
+                        '<router-link :to="\'/user/\' + user.id">{{ user.name }}</router-link>' +
+                    '</li>' +
+                '</ul>' +
+            '</div>',
+            data() {
+                return {
+                    users: [
+                        { id: 1, name: 'John Doe', email: 'john@example.com' },
+                        { id: 2, name: 'Jane Smith', email: 'jane@example.com' },
+                        { id: 3, name: 'Bob Johnson', email: 'bob@example.com' }
+                    ]
+                }
+            }
+        };
+
+        const UserProfile = {
+            template: '<div>' +
+                '<h2>👤 User Profile</h2>' +
+                '<p><strong>User ID:</strong> {{ $route.params.id }}</p>' +
+                '<p><strong>Name:</strong> {{ userName }}</p>' +
+                '<p><strong>Email:</strong> {{ userEmail }}</p>' +
+                '<router-link to="/users">← Back to Users</router-link>' +
+            '</div>',
+            data() {
+                return {
+                    userName: '',
+                    userEmail: ''
+                }
+            },
+            mounted() {
+                const userId = this.$route.params.id;
+
+                const users = {
+                    1: {name: 'John Doe', email: 'john@example.com'},
+                    2: {name: 'Jane Smith', email: 'jane@example.com'},
+                    3: {name: 'Bob Johnson', email: 'bob@example.com'}
+                };
+
+                const user = users[userId] || {name: 'Unknown User', email: 'N/A'};
+                this.userName = user.name;
+                this.userEmail = user.email;
+            }
+        };
+ 
+
+        const ProductsList = {
+            template: '<div>' +
+                '<h2>🛍️ Products</h2>' +
+                '<ul>' +
+                    '<li v-for="product in products" :key="product.id">' +
+                        '<router-link :to="\'/product/\' + product.id">' +
+                            '{{ product.name }} - ${{ product.price }}' +
+                        '</router-link>' +
+                    '</li>' +
+                '</ul>' +
+            '</div>',
+
+            data() {
+                return {
+                    products: [
+                        { id: 1, name: 'Laptop', price: 999, description: 'High-performance laptop' },
+                        { id: 2, name: 'Mouse', price: 25, description: 'Wireless mouse' },
+                        { id: 3, name: 'Keyboard', price: 75, description: 'Mechanical keyboard' }
+                    ]
+                }
+            }
+        };
+
+        const ProductDetail = {
+            template: '<div>' +
+                '<h2>📦 Product Details</h2>' +
+                '<p><strong>Product ID:</strong> {{ $route.params.id }}</p>' +
+                '<p><strong>Name:</strong> {{ productName }}</p>' +
+                '<p><strong>Price:</strong> ${{ productPrice }}</p>' +
+                '<p><strong>Description:</strong> {{ productDescription }}</p>' +
+                '<router-link to="/products">← Back to Products</router-link>' +
+            '</div>',
+            data() {
+                return {
+                    productName: '',
+                    productPrice: 0,
+                    productDescription: ''
+                }
+            },
+
+            mounted() {
+                const productId = this.$route.params.id;
+
+                const products = {
+                    1: {name: 'Laptop', price: 999, description: 'High-performance laptop'},
+                    2: {name: 'Mouse', price: 25, description: 'Wireless mouse'},
+                    3: {name: 'Keyboard', price: 75, description: 'Mechanical keyboard'}
+                };
+
+                const product = products[productId] || {name: 'Unknown', price: 0, description: 'N/A'};
+                this.productName = product.name;
+                this.productPrice = product.price;
+                this.productDescription = product.description;
+            }
+        };
+
+        const Search = {
+            template: '<div>' +
+                '<h2>🔍 Search Results</h2>' +
+                '<p><strong>Search Query:</strong> {{ $route.query.q || "None" }}</p>' +
+                '<p><strong>Sort By:</strong> {{ $route.query.sort || "None" }}</p>' +
+                '<p><strong>All Query Parameters:</strong> {{ JSON.stringify($route.query) }}</p>' +
+            '</div>'
+        };
+
+        const routes = [
+            { path: '/users', component: UserList },
+            { path: '/user/:id', component: UserProfile },
+            { path: '/products', component: ProductsList },
+            { path: '/product/:id', component: ProductDetail },
+            { path: '/search', component: Search }
+        ];
+    
+
+        
+        // YOUR CODE HERE
+        // 1. Create routes with parameters: /user/:id, /product/:id
+        // 2. Create search route with query strings: /search
+        // 3. Access parameters and query strings in components
+        // 4. Add navigation links
+
+        const router = createRouter({
+            history: createWebHashHistory(),
+            routes
+        });
+
+         const app = createApp({});
+         app.use(router);
+         app.mount('#app');
+        
+    </script>
+</body>
+</html>
+
+

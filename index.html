@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue.js Learning Path - Home</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #42b983;
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+        }
+        .phases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .phase {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 5px solid #42b983;
+            transition: transform 0.3s;
+        }
+        .phase:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .phase h2 {
+            color: #42b983;
+            margin-bottom: 15px;
+        }
+        .lessons {
+            list-style: none;
+        }
+        .lessons li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .lessons li:last-child {
+            border-bottom: none;
+        }
+        .lessons a {
+            color: #333;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s;
+        }
+        .lessons a:hover {
+            color: #42b983;
+        }
+        .lessons a::before {
+            content: "📚";
+            margin-right: 10px;
+        }
+        .quick-start {
+            background: #e8f5e9;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .quick-start h2 {
+            color: #42b983;
+            margin-bottom: 15px;
+        }
+        .quick-start ol {
+            margin-left: 20px;
+        }
+        .quick-start li {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+        .btn {
+            display: inline-block;
+            background: #42b983;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #35a372;
+        }
+        .status {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+        .status.available {
+            background: #4caf50;
+            color: white;
+        }
+        .status.coming {
+            background: #ff9800;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Vue.js Learning Path</h1>
+        <p class="subtitle">From HTML Developer to Vue Expert</p>
+        
+        <div class="quick-start">
+            <h2>🎯 Quick Start</h2>
+            <ol>
+                <li><strong>No installation needed!</strong> All lessons work directly in your browser</li>
+                <li>Start with <strong>Lesson 1</strong> - Introduction to Vue.js</li>
+                <li>Each lesson includes theory, practice examples, and exercises</li>
+                <li>Complete exercises before moving to the next lesson</li>
+                <li>Check solutions if you get stuck (but try first!)</li>
+            </ol>
+            <a href="lessons/lesson-01/index.html" class="btn">Start Learning →</a>
+            <a href="ecommerce/index.html" class="btn" style="margin-left: 10px; background: #764ba2;">🛒 ShopVue E‑commerce →</a>
+        </div>
+        
+        <h2 style="margin-top: 40px; color: #42b983;">📖 Course Structure</h2>
+        
+        <div class="phases">
+            <div class="phase">
+                <h2>Phase 1: Fundamentals</h2>
+                <ul class="lessons">
+                    <li><a href="lessons/lesson-01/index.html">Lesson 1: Introduction to Vue <span class="status available">Available</span></a></li>
+                    <li><a href="lessons/lesson-02/index.html">Lesson 2: Template Syntax & Data Binding <span class="status available">Available</span></a></li>
+                    <li><a href="lessons/lesson-03/index.html">Lesson 3: Directives <span class="status available">Available</span></a></li>
+                    <li><a href="lessons/lesson-04/index.html">Lesson 4: Event Handling & Methods <span class="status available">Available</span></a></li>
+                    <li><a href="lessons/lesson-05/index.html">Lesson 5: Computed Properties & Watchers <span class="status available">Available</span></a></li>
+                </ul>
+            </div>
+            
+            <div class="phase">
+                <h2>Phase 2: Components</h2>
+                <ul class="lessons">
+                    <li><a href="lessons/lesson-06/index.html">Lesson 6: Introduction to Components <span class="status available">Available</span></a></li>
+                    <li><a href="lessons/lesson-07/index.html">Lesson 7: Component Props <span class="status available">Available</span></a></li>
+                    <li><a href="lessons/lesson-08/index.html">Lesson 8: Component Events <span class="status available">Available</span></a></li>
+                    <li><a href="lessons/lesson-09/index.html">Lesson 9: Slots & Composition <span class="status available">Available</span></a></li>
+                    <li><a href="lessons/lesson-10/index.html">Lesson 10: Lifecycle Hooks <span class="status available">Available</span></a></li>
+                </ul>
+            </div>
+            
+            <div class="phase">
+                <h2>Phase 3: Advanced Features</h2>
+                <ul class="lessons">
+                    <li><a href="lessons/lesson-11/index.html">Lesson 11: Forms & v-model <span class="status available">Available</span></a></li>
+                    <li><a href="lessons/lesson-12/index.html">Lesson 12: Dynamic Components <span class="status available">Available</span></a></li>
+                    <li><a href="lessons/lesson-13/index.html">Lesson 13: Lists & Keys <span class="status available">Available</span></a></li>
+                    <li><a href="lessons/lesson-14/index.html">Lesson 14: Styling in Vue <span class="status available">Available</span></a></li>
+                    <li><a href="lessons/lesson-15/index.html">Lesson 15: Custom Directives <span class="status available">Available</span></a></li>
+                </ul>
+            </div>
+            
+            <div class="phase">
+                <h2>Phase 4: State Management & Routing</h2>
+                <ul class="lessons">
+                    <li><a href="lessons/lesson-16/index.html">Lesson 16: State Management <span class="status available">Available</span></a></li>
+                    <li><a href="lessons/lesson-17/index.html">Lesson 17: Vue Router - Navigation <span class="status available">Available</span></a></li>
+                    <li><a href="lessons/lesson-18/index.html">Lesson 18: Route Parameters & Query Strings <span class="status available">Available</span></a></li>
+                    <li><a href="lessons/lesson-19/index.html">Lesson 19: Nested Routes <span class="status available">Available</span></a></li>
+                    <li><a href="lessons/lesson-20/index.html">Lesson 20: Route Guards <span class="status available">Available</span></a></li>
+                </ul>
+            </div>
+            
+            <div class="phase">
+                <h2>Phase 5: Advanced Patterns</h2>
+                <ul class="lessons">
+                    <li><a href="lessons/lesson-21/index.html">Lesson 21: Composition API Introduction <span class="status available">Available</span></a></li>
+                    <li><a href="lessons/lesson-22/index.html">Lesson 22: Composables & Reusability <span class="status available">Available</span></a></li>
+                    <li><a href="lessons/lesson-23/index.html">Lesson 23: Teleport & Suspense <span class="status available">Available</span></a></li>
+                    <li><a href="lessons/lesson-24/index.html">Lesson 24: Performance Optimization <span class="status available">Available</span></a></li>
+                    <li><a href="lessons/lesson-25/index.html">Lesson 25: Testing Vue Components <span class="status available">Available</span></a></li>
+                    <li><a href="lessons/lesson-26/index.html">Lesson 26: Deployment & Build Tools <span class="status available">Available</span></a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div style="margin-top: 40px; padding: 20px; background: #f0f0f0; border-radius: 10px;">
+            <h3 style="color: #42b983; margin-bottom: 10px;">💡 Pro Tips</h3>
+            <ul style="margin-left: 20px; line-height: 1.8;">
+                <li>Don't rush! Take time to understand each concept</li>
+                <li>Type code yourself - don't just copy/paste</li>
+                <li>Experiment with the examples - break things and fix them!</li>
+                <li>Build a small project after each phase</li>
+                <li>Read the <a href="https://vuejs.org" target="_blank" style="color: #42b983;">official Vue.js documentation</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

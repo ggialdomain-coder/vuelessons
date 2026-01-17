@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 2: Template Syntax & Data Binding</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .theory {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .exercise {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .demo-box {
+            border: 2px solid #42b983;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Lesson 2: Template Syntax & Data Binding</h1>
+    
+    <div class="theory">
+        <h2>🎓 Theory: Template Syntax</h2>
+        <p>Vue uses a template syntax that extends HTML. The most important concept is <strong>interpolation</strong> - displaying data in your HTML.</p>
+        
+        <h3>1. Text Interpolation (Mustache Syntax)</h3>
+        <pre><code>&lt;span&gt;{{ message }}&lt;/span&gt;</code></pre>
+        <p>This displays the value of <code>message</code> from your data.</p>
+        
+        <h3>2. Raw HTML</h3>
+        <pre><code>&lt;div v-html="rawHtml"&gt;&lt;/div&gt;</code></pre>
+        <p>Use <code>v-html</code> to render HTML (be careful with user input!).</p>
+        
+        <h3>3. Attribute Binding</h3>
+        <pre><code>&lt;div v-bind:id="dynamicId"&gt;&lt;/div&gt;
+&lt;!-- Shorthand --&gt;
+&lt;div :id="dynamicId"&gt;&lt;/div&gt;</code></pre>
+        <p>Bind attributes dynamically using <code>v-bind</code> or <code>:</code> shorthand.</p>
+        
+        <h3>4. JavaScript Expressions</h3>
+        <pre><code>{{ number + 1 }}
+{{ ok ? 'YES' : 'NO' }}
+{{ message.split('').reverse().join('') }}</code></pre>
+        <p>You can use JavaScript expressions inside <code>{{ }}</code>.</p>
+    </div>
+
+    <div class="practice">
+        <h2>💻 Practice: Try It Out</h2>
+        
+        <div id="app">
+            <div class="demo-box">
+                <h3>1. Text Interpolation</h3>
+                <p>Message: {{ message }}</p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>2. Raw HTML</h3>
+                <p>Regular: {{ rawHtml }}</p>
+                <p>Rendered HTML: <span v-html="rawHtml"></span></p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>3. Attribute Binding</h3>
+                <input type="text" v-bind:placeholder="placeholderText">
+                <p>Current placeholder: "{{ placeholderText }}"</p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>4. JavaScript Expressions</h3>
+                <p>Number: {{ number }}</p>
+                <p>Number + 1: {{ number + 1 }}</p>
+                <p>Is OK? {{ ok ? 'YES' : 'NO' }}</p>
+                <p>Reversed message: {{ message.split('').reverse().join('') }}</p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>5. Two-Way Binding (v-model)</h3>
+                <input type="text" v-model="userInput" placeholder="Type something...">
+                <p>You typed: <strong>{{ userInput }}</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>✏️ Exercise</h2>
+        <p><strong>Task:</strong> Create a simple calculator that:</p>
+        <ol>
+            <li>Has two input fields for numbers</li>
+            <li>Displays the sum, difference, product, and quotient</li>
+            <li>Updates automatically when you change the numbers</li>
+            <li>Shows an error message if dividing by zero</li>
+        </ol>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        createApp({
+            data() {
+                return {
+                    message: 'Hello Vue!',
+                    rawHtml: '<strong style="color: red;">This is bold and red!</strong>',
+                    placeholderText: 'Type here...',
+                    number: 10,
+                    ok: true,
+                    userInput: ''
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building Custom Directives - Step by Step</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .step {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .step h2 {
+            color: #42b983;
+            border-bottom: 2px solid #42b983;
+            padding-bottom: 10px;
+        }
+        .explanation {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #42b983;
+        }
+        .code-block {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            word-wrap: break-word;
+            border: 1px solid #ddd;
+        }
+        .demo-app {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin: 20px 0;
+        }
+        .tip {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        .warning {
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #dc3545;
+            margin: 15px 0;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        .demo-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #42b983;
+            border-radius: 8px;
+        }
+        .demo-section h3 {
+            color: #42b983;
+            margin-top: 0;
+        }
+        input {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 100%;
+            max-width: 400px;
+            margin: 10px 0;
+        }
+        .highlightable {
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #f9f9f9;
+            transition: background 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 Building Custom Directives - Step by Step Tutorial</h1>
+    <p style="font-size: 1.1em; color: #666;">Learn how to build custom directives for DOM manipulation! This tutorial will guide you through building exactly what you need for the exercise.</p>
+    
+    <div class="warning" style="margin-top: 20px;">
+        <strong>📝 Note:</strong> This tutorial is designed to match the exercise requirements exactly. Follow each step in order to build the custom directives step by step.
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step">
+        <h2>Step 1: Understanding Custom Directives</h2>
+        <div class="explanation">
+            <p><strong>Goal:</strong> Build two custom directives: <code>v-focus</code> (auto-focus inputs) and <code>v-highlight</code> (highlight text on click).</p>
+            <p><strong>What are Custom Directives?</strong></p>
+            <ul>
+                <li>✅ Reusable DOM manipulation logic</li>
+                <li>✅ Direct access to DOM elements</li>
+                <li>✅ Perfect for low-level DOM operations</li>
+                <li>✅ Can accept values and arguments</li>
+            </ul>
+        </div>
+        
+        <div class="explanation">
+            <p><strong>Directive Lifecycle Hooks:</strong></p>
+            <ul>
+                <li><code>mounted(el, binding)</code> - Called when element is inserted into DOM</li>
+                <li><code>updated(el, binding)</code> - Called when element's parent updates</li>
+                <li><code>unmounted(el)</code> - Called when element is removed (cleanup!)</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 When to Use Directives:</strong> Use directives for DOM manipulation (focus, scroll, click outside, etc.). For complex logic, consider using components instead.
+        </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step">
+        <h2>Step 2: Register v-focus Directive</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create a <code>v-focus</code> directive that automatically focuses an input element when it's mounted. This matches the exercise requirement: "Create a v-focus directive that auto-focuses an input element when mounted".</p>
+            <p><strong>Key concept:</strong> Use <code>app.directive()</code> to register globally, and call <code>el.focus()</code> in the <code>mounted</code> hook.</p>
+        </div>
+        
+        <div class="code-block">
+// Register v-focus directive globally
+app.directive('focus', {
+    mounted(el) {
+        el.focus();
+    }
+});
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>app.directive('focus', { ... })</code> - Registers a global directive named 'focus'</li>
+                <li><code>mounted(el)</code> - Hook called when element is inserted into DOM</li>
+                <li><code>el</code> - The DOM element the directive is attached to</li>
+                <li><code>el.focus()</code> - Native DOM method that focuses the element</li>
+                <li>This matches the exercise requirement: "Use mounted hook to set up the directive behavior"</li>
+            </ul>
+        </div>
+
+        <div class="code-block">
+// Use in template
+&lt;input v-focus placeholder="This input auto-focuses"&gt;
+        </div>
+
+        <div class="tip">
+            <strong>💡 Simple and Clean:</strong> The <code>v-focus</code> directive is simple - it just focuses the element when mounted. No cleanup needed!
+        </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step">
+        <h2>Step 3: Register v-highlight Directive - Basic Structure</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Create a <code>v-highlight</code> directive that highlights text when clicked. This matches the exercise requirement: "Create a v-highlight directive that highlights text when clicked".</p>
+            <p><strong>Key concept:</strong> We'll need to add a click event listener and handle cleanup in <code>unmounted</code>.</p>
+        </div>
+        
+        <div class="code-block">
+// Register v-highlight directive globally
+app.directive('highlight', {
+    mounted(el, binding) {
+        // We'll add the click handler here
+    },
+    unmounted(el) {
+        // We'll clean up here
+    }
+});
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>app.directive('highlight', { ... })</code> - Registers a global directive named 'highlight'</li>
+                <li><code>mounted(el, binding)</code> - Hook called when element is inserted</li>
+                <li><code>binding</code> - Object containing directive information</li>
+                <li><code>binding.value</code> - The value passed to the directive (e.g., <code>v-highlight="'yellow'"</code>)</li>
+                <li><code>unmounted(el)</code> - Hook called when element is removed (for cleanup)</li>
+                <li>This matches the exercise requirement: "Add click event listener in mounted hook" and "Remove event listener in unmounted hook"</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step">
+        <h2>Step 4: Get Color from binding.value</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Get the highlight color from the directive value, with a default of 'yellow'. This matches the exercise requirement: "Use binding.value to get the highlight color (default: 'yellow')".</p>
+            <p><strong>Key concept:</strong> Use <code>binding.value</code> to access the value passed to the directive.</p>
+        </div>
+        
+        <div class="code-block">
+app.directive('highlight', {
+    mounted(el, binding) {
+        // Get color from binding.value, default to 'yellow'
+        const color = binding.value || 'yellow';
+        
+        // We'll add click handler next
+    },
+    unmounted(el) {
+        // Cleanup
+    }
+});
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>binding.value</code> - The value passed to the directive</li>
+                <li><code>v-highlight="'yellow'"</code> → <code>binding.value = 'yellow'</code></li>
+                <li><code>v-highlight="'lightblue'"</code> → <code>binding.value = 'lightblue'</code></li>
+                <li><code>v-highlight</code> → <code>binding.value = undefined</code> (no value)</li>
+                <li><code>binding.value || 'yellow'</code> - Uses 'yellow' as default if no value provided</li>
+                <li>This matches the exercise requirement: "For v-highlight, use binding.value to get the highlight color (default: 'yellow')"</li>
+            </ul>
+        </div>
+
+        <div class="code-block">
+// Examples of usage:
+&lt;div v-highlight&gt;Uses default 'yellow'&lt;/div&gt;
+&lt;div v-highlight="'lightblue'"&gt;Uses 'lightblue'&lt;/div&gt;
+&lt;div v-highlight="'lightgreen'"&gt;Uses 'lightgreen'&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step">
+        <h2>Step 5: Add Click Event Listener</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Add a click event listener that highlights the element when clicked. This matches the exercise requirement: "Add click event listener in mounted hook".</p>
+            <p><strong>Key concept:</strong> Store the handler function so we can remove it later in <code>unmounted</code>.</p>
+        </div>
+        
+        <div class="code-block">
+app.directive('highlight', {
+    mounted(el, binding) {
+        const color = binding.value || 'yellow';
+        
+        // Create handler function
+        const highlightHandler = function() {
+            // Change background color
+            el.style.backgroundColor = color;
+            
+            // Reset after 2 seconds
+            setTimeout(() => {
+                el.style.backgroundColor = '';
+            }, 2000);
+        };
+        
+        // Store handler on element so we can remove it later
+        el._highlightHandler = highlightHandler;
+        
+        // Add click event listener
+        el.addEventListener('click', highlightHandler);
+    },
+    unmounted(el) {
+        // We'll clean up here
+    }
+});
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>const highlightHandler = function() { ... }</code> - Creates the click handler function</li>
+                <li><code>el.style.backgroundColor = color</code> - Sets the background color (matches exercise: "Use el.style.backgroundColor to change background color")</li>
+                <li><code>setTimeout(() => { el.style.backgroundColor = ''; }, 2000)</code> - Resets background after 2 seconds</li>
+                <li><code>el._highlightHandler = highlightHandler</code> - Stores handler on element (so we can remove it later)</li>
+                <li><code>el.addEventListener('click', highlightHandler)</code> - Adds click event listener</li>
+                <li>This matches the exercise requirement: "Add click event listener in mounted hook"</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>💡 Why Store the Handler?</strong> We store <code>el._highlightHandler</code> so we can remove the exact same function in <code>unmounted</code>. This prevents memory leaks!
+        </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step">
+        <h2>Step 6: Clean Up Event Listener in unmounted</h2>
+        <div class="explanation">
+            <p><strong>What we're doing:</strong> Remove the event listener when the element is unmounted to prevent memory leaks. This matches the exercise requirement: "Remove event listener in unmounted hook to prevent memory leaks".</p>
+            <p><strong>Key concept:</strong> Always clean up event listeners in <code>unmounted</code>!</p>
+        </div>
+        
+        <div class="code-block">
+app.directive('highlight', {
+    mounted(el, binding) {
+        const color = binding.value || 'yellow';
+        
+        const highlightHandler = function() {
+            el.style.backgroundColor = color;
+            setTimeout(() => {
+                el.style.backgroundColor = '';
+            }, 2000);
+        };
+        
+        el._highlightHandler = highlightHandler;
+        el.addEventListener('click', highlightHandler);
+    },
+    unmounted(el) {
+        // Remove event listener using stored handler
+        if (el._highlightHandler) {
+            el.removeEventListener('click', el._highlightHandler);
+        }
+    }
+});
+        </div>
+
+        <div class="explanation">
+            <p><strong>Explanation:</strong></p>
+            <ul>
+                <li><code>unmounted(el)</code> - Called when element is removed from DOM</li>
+                <li><code>if (el._highlightHandler)</code> - Check if handler exists (safety check)</li>
+                <li><code>el.removeEventListener('click', el._highlightHandler)</code> - Removes the exact same handler we added</li>
+                <li>This prevents memory leaks - the handler won't be called after element is removed</li>
+                <li>This matches the exercise requirement: "Remove event listener in unmounted hook to prevent memory leaks"</li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Important:</strong> Always remove event listeners in <code>unmounted</code>! If you don't, the handler might still be called even after the element is removed, causing memory leaks and bugs.
+        </div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="step">
+        <h2>Step 7: Complete Working Code</h2>
+        <p>Here's the complete code for both directives that matches your exercise:</p>
+        
+        <div class="code-block">
+&lt;script src="https://unpkg.com/vue@3/dist/vue.global.js"&gt;&lt;/script&gt;
+
+&lt;script&gt;
+    const { createApp } = Vue;
+    
+    const app = createApp({
+        data() {
+            return {}
+        }
+    });
+    
+    // Register v-focus directive
+    app.directive('focus', {
+        mounted(el) {
+            el.focus();
+        }
+    });
+    
+    // Register v-highlight directive
+    app.directive('highlight', {
+        mounted(el, binding) {
+            const color = binding.value || 'yellow';
+            
+            const highlightHandler = function() {
+                el.style.backgroundColor = color;
+                setTimeout(() => {
+                    el.style.backgroundColor = '';
+                }, 2000);
+            };
+            
+            el._highlightHandler = highlightHandler;
+            el.addEventListener('click', highlightHandler);
+        },
+        unmounted(el) {
+            if (el._highlightHandler) {
+                el.removeEventListener('click', el._highlightHandler);
+            }
+        }
+    });
+    
+    app.mount('#app');
+&lt;/script&gt;
+
+&lt;!-- HTML --&gt;
+&lt;div id="app"&gt;
+    &lt;h2&gt;Custom Directives Demo&lt;/h2&gt;
+    
+    &lt;div class="demo-section"&gt;
+        &lt;h3&gt;1. v-focus Directive&lt;/h3&gt;
+        &lt;input v-focus placeholder="This input auto-focuses"&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="demo-section"&gt;
+        &lt;h3&gt;2. v-highlight Directive&lt;/h3&gt;
+        &lt;div class="highlightable" v-highlight&gt;
+            Click me to highlight in yellow!
+        &lt;/div&gt;
+        &lt;div class="highlightable" v-highlight="'lightblue'"&gt;
+            Click me to highlight in light blue!
+        &lt;/div&gt;
+        &lt;div class="highlightable" v-highlight="'lightgreen'"&gt;
+            Click me to highlight in light green!
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+        </div>
+    </div>
+
+    <!-- STEP 8 -->
+    <div class="step">
+        <h2>Step 8: Full Working Demo</h2>
+        <p>See the complete custom directives in action:</p>
+        
+        <div class="demo-app">
+            <h3>Complete Custom Directives Demo:</h3>
+            <div id="demo">
+                <div class="demo-section">
+                    <h3>1. v-focus Directive</h3>
+                    <p>This input should automatically receive focus:</p>
+                    <input v-focus type="text" placeholder="This input should auto-focus">
+                    <p><small>If the input is focused automatically, your directive works! ✅</small></p>
+                </div>
+                
+                <div class="demo-section">
+                    <h3>2. v-highlight Directive</h3>
+                    <p>Click on the text below to highlight it:</p>
+                    <div class="highlightable" v-highlight>
+                        Click me to highlight in yellow!
+                    </div>
+                    <div class="highlightable" v-highlight="'lightblue'">
+                        Click me to highlight in light blue!
+                    </div>
+                    <div class="highlightable" v-highlight="'lightgreen'">
+                        Click me to highlight in light green!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KEY CONCEPTS -->
+    <div class="step">
+        <h2>🎓 Key Concepts You Learned</h2>
+        <div class="explanation">
+            <h3>Custom Directives:</h3>
+            <ul>
+                <li>✅ Use <code>app.directive('name', { ... })</code> to register globally</li>
+                <li>✅ Use <code>mounted(el, binding)</code> for initial setup</li>
+                <li>✅ Use <code>unmounted(el)</code> for cleanup</li>
+                <li>✅ Access directive value with <code>binding.value</code></li>
+                <li>✅ Direct access to DOM element via <code>el</code> parameter</li>
+            </ul>
+            
+            <h3>v-focus Directive Pattern:</h3>
+            <ul>
+                <li>✅ Simple directive - just calls <code>el.focus()</code> in <code>mounted</code></li>
+                <li>✅ No cleanup needed (no event listeners)</li>
+                <li>✅ Perfect for auto-focusing inputs</li>
+            </ul>
+            
+            <h3>v-highlight Directive Pattern:</h3>
+            <ul>
+                <li>✅ Get color from <code>binding.value</code> with default fallback</li>
+                <li>✅ Add event listener in <code>mounted</code></li>
+                <li>✅ Store handler function on element (<code>el._highlightHandler</code>)</li>
+                <li>✅ Remove event listener in <code>unmounted</code> to prevent memory leaks</li>
+                <li>✅ Use <code>el.style.backgroundColor</code> to change color</li>
+                <li>✅ Use <code>setTimeout</code> to reset color after delay</li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Remember:</strong> Always remove event listeners in <code>unmounted</code>! This prevents memory leaks and bugs.
+        </div>
+
+        <div class="tip">
+            <strong>💡 Ready for the Exercise?</strong> You now have everything you need! Go to the exercise page and build your custom directives. Remember:
+            <ol>
+                <li>Register <code>v-focus</code> directive with <code>mounted</code> hook that calls <code>el.focus()</code></li>
+                <li>Register <code>v-highlight</code> directive with <code>mounted</code> and <code>unmounted</code> hooks</li>
+                <li>Get color from <code>binding.value</code> with default 'yellow'</li>
+                <li>Add click event listener in <code>mounted</code></li>
+                <li>Store handler function on element (<code>el._highlightHandler</code>)</li>
+                <li>Remove event listener in <code>unmounted</code> using stored handler</li>
+                <li>Use <code>el.style.backgroundColor</code> to change color</li>
+                <li>Use <code>setTimeout</code> to reset color after 2 seconds</li>
+            </ol>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        (function() {
+            function initDemo() {
+                if (typeof Vue === 'undefined') {
+                    setTimeout(initDemo, 100);
+                    return;
+                }
+                
+                const { createApp } = Vue;
+                
+                const app = createApp({
+                    data() {
+                        return {}
+                    }
+                });
+                
+                // Register v-focus directive
+                app.directive('focus', {
+                    mounted(el) {
+                        el.focus();
+                    }
+                });
+                
+                // Register v-highlight directive
+                app.directive('highlight', {
+                    mounted(el, binding) {
+                        const color = binding.value || 'yellow';
+                        
+                        const highlightHandler = function() {
+                            el.style.backgroundColor = color;
+                            setTimeout(() => {
+                                el.style.backgroundColor = '';
+                            }, 2000);
+                        };
+                        
+                        el._highlightHandler = highlightHandler;
+                        el.addEventListener('click', highlightHandler);
+                    },
+                    unmounted(el) {
+                        if (el._highlightHandler) {
+                            el.removeEventListener('click', el._highlightHandler);
+                        }
+                    }
+                });
+                
+                app.mount('#demo');
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initDemo);
+            } else {
+                initDemo();
+            }
+        })();
+    </script>
+</body>
+</html>
+
+

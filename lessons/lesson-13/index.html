@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 13: Lists & Keys</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .theory {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .exercise {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        .demo-box {
+            border: 2px solid #42b983;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .link-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .link-box a {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link-box a:hover {
+            text-decoration: underline;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        .item-list {
+            list-style: none;
+            padding: 0;
+        }
+        .item-list li {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Lesson 13: Lists & Keys</h1>
+    
+    <div class="link-box">
+        <p><strong>📖 Tutorial:</strong> <a href="lists-keys-tutorial.html">Step-by-step Lists & Keys Tutorial</a></p>
+        <p><strong>✏️ Exercise:</strong> <a href="lists-keys-exercise.html">Build a Todo List</a></p>
+    </div>
+    
+    <div class="theory">
+        <h2>🎓 Theory: Lists & Keys</h2>
+        
+        <h3>What are Keys?</h3>
+        <p>Keys are unique identifiers that help Vue track which items have changed, been added, or removed in a list.</p>
+        
+        <h3>Why Keys are Important:</h3>
+        <ul>
+            <li>✅ Help Vue efficiently update the DOM</li>
+            <li>✅ Prevent rendering bugs when list order changes</li>
+            <li>✅ Maintain component state correctly</li>
+            <li>✅ Improve performance with large lists</li>
+        </ul>
+        
+        <h3>Basic Syntax:</h3>
+        <pre><code>// Using v-for with :key
+&lt;li v-for="item in items" :key="item.id"&gt;
+    {{ item.name }}
+&lt;/li&gt;
+
+// Using index as key (not recommended for dynamic lists)
+&lt;li v-for="(item, index) in items" :key="index"&gt;
+    {{ item.name }}
+&lt;/li&gt;</code></pre>
+        
+        <h3>Best Practices:</h3>
+        <ul>
+            <li>✅ Always use <code>:key</code> with <code>v-for</code></li>
+            <li>✅ Use unique, stable identifiers (like <code>id</code>)</li>
+            <li>✅ Avoid using <code>index</code> as key when items can be reordered</li>
+            <li>✅ Keys should be unique within the list</li>
+        </ul>
+        
+        <h3>What Happens Without Keys?</h3>
+        <p>Without keys, Vue may incorrectly reuse DOM elements, causing:</p>
+        <ul>
+            <li>❌ Incorrect component state preservation</li>
+            <li>❌ Performance issues</li>
+            <li>❌ Bugs when list order changes</li>
+        </ul>
+    </div>
+
+    <div class="practice">
+        <h2>💻 Practice: Lists & Keys</h2>
+        
+        <div id="app">
+            <div class="demo-box">
+                <h3>1. List with Keys</h3>
+                <ul class="item-list">
+                    <li v-for="item in items" :key="item.id">
+                        <strong>{{ item.name }}</strong> - {{ item.description }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>✏️ Exercise</h2>
+        <p><strong>Task:</strong> Create a todo list application:</p>
+        <ol>
+            <li>Create a list of todos using <code>v-for</code></li>
+            <li>Each todo should have: id, text, completed status</li>
+            <li>Use <code>:key="todo.id"</code> for each todo item</li>
+            <li>Add functionality to add new todos</li>
+            <li>Add functionality to delete todos</li>
+            <li>Add functionality to toggle todo completion</li>
+            <li>Display count of completed todos</li>
+        </ol>
+        <p><strong>Hint:</strong> Use unique IDs for each todo and always include <code>:key</code> in your <code>v-for</code>!</p>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        const app = createApp({
+            data() {
+                return {
+                    items: [
+                        { id: 1, name: 'Item 1', description: 'First item' },
+                        { id: 2, name: 'Item 2', description: 'Second item' },
+                        { id: 3, name: 'Item 3', description: 'Third item' }
+                    ]
+                }
+            }
+        });
+        
+        app.mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

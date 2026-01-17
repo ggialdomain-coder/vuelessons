@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 21: Composition API Introduction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .theory {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .exercise {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        .demo-box {
+            border: 2px solid #42b983;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .link-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .link-box a {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link-box a:hover {
+            text-decoration: underline;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Lesson 21: Composition API Introduction</h1>
+    
+    <div class="link-box">
+        <p><strong>📖 Tutorial:</strong> <a href="composition-api-tutorial.html">Step-by-step Composition API Tutorial</a></p>
+        <p><strong>✏️ Exercise:</strong> <a href="composition-api-exercise.html">Convert Options API to Composition API</a></p>
+    </div>
+    
+    <div class="theory">
+        <h2>🎓 Theory: Composition API</h2>
+        
+        <h3>What is Composition API?</h3>
+        <p>The Composition API is an alternative way to write Vue components using functions instead of options. It provides better code organization and reusability.</p>
+        
+        <h3>Options API vs Composition API:</h3>
+        <pre><code>// Options API (what you've learned so far)
+export default {
+    data() {
+        return { count: 0 }
+    },
+    methods: {
+        increment() {
+            this.count++
+        }
+    }
+}
+
+// Composition API (new way)
+import { ref } from 'vue'
+export default {
+    setup() {
+        const count = ref(0)
+        const increment = () => {
+            count.value++
+        }
+        return { count, increment }
+    }
+}</code></pre>
+        
+        <h3>Key Benefits:</h3>
+        <ul>
+            <li>✅ Better code organization (group related logic together)</li>
+            <li>✅ Easier to reuse logic across components</li>
+            <li>✅ Better TypeScript support</li>
+            <li>✅ More flexible than Options API</li>
+        </ul>
+        
+        <h3>Key Concepts:</h3>
+        <ul>
+            <li><strong>setup():</strong> Entry point for Composition API</li>
+            <li><strong>ref():</strong> Creates reactive reference for primitive values</li>
+            <li><strong>reactive():</strong> Creates reactive object</li>
+            <li><strong>computed():</strong> Creates computed properties</li>
+            <li><strong>watch():</strong> Watches for changes</li>
+        </ul>
+    </div>
+
+    <div class="practice">
+        <h2>💻 Practice: Simple Counter with Composition API</h2>
+        
+        <div id="app">
+            <div class="demo-box">
+                <h3>Counter Example</h3>
+                <p>Count: {{ count }}</p>
+                <button @click="increment">Increment</button>
+                <button @click="decrement">Decrement</button>
+                <button @click="reset">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>✏️ Exercise</h2>
+        <p><strong>Task:</strong> Convert an Options API component to Composition API:</p>
+        <ol>
+            <li>Create a component using Composition API with <code>setup()</code></li>
+            <li>Use <code>ref()</code> for reactive data</li>
+            <li>Create methods as regular functions</li>
+            <li>Return all data and methods from <code>setup()</code></li>
+            <li>Test that reactivity works the same way</li>
+        </ol>
+        <p><strong>Hint:</strong> Remember to import <code>ref</code> from Vue and return everything you want to use in the template!</p>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp, ref } = Vue;
+        
+        const app = createApp({
+            setup() {
+                // Use ref() for reactive data
+                const count = ref(0);
+                
+                // Define methods as regular functions
+                const increment = () => {
+                    count.value++;  // Note: use .value to access ref
+                };
+                
+                const decrement = () => {
+                    count.value--;
+                };
+                
+                const reset = () => {
+                    count.value = 0;
+                };
+                
+                // Return everything to use in template
+                return {
+                    count,
+                    increment,
+                    decrement,
+                    reset
+                };
+            }
+        });
+        
+        app.mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+

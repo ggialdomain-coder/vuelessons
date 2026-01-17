@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List Solution</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f6f9fc;
+        }
+
+        .solution-area {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            color: #42b983;
+            text-align: center;
+        }
+
+        input[type="text"] {
+            padding: 12px;
+            margin: 10px 5px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 300px;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #42b983;
+        }
+
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+
+        button:hover {
+            background: #35a372;
+        }
+
+        .todo-item {
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .todo-item.completed {
+            background: #d4edda;
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #6c757d;
+            padding: 40px;
+            font-style: italic;
+        }
+
+        .code-explanation {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #42b983;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="solution-area">
+        <h1>✅ Todo List Solution</h1>
+        <p style="text-align: center; color: #666;">Here's the complete solution with explanations</p>
+
+        <div id="app">
+            <h2 style="color: #42b983; margin-top: 0;">My Todo List</h2>
+
+            <!-- Add new todo -->
+            <div style="margin-bottom: 20px;">
+                <input type="text" v-model="newTodoText" placeholder="Add a new todo..." @keyup.enter="addTodo">
+                <button @click="addTodo">Add Todo</button>
+            </div>
+
+            <!-- Empty message -->
+            <div v-if="todos.length === 0" class="empty-message">
+                No todos yet! Add one above. ✨
+            </div>
+
+            <!-- Todo list -->
+            <div v-for="todo in todos" :key="todo.id" class="todo-item" :class="{ completed: todo.completed }">
+                <input type="checkbox" v-model="todo.completed">
+                <span>{{ todo.text }}</span>
+            </div>
+        </div>
+
+        <div class="code-explanation">
+            <h3>📝 Code Explanation:</h3>
+            <ul>
+                <li><strong>v-model="newTodoText":</strong> Two-way binding for the input field</li>
+                <li><strong>@click="addTodo":</strong> Calls the method when button is clicked</li>
+                <li><strong>@keyup.enter="addTodo":</strong> Also adds todo when Enter is pressed</li>
+                <li><strong>v-if="todos.length === 0":</strong> Shows message only when array is empty</li>
+                <li><strong>v-for="todo in todos":</strong> Loops through todos array</li>
+                <li><strong>:key="todo.id":</strong> Unique key for each item (required!)</li>
+                <li><strong>v-model="todo.completed":</strong> Binds checkbox to completed property</li>
+                <li><strong>:class="{ completed: todo.completed }":</strong> Adds "completed" class when todo is done
+                </li>
+                <li><strong>this.todos.push():</strong> Adds new item to the array</li>
+                <li><strong>Date.now():</strong> Generates unique ID using timestamp</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    todos: [],
+                    newTodoText: ''
+                }
+            },
+            methods: {
+                addTodo() {
+                    // Don't add empty todos
+                    if (this.newTodoText.trim() === '') {
+                        return;
+                    }
+                    const newTodo = {
+                        id: Date.now(),  // Unique ID
+                        text: this.newTodoText,
+                        completed: false
+                    };
+
+                    // Add to array
+                    this.todos.push(newTodo);
+                    // Clear input
+                    this.newTodoText = '';
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+
+</html>

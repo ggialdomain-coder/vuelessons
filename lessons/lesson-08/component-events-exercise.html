@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Component Events Exercise - Shopping Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f6f9fc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        h1 {
+            color: #42b983;
+            text-align: center;
+        }
+        .hints {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .hints h3 {
+            margin-top: 0;
+            color: #ff9800;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: inline-block;
+            min-width: 250px;
+            vertical-align: top;
+        }
+        .card h3 {
+            color: #42b983;
+            margin-top: 0;
+        }
+        .card button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .card button:hover {
+            background: #35a372;
+        }
+        .price {
+            font-size: 1.5em;
+            color: #42b983;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        .products-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .cart {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .cart-item {
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 3px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .cart-total {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛒 Shopping Cart with Component Events Exercise</h1>
+        <p style="text-align: center; color: #666;">Build a shopping cart using component events! When users click "Add to Cart", the item should be added to the cart.</p>
+        
+        <div class="hints">
+            <h3>📋 Requirements:</h3>
+            <ol>
+                <li>Create a ProductCard component that accepts props: <code>name</code>, <code>price</code>, <code>description</code></li>
+                <li>Add an "Add to Cart" button that emits an event with product data</li>
+                <li>In the parent, listen to the event and add items to a cart array</li>
+                <li>Display the cart with all added items (name and price)</li>
+                <li>Calculate and display the total price of all items in the cart</li>
+            </ol>
+            
+            <h3>💡 Hints:</h3>
+            <ul>
+                <li>Emit event: <code>this.$emit('add-to-cart', { name, price, description })</code></li>
+                <li>Listen to event: <code>@add-to-cart="addToCart"</code></li>
+                <li>Event handler receives product data: <code>addToCart(product) { this.cart.push(product); }</code></li>
+                <li>Use computed property to calculate total: <code>totalPrice() { return this.cart.reduce(...) }</code></li>
+                <li>Use <code>v-for</code> to display cart items</li>
+                <li>Event names should be in kebab-case: <code>'add-to-cart'</code></li>
+            </ul>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- YOUR CODE STARTS HERE -->
+        <!-- ============================================ -->
+        
+        <div id="app">
+            <h2 style="color: #42b983; text-align: center;">Our Products</h2>
+            
+            <!-- Cart Display -->
+            <div class="cart">
+                <h3>Shopping Cart ({{ cart.length }} items)</h3>
+       
+                <div v-if="cart.length === 0" style="color: #999; padding: 10px;">
+                    Cart is empty. Add some products!
+                </div>
+                  <div v-for="(item,index) in cart" :key="index" class="cart-item">
+                    {{ item.name}} - $ {{ item.price.toFixed(2) }}
+                 </div>
+                
+                 <div class="cart-total" v-if="cart.length > 0">
+                    Total: $ {{ totalPrice.toFixed(2) }}
+                </div>
+            </div>
+            
+            <!-- Products -->
+            <div class="products-container">
+                <product-card
+                    v-for="product in products"
+                    :key="product.id"
+                    :name="product.description"
+                    :price="product.price"
+                    :description="product.description"
+                    @add-to-cart="addToCart"
+                ></product-card>
+ 
+                
+            </div>
+        </div>
+        
+ 
+    </div>
+
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        // Create the Vue app
+        const app = createApp({
+            data() {
+                return {
+                    cart: [],
+                    products: [
+                        { id: 1, name: 'Vue.js Book', price: 29.99, description: 'Learn Vue.js the easy way!' },
+                        { id: 2, name: 'React Guide', price: 34.99, description: 'Master React development' },
+                        { id: 3, name: 'Angular Tutorial', price: 39.99, description: 'Complete Angular course' },
+                        { id: 4, name: 'JavaScript Mastery', price: 24.99, description: 'Advanced JavaScript concepts' },
+                        { id: 5, name: 'Node.js Handbook', price: 32.99, description: 'Build server-side applications' }
+                    ]
+                }
+            },
+            computed: {
+                totalPrice(){
+                    return this.cart.reduce((sum, item) => sum + item.price, 0 )
+                }
+   
+            },
+            methods: { 
+                addToCart(product) {
+                     this.cart.push(product)
+                }
+            }
+        });
+
+        app.component("ProductCard", {
+            props: ['name', 'price', 'description'],
+            template: `
+                <div class="card">
+                    <h3>{{ name }}</h3>
+                    <p class="price">\${{ price.toFixed(2) }}  </p>
+                    <p> {{ description }} </p>
+                    <button @click="addToCart"> Add to cart </button>
+                </div>
+            `,
+            methods: {
+                addToCart() {
+                    this.$emit('add-to-cart', {
+                        name: this.name,
+                        price: this.price,
+                        description: this.description
+                    })
+                }
+            }
+        })
+        
+     
+        app.mount('#app');
+    </script>
+</body>
+</html>
+
+

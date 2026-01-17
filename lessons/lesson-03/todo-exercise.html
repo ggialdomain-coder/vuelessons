@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List Exercise - Build It Yourself!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f6f9fc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        h1 {
+            color: #42b983;
+            text-align: center;
+        }
+        .hints {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .hints h3 {
+            margin-top: 0;
+            color: #ff9800;
+        }
+        input[type="text"] {
+            padding: 12px;
+            margin: 10px 5px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 300px;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #42b983;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        .todo-item {
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .todo-item.completed {
+            background: #d4edda;
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+        .empty-message {
+            text-align: center;
+            color: #6c757d;
+            padding: 40px;
+            font-style: italic;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        .todo-item.completed { background: #d4edda; text-decoration: line-through; color: #6c757d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Todo List Exercise</h1>
+        <p style="text-align: center; color: #666;">Build your todo list here! Follow the requirements below.</p>
+        
+        <div class="hints">
+            <h3>📋 Requirements:</h3>
+            <ol>
+                <li>Display a list of todos using <code>v-for</code></li>
+                <li>Show "No todos" message when list is empty (use <code>v-if</code>)</li>
+                <li>Each todo has a checkbox to mark as complete (use <code>v-model</code>)</li>
+                <li>Completed todos have a different style (use <code>:class</code> binding)</li>
+                <li>Add a button to add new todos (create an <code>addTodo</code> method)</li>
+            </ol>
+            
+            <h3>💡 Hints:</h3>
+            <ul>
+                <li>Start with an empty <code>todos</code> array in data</li>
+                <li>Each todo needs: <code>id</code>, <code>text</code>, and <code>completed</code> properties</li>
+                <li>Use <code>:key="todo.id"</code> with v-for (required!)</li>
+                <li>Use <code>:class="{ completed: todo.completed }"</code> for styling</li>
+                <li>In <code>addTodo</code> method, use <code>this.todos.push()</code> to add new items</li>
+                <li>Use <code>Date.now()</code> to generate unique IDs</li>
+            </ul>
+        </div>
+
+        <!-- YOUR CODE STARTS HERE -->
+        <div id="app">
+            <h2 style="color: #42b983;">My Todo List</h2>
+            <div>
+                <input type="text" v-model="newTodoText" name="" id="" placeholder="Add a new todo..." @keyup.enter="addTodo">
+                <button @click="addTodo">Add Todo</button>
+            </div> 
+            <div v-if="todos.length === 0" class="empty-message">
+                No todos yet! Add one below.
+            </div>
+            <div v-for="todo in todos" :key="todo.id" class="todo-item" :class="{ completed: todo.completed }">
+                <input type="checkbox" v-model="todo.completed"> <span>{{ todo.text }}</span> </div>
+            
+            
+        </div>
+        <!-- YOUR CODE ENDS HERE -->
+    </div>
+
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        createApp({
+            data() {
+                return {
+                todos: [],
+                newTodoText: ''
+                }
+            },
+            methods: {
+                addTodo(){
+                    if(this.newTodoText.trim() === ''){
+                        return;
+                    }
+                    const newTodo = {
+                        id: Date.now(),
+                        text: this.newTodoText,
+                        completed: false
+                    };
+                    this.todos.push(newTodo)
+                    this.newTodoText = ''
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
+

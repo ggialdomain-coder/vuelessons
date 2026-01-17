@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Optimization Exercise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f6f9fc;
+        }
+        .exercise-box {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .requirements {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #ff9800;
+            margin: 20px 0;
+        }
+        .hint {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2196f3;
+            margin: 15px 0;
+        }
+        .code-block {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            border: 1px solid #ddd;
+        }
+        .nav-link {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background: #e3f2fd;
+            color: #1976d2;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .nav-link:hover {
+            background: #bbdefb;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-link">
+        <a href="index.html">← Back to Lesson 24</a>
+    </div>
+
+    <div class="exercise-box">
+        <h1>✏️ Exercise: Optimize a Slow Component</h1>
+        
+        <div class="requirements">
+            <h2>📋 Requirements</h2>
+            <p><strong>Your Task:</strong> Optimize a component with performance issues.</p>
+            
+            <h3>Part 1: Replace v-if with v-show</h3>
+            <ol>
+                <li>Identify elements that toggle frequently</li>
+                <li>Replace <code>v-if</code> with <code>v-show</code> for frequent toggles</li>
+                <li>Keep <code>v-if</code> for elements that rarely toggle</li>
+            </ol>
+            
+            <h3>Part 2: Use Computed Instead of Methods</h3>
+            <ol>
+                <li>Find methods called in templates</li>
+                <li>Convert to computed properties if they derive from reactive data</li>
+                <li>Test that results are the same but performance is better</li>
+            </ol>
+            
+            <h3>Part 3: Add v-memo to Lists</h3>
+            <ol>
+                <li>Identify expensive list items</li>
+                <li>Add <code>v-memo</code> with appropriate dependencies</li>
+                <li>Test that items only re-render when dependencies change</li>
+            </ol>
+        </div>
+        
+        <div class="hint">
+            <h3>💡 Hints</h3>
+            <ul>
+                <li>Use browser DevTools Performance tab to measure</li>
+                <li>v-show for dropdowns, modals that toggle often</li>
+                <li>v-if for conditional content that rarely changes</li>
+                <li>Computed for values calculated from reactive data</li>
+                <li>v-memo for lists with expensive rendering</li>
+            </ul>
+        </div>
+        
+        <div class="exercise-box">
+            <h2>🎯 Your Solution Area</h2>
+            <p>Optimize the component below:</p>
+            
+            <div id="app">
+                <!-- Optimize this component -->
+                 <div v-if="show">Content</div>
+                 <div v-show="show">content</div>
+
+                 <div>{{ expensiveValue }}</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp, ref, computed } = Vue;
+        // YOUR CODE HERE
+        // Optimize the component for better performance
+        
+        const app = createApp({
+            setup() {
+                const data = ref([1,2,3,4,5]);
+
+                const expensiveCalculation = () => {
+                    return data.value.reduce((sum,n) => sum + n, 0);
+                }
+
+                const expensiveValue = computed(() => {
+                    return data.value.reduce((sum,n) => sum + n, 0)
+                });
+
+                return {expensiveValue}
+            }
+        });
+        
+        app.mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+

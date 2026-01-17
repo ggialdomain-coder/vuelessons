@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 20: Route Guards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .theory {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .exercise {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        .demo-box {
+            border: 2px solid #42b983;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .link-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .link-box a {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link-box a:hover {
+            text-decoration: underline;
+        }
+        nav {
+            background: #42b983;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 8px 15px;
+            border-radius: 3px;
+        }
+        nav a:hover, nav a.router-link-active {
+            background: rgba(255,255,255,0.2);
+        }
+        .page-content {
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            min-height: 200px;
+            background: white;
+        }
+        .auth-box {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #ffc107;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Lesson 20: Route Guards</h1>
+    
+    <div class="link-box">
+        <p><strong>📖 Tutorial:</strong> <a href="route-guards-tutorial.html">Step-by-step Route Guards Tutorial</a></p>
+        <p><strong>✏️ Exercise:</strong> <a href="route-guards-exercise.html">Build Authentication with Route Guards</a></p>
+    </div>
+    
+    <div class="theory">
+        <h2>🎓 Theory: Route Guards</h2>
+        
+        <h3>What are Route Guards?</h3>
+        <p>Route guards allow you to control navigation - you can prevent users from accessing certain routes, redirect them, or perform actions before/after navigation.</p>
+        
+        <h3>Types of Route Guards:</h3>
+        <ul>
+            <li><strong>beforeEach:</strong> Runs before every navigation</li>
+            <li><strong>beforeResolve:</strong> Runs after all guards and async components</li>
+            <li><strong>afterEach:</strong> Runs after navigation completes</li>
+            <li><strong>beforeEnter:</strong> Guard on individual route</li>
+            <li><strong>beforeRouteEnter:</strong> Guard in component</li>
+            <li><strong>beforeRouteUpdate:</strong> Guard when route params change</li>
+            <li><strong>beforeRouteLeave:</strong> Guard when leaving route</li>
+        </ul>
+        
+        <h3>Global Before Each Guard:</h3>
+        <pre><code>router.beforeEach((to, from, next) => {
+    // Check if user is authenticated
+    if (to.path === '/dashboard' && !isAuthenticated) {
+        next('/login');  // Redirect to login
+    } else {
+        next();  // Allow navigation
+    }
+});</code></pre>
+        
+        <h3>Route-Level Guard:</h3>
+        <pre><code>const routes = [
+    {
+        path: '/admin',
+        component: Admin,
+        beforeEnter: (to, from, next) => {
+            if (isAdmin) {
+                next();
+            } else {
+                next('/unauthorized');
+            }
+        }
+    }
+];</code></pre>
+        
+        <h3>Component-Level Guard:</h3>
+        <pre><code>export default {
+    beforeRouteLeave(to, from, next) {
+        if (this.hasUnsavedChanges) {
+            if (confirm('You have unsaved changes. Leave?')) {
+                next();
+            } else {
+                next(false);  // Cancel navigation
+            }
+        } else {
+            next();
+        }
+    }
+}</code></pre>
+        
+        <h3>Key Concepts:</h3>
+        <ul>
+            <li><strong>to:</strong> Target route object</li>
+            <li><strong>from:</strong> Current route object</li>
+            <li><strong>next:</strong> Function to continue navigation</li>
+            <li><strong>next():</strong> Continue to next route</li>
+            <li><strong>next('/path'):</strong> Redirect to path</li>
+            <li><strong>next(false):</strong> Cancel navigation</li>
+        </ul>
+    </div>
+
+    <div class="practice">
+        <h2>💻 Practice: Authentication Guard</h2>
+        
+        <div id="app">
+            <div class="auth-box" v-if="!isAuthenticated">
+                <p>You are not logged in. <button @click="login">Login</button></p>
+            </div>
+            <div class="auth-box" v-else>
+                <p>Welcome! You are logged in. <button @click="logout">Logout</button></p>
+            </div>
+            
+            <nav>
+                <router-link to="/">Home</router-link>
+                <router-link to="/public">Public Page</router-link>
+                <router-link to="/dashboard">Dashboard (Protected)</router-link>
+            </nav>
+            
+            <div class="page-content">
+                <router-view></router-view>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>✏️ Exercise</h2>
+        <p><strong>Task:</strong> Implement route guards for authentication:</p>
+        <ol>
+            <li>Create a simple authentication system (login/logout)</li>
+            <li>Create a protected route <code>/dashboard</code></li>
+            <li>Add a <code>beforeEach</code> guard that checks authentication</li>
+            <li>Redirect unauthenticated users to <code>/login</code></li>
+            <li>Add a <code>beforeRouteLeave</code> guard to warn about unsaved changes</li>
+            <li>Test navigation with and without authentication</li>
+        </ol>
+        <p><strong>Hint:</strong> Use <code>router.beforeEach()</code> for global guards and check <code>to.meta.requiresAuth</code> for protected routes!</p>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue-router@4/dist/vue-router.global.js"></script>
+    
+    <script>
+        const { createApp, reactive } = Vue;
+        const { createRouter, createWebHashHistory } = VueRouter;
+        
+        // Simple auth store
+        const authStore = {
+            state: reactive({
+                isAuthenticated: false,
+                user: null
+            }),
+            login(user) {
+                this.state.isAuthenticated = true;
+                this.state.user = user;
+            },
+            logout() {
+                this.state.isAuthenticated = false;
+                this.state.user = null;
+            }
+        };
+        
+        const Home = {
+            template: '<div><h2>🏠 Home</h2><p>Welcome! This is a public page.</p></div>'
+        };
+        
+        const Public = {
+            template: '<div><h2>🌐 Public Page</h2><p>Anyone can access this page.</p></div>'
+        };
+        
+        const Dashboard = {
+            template: '<div><h2>📊 Dashboard</h2><p>This is a protected page. Only logged-in users can see this.</p></div>'
+        };
+        
+        const Login = {
+            template: `
+                <div>
+                    <h2>🔐 Login</h2>
+                    <p>Please log in to access the dashboard.</p>
+                    <button @click="handleLogin">Login</button>
+                </div>
+            `,
+            methods: {
+                handleLogin() {
+                    authStore.login({ name: 'John Doe' });
+                    this.$router.push('/dashboard');
+                }
+            }
+        };
+        
+        const routes = [
+            { path: '/', component: Home },
+            { path: '/public', component: Public },
+            { 
+                path: '/dashboard', 
+                component: Dashboard,
+                meta: { requiresAuth: true }
+            },
+            { path: '/login', component: Login }
+        ];
+        
+        const router = createRouter({
+            history: createWebHashHistory(),
+            routes
+        });
+        
+        // Global guard
+        router.beforeEach((to, from, next) => {
+            if (to.meta.requiresAuth && !authStore.state.isAuthenticated) {
+                next('/login');
+            } else {
+                next();
+            }
+        });
+        
+        const app = createApp({
+            data() {
+                return {
+                    authStore: authStore.state
+                }
+            },
+            methods: {
+                login() {
+                    authStore.login({ name: 'John Doe' });
+                },
+                logout() {
+                    authStore.logout();
+                    this.$router.push('/');
+                }
+            }
+        });
+        
+        app.use(router);
+        app.mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

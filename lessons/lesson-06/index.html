@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 6: Introduction to Components</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .theory {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .exercise {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .demo-box {
+            border: 2px solid #42b983;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .component-box {
+            border: 2px dashed #42b983;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .link-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .link-box a {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link-box a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Lesson 6: Introduction to Components</h1>
+    
+    <div class="link-box">
+        <p><strong>📖 Tutorial:</strong> <a href="components-tutorial.html">Step-by-step Components Tutorial</a></p>
+        <p><strong>✏️ Exercise:</strong> <a href="components-exercise.html">Build a Product Card Component</a></p>
+    </div>
+    
+    <div class="theory">
+        <h2>🎓 Theory: What are Components?</h2>
+        
+        <h3>Why Components?</h3>
+        <p>Components are reusable pieces of UI. Think of them like LEGO blocks - you build small pieces and combine them to create larger applications.</p>
+        
+        <h3>Benefits:</h3>
+        <ul>
+            <li><strong>Reusability</strong>: Write once, use many times</li>
+            <li><strong>Organization</strong>: Break complex apps into smaller pieces</li>
+            <li><strong>Maintainability</strong>: Easier to find and fix bugs</li>
+            <li><strong>Collaboration</strong>: Team members can work on different components</li>
+        </ul>
+        
+        <h3>Component Structure:</h3>
+        <pre><code>// Define a component
+const MyComponent = {
+    template: `&lt;div&gt;Hello from Component!&lt;/div&gt;`,
+    data() {
+        return {
+            message: 'Hello'
+        }
+    }
+}
+
+// Register it
+app.component('MyComponent', MyComponent)
+
+// Use it in template
+&lt;MyComponent /&gt;</code></pre>
+        
+        <h3>Component Options:</h3>
+        <ul>
+            <li><code>template</code> - HTML structure</li>
+            <li><code>data()</code> - Component's own data (must be a function!)</li>
+            <li><code>methods</code> - Component methods</li>
+            <li><code>computed</code> - Computed properties</li>
+            <li><code>props</code> - Data passed from parent (we'll learn this in Lesson 7)</li>
+        </ul>
+        
+        <h3>Important: data() must be a function!</h3>
+        <pre><code>// ✅ CORRECT
+data() {
+    return {
+        count: 0
+    }
+}
+
+// ❌ WRONG
+data: {
+    count: 0
+}</code></pre>
+        <p>Why? Each component instance needs its own data. If it's an object, all instances would share the same data!</p>
+    </div>
+
+    <div class="practice">
+        <h2>💻 Practice: Creating & Using Components</h2>
+        
+        <div id="app">
+            <div class="demo-box">
+                <h3>1. Simple Component</h3>
+                <greeting-card></greeting-card>
+                <greeting-card></greeting-card>
+                <greeting-card></greeting-card>
+            </div>
+            
+            <div class="demo-box">
+                <h3>2. Component with Data</h3>
+                <counter-button></counter-button>
+                <counter-button></counter-button>
+                <p><small>Each button has its own independent counter!</small></p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>3. Component with Methods</h3>
+                <todo-item></todo-item>
+                <todo-item></todo-item>
+            </div>
+            
+            <div class="demo-box">
+                <h3>4. Reusable Card Component</h3>
+                <product-card></product-card>
+                <product-card></product-card>
+                <product-card></product-card>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>✏️ Exercise</h2>
+        <p><strong>Task:</strong> Create a Product Card component:</p>
+        <ol>
+            <li>Create a component called <code>ProductCard</code></li>
+            <li>Display product name, price, and description</li>
+            <li>Add a "Buy Now" button that shows an alert</li>
+            <li>Use the component multiple times with different products</li>
+            <li>Each component instance should have its own data</li>
+        </ol>
+        <p><strong>Hint:</strong> Remember that <code>data()</code> must be a function that returns an object!</p>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        const app = createApp({
+            data() {
+                return {
+                    message: 'Main App'
+                }
+            }
+        });
+        
+        // Component 1: Simple Greeting Card
+        app.component('GreetingCard', {
+            template: `
+                <div class="component-box">
+                    <h4>👋 Hello from Component!</h4>
+                    <p>This is a reusable component.</p>
+                </div>
+            `
+        });
+        
+        // Component 2: Counter Button
+        app.component('CounterButton', {
+            template: `
+                <div class="component-box">
+                    <button @click="increment">Clicked {{ count }} times</button>
+                </div>
+            `,
+            data() {
+                return {
+                    count: 0
+                }
+            },
+            methods: {
+                increment() {
+                    this.count++;
+                }
+            }
+        });
+        
+        // Component 3: Todo Item
+        app.component('TodoItem', {
+            template: `
+                <div class="component-box">
+                    <input v-model="task" placeholder="Enter task...">
+                    <button @click="addTask">Add Task</button>
+                    <ul v-if="tasks.length > 0">
+                        <li v-for="(task, index) in tasks" :key="index">{{ task }}</li>
+                    </ul>
+                </div>
+            `,
+            data() {
+                return {
+                    task: '',
+                    tasks: []
+                }
+            },
+            methods: {
+                addTask() {
+                    if (this.task.trim()) {
+                        this.tasks.push(this.task);
+                        this.task = '';
+                    }
+                }
+            }
+        });
+        
+        // Component 4: Product Card
+        app.component('ProductCard', {
+            template: `
+                <div class="card">
+                    <h3>{{ product.name }}</h3>
+                    <p><strong>Price:</strong> ${{ product.price.toFixed(2) }}</p>
+                    <p>{{ product.description }}</p>
+                    <button @click="buy">Buy Now</button>
+                </div>
+            `,
+            data() {
+                return {
+                    product: {
+                        name: 'Vue.js Book',
+                        price: 29.99,
+                        description: 'Learn Vue.js the easy way!'
+                    }
+                }
+            },
+            methods: {
+                buy() {
+                    alert(`Added ${this.product.name} to cart!`);
+                }
+            }
+        });
+        
+        app.mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header Test - ShopVue</title>
+    <link rel="stylesheet" href="assets/css/main.css?v=2">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+        }
+        .test-info {
+            padding: 20px;
+            background: white;
+            margin: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="test-app">
+        <header-component 
+            :cart-count="0"
+            :current-page="'home'"
+            :logo-image="''"
+        ></header-component>
+        
+        <div class="test-info">
+            <h2>✅ Header Test Page</h2>
+            <p><strong>If you can see the header above, it's working!</strong></p>
+            <p>The header should show:</p>
+            <ul>
+                <li>Top bar with "Deliver to New York, NY 10001" on the left</li>
+                <li>"Login" button on the right</li>
+                <li>Main header with "ShopVue" logo, search bar, and cart icon</li>
+                <li>Navigation menu below</li>
+            </ul>
+            <p><strong>Check the browser console (F12) for debug messages.</strong></p>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="assets/js/components/Header.js?v=2"></script>
+    <script>
+        const { createApp } = Vue;
+        
+        console.log('=== HEADER TEST PAGE ===');
+        console.log('Vue loaded:', typeof Vue !== 'undefined');
+        console.log('Header component:', typeof Header !== 'undefined');
+        
+        const app = createApp({
+            data() {
+                return {}
+            },
+            components: {
+                Header
+            },
+            mounted() {
+                console.log('Test app mounted successfully!');
+            }
+        });
+        
+        app.mount('#test-app');
+        console.log('App mounted!');
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 14: Styling in Vue</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .theory {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .exercise {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        .demo-box {
+            border: 2px solid #42b983;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .link-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .link-box a {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link-box a:hover {
+            text-decoration: underline;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #35a372;
+        }
+        .styled-box {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success {
+            background: #4caf50;
+            color: white;
+        }
+        .error {
+            background: #f44336;
+            color: white;
+        }
+        .warning {
+            background: #ff9800;
+            color: white;
+        }
+        .info {
+            background: #2196f3;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Lesson 14: Styling in Vue</h1>
+    
+    <div class="link-box">
+        <p><strong>📖 Tutorial:</strong> <a href="styling-tutorial.html">Step-by-step Styling Tutorial</a></p>
+        <p><strong>✏️ Exercise:</strong> <a href="styling-exercise.html">Build a Notification System</a></p>
+    </div>
+    
+    <div class="theory">
+        <h2>🎓 Theory: Styling in Vue</h2>
+        
+        <h3>What is Dynamic Styling?</h3>
+        <p>Vue allows you to dynamically apply CSS classes and inline styles based on your component's data. This enables responsive, interactive styling.</p>
+        
+        <h3>Class Binding with :class</h3>
+        <p>Use <code>:class</code> (or <code>v-bind:class</code>) to dynamically bind CSS classes:</p>
+        
+        <h4>Object Syntax:</h4>
+        <pre><code>// Toggle class based on condition
+&lt;div :class="{ active: isActive, error: hasError }"&gt;
+    Content
+&lt;/div&gt;
+
+// In data
+data() {
+    return {
+        isActive: true,
+        hasError: false
+    }
+}</code></pre>
+        
+        <h4>Array Syntax:</h4>
+        <pre><code>// Apply multiple classes
+&lt;div :class="[activeClass, errorClass]"&gt;
+    Content
+&lt;/div&gt;
+
+// In data
+data() {
+    return {
+        activeClass: 'active',
+        errorClass: 'error'
+    }
+}</code></pre>
+        
+        <h3>Style Binding with :style</h3>
+        <p>Use <code>:style</code> (or <code>v-bind:style</code>) to dynamically bind inline styles:</p>
+        
+        <h4>Object Syntax:</h4>
+        <pre><code>// Apply inline styles
+&lt;div :style="{ color: textColor, fontSize: fontSize + 'px' }"&gt;
+    Content
+&lt;/div&gt;
+
+// In data
+data() {
+    return {
+        textColor: 'red',
+        fontSize: 20
+    }
+}</code></pre>
+        
+        <h4>Array Syntax:</h4>
+        <pre><code>// Apply multiple style objects
+&lt;div :style="[baseStyles, dynamicStyles]"&gt;
+    Content
+&lt;/div&gt;</code></pre>
+        
+        <h3>Use Cases:</h3>
+        <ul>
+            <li>✅ Theme switching (light/dark mode)</li>
+            <li>✅ Status indicators (success/error/warning)</li>
+            <li>✅ Interactive UI elements (hover, active states)</li>
+            <li>✅ Progress bars and dynamic sizing</li>
+            <li>✅ Conditional styling based on data</li>
+        </ul>
+        
+        <h3>Best Practices:</h3>
+        <ul>
+            <li>✅ Use <code>:class</code> for CSS classes (better performance)</li>
+            <li>✅ Use <code>:style</code> for dynamic values (colors, sizes)</li>
+            <li>✅ Prefer computed properties for complex style logic</li>
+            <li>✅ Keep style objects in data or computed properties</li>
+        </ul>
+    </div>
+
+    <div class="practice">
+        <h2>💻 Practice: Dynamic Styling</h2>
+        
+        <div id="app">
+            <div class="demo-box">
+                <h3>1. Class Binding (Object Syntax)</h3>
+                <div :class="{ success: type === 'success', error: type === 'error' }" class="styled-box">
+                    This box changes color based on type: {{ type }}
+                </div>
+                <button @click="type = 'success'">Success</button>
+                <button @click="type = 'error'">Error</button>
+            </div>
+            
+            <div class="demo-box">
+                <h3>2. Style Binding (Object Syntax)</h3>
+                <div :style="{ backgroundColor: bgColor, color: textColor, padding: '15px', borderRadius: '5px' }">
+                    This box uses inline styles: Background = {{ bgColor }}, Text = {{ textColor }}
+                </div>
+                <button @click="bgColor = '#4caf50'; textColor = 'white'">Green</button>
+                <button @click="bgColor = '#2196f3'; textColor = 'white'">Blue</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>✏️ Exercise</h2>
+        <p><strong>Task:</strong> Create a notification system with dynamic styling:</p>
+        <ol>
+            <li>Create notifications with different types: success, error, warning, info</li>
+            <li>Use <code>:class</code> to apply different CSS classes based on notification type</li>
+            <li>Use <code>:style</code> to apply dynamic colors and styles</li>
+            <li>Add buttons to create different notification types</li>
+            <li>Display multiple notifications in a list</li>
+            <li>Add functionality to dismiss/remove notifications</li>
+        </ol>
+        <p><strong>Hint:</strong> Use object syntax for <code>:class</code> and <code>:style</code> bindings. Create a computed property or method to return style objects based on notification type!</p>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        const app = createApp({
+            data() {
+                return {
+                    type: 'success',
+                    bgColor: '#4caf50',
+                    textColor: 'white'
+                }
+            }
+        });
+        
+        app.mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

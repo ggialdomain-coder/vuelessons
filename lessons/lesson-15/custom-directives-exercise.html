@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Directives Exercise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f6f9fc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        h1 {
+            color: #42b983;
+            text-align: center;
+        }
+        .hints {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .hints h3 {
+            margin-top: 0;
+            color: #ff9800;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        .demo-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #42b983;
+            border-radius: 8px;
+        }
+        .demo-section h3 {
+            color: #42b983;
+            margin-top: 0;
+        }
+        input {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 100%;
+            max-width: 400px;
+            margin: 10px 0;
+        }
+        .highlightable {
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #f9f9f9;
+            transition: background 0.3s;
+        }
+        .todo {
+            background: #fff3cd;
+            padding: 5px 10px;
+            border-radius: 3px;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Custom Directives Exercise</h1>
+        <p style="text-align: center; color: #666;">Build custom directives for DOM manipulation! Practice creating reusable directives.</p>
+        
+        <div class="hints">
+            <h3>📋 Requirements:</h3>
+            <ol>
+                <li>Create a <code>v-focus</code> directive that auto-focuses an input element when mounted</li>
+                <li>Create a <code>v-highlight</code> directive that highlights text when clicked</li>
+                <li>Register both directives globally using <code>app.directive()</code></li>
+                <li>Use <code>mounted</code> hook to set up the directive behavior</li>
+                <li>For <code>v-highlight</code>, use <code>binding.value</code> to get the highlight color (default: 'yellow')</li>
+                <li>Add click event listener in <code>mounted</code> hook</li>
+                <li>Remove event listener in <code>unmounted</code> hook to prevent memory leaks</li>
+                <li>Use <code>el.style.backgroundColor</code> to change background color</li>
+            </ol>
+            
+            <h3>💡 Hints:</h3>
+            <ul>
+                <li>Directive structure: <code>app.directive('name', { mounted(el, binding) { ... }, unmounted(el) { ... } })</code></li>
+                <li>For <code>v-focus</code>: Use <code>el.focus()</code> in the <code>mounted</code> hook</li>
+                <li>For <code>v-highlight</code>: Use <code>el.addEventListener('click', handler)</code> in <code>mounted</code></li>
+                <li>Store the handler function so you can remove it: <code>el._highlightHandler = function() { ... }</code></li>
+                <li>Remove listener: <code>el.removeEventListener('click', el._highlightHandler)</code> in <code>unmounted</code></li>
+                <li>Get color: <code>const color = binding.value || 'yellow'</code></li>
+                <li>Set background: <code>el.style.backgroundColor = color</code></li>
+                <li>Reset after timeout: <code>setTimeout(() => { el.style.backgroundColor = ''; }, 2000)</code></li>
+            </ul>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- YOUR CODE STARTS HERE -->
+        <!-- ============================================ -->
+        
+        <div id="app">
+            <div class="demo-section">
+                <h3>1. v-focus Directive</h3>
+                <p>This input should automatically receive focus when the page loads:</p>
+                <!-- TODO: Add v-focus directive -->
+                <input type="text" placeholder="This input should auto-focus" v-focus>
+                <p><small>If the input is focused automatically, your directive works! ✅</small></p>
+            </div>
+            
+            <div class="demo-section">
+                <h3>2. v-highlight Directive</h3>
+                <p>Click on the text below to highlight it:</p>
+                <!-- TODO: Add v-highlight directive with color value -->
+                <div class="highlightable">
+                    Click me to highlight in yellow!
+                </div>
+                <div class="highlightable" v-highlight="'lightblue'">
+                    Click me to highlight in light blue!
+                </div>
+                <div class="highlightable" v-highlight="'lightgreen'">
+                    Click me to highlight in light green!
+                </div>
+                <div v-highlight>Default </div>
+                <div v-highlight="'orange'">Click me to highlight in orange!  </div>
+                <div v-highlight="'yellow'">Click me to highlight in yellow!  </div> 
+            </div>
+        </div>
+        
+        <!-- ============================================ -->
+        <!-- YOUR CODE ENDS HERE -->
+        <!-- ============================================ -->
+    </div>
+
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        // Create the Vue app
+        const app = createApp({
+            data() {
+                return {}
+            }
+        });
+        app.directive('focus', {
+            mounted(el) {
+                el.focus()
+            }
+        })
+        app.directive('highlight', {
+            mounted(el,binding) {
+                const color = binding.value || 'yellow';
+
+                const highlightHandler = function() {
+                    el.style.backgroundColor = color;
+                    setTimeout(() => {
+                        el.style.backgroundColor ='';
+                    }, 2000);
+                 
+                };
+                el._highlightHandler = highlightHandler;
+                el.addEventListener('click', highlightHandler);
+
+            },
+            unmounted(el) {
+                if (el._highlightHandler) {
+                    el.removeEventListener('click', el._highlightHandler)
+                }
+            }
+        })
+        
+        // TODO: Register v-focus directive
+        // Steps:
+        // 1. Use app.directive('focus', { ... })
+        // 2. Add mounted(el) hook
+        // 3. Call el.focus() to focus the element
+        
+        // TODO: Register v-highlight directive
+        // Steps:
+        // 1. Use app.directive('highlight', { ... })
+        // 2. Add mounted(el, binding) hook
+        // 3. Get color from binding.value (default: 'yellow')
+        // 4. Add click event listener that changes backgroundColor
+        // 5. Store handler function: el._highlightHandler = function() { ... }
+        // 6. Reset background after 2 seconds using setTimeout
+        // 7. Add unmounted(el) hook
+        // 8. Remove event listener: el.removeEventListener('click', el._highlightHandler)
+        
+        // Mount the app
+        app.mount('#app');
+    </script>
+</body>
+</html>
+
+

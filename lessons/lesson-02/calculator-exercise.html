@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator Exercise - Your Turn!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f6f9fc;
+        }
+        .exercise-area {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        h1 {
+            color: #42b983;
+            text-align: center;
+        }
+        .instructions {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        input {
+            padding: 12px;
+            margin: 10px 5px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 200px;
+        }
+        input:focus {
+            outline: none;
+            border-color: #42b983;
+        }
+        .result {
+            background: #f0f0f0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .result p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+            background: #ffe0e0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+    </style>
+</head>
+<body>
+    <div class="exercise-area">
+        <h1>🧮 Calculator Exercise</h1>
+        
+        <div class="instructions">
+            <h2>Your Task:</h2>
+            <p>Build a calculator that:</p>
+            <ol>
+                <li>Has two input fields for numbers</li>
+                <li>Displays the <strong>sum</strong>, <strong>difference</strong>, <strong>product</strong>, and <strong>quotient</strong></li>
+                <li>Updates automatically when you change the numbers</li>
+                <li>Shows an error message if dividing by zero</li>
+            </ol>
+            
+            <p><strong>Hints:</strong></p>
+            <ul>
+                <li>Use <code>v-model.number</code> for the inputs</li>
+                <li>Use <code>{{ }}</code> for displaying calculations</li>
+                <li>Use <code>v-if</code> or ternary operator for the division by zero check</li>
+            </ul>
+        </div>
+
+        <!-- TODO: Build your calculator here -->
+        <div id="app">
+            <h2>Simple Calculator</h2>
+            
+            <!-- Step 1: Add two input fields with v-model.number -->
+            <!-- Your code here -->
+            
+            <!-- Step 2: Display the calculations -->
+            <div class="result">
+                <!-- Your code here -->
+                <!-- Sum: ... -->
+                <!-- Difference: ... -->
+                <!-- Product: ... -->
+                <!-- Quotient: ... (with error handling) -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp } = Vue;
+        
+        createApp({
+            data() {
+                return {
+                    // TODO: Add number1 and number2 here
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

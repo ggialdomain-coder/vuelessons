@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart Exercise - Computed Properties & Watchers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f6f9fc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        h1 {
+            color: #42b983;
+            text-align: center;
+        }
+        .hints {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .hints h3 {
+            margin-top: 0;
+            color: #ff9800;
+        }
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .product-item input {
+            width: 80px;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .cart-summary {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .cart-summary input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            width: 200px;
+            margin: 10px 0;
+        }
+        .warning-message {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+            display: none;
+        }
+        .warning-message.show {
+            display: block;
+        }
+        .discount-applied {
+            color: #28a745;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        .todo {
+            background: #f0f0f0;
+            padding: 10px;
+            margin: 10px 0;
+            border-left: 3px solid #42b983;
+            font-style: italic;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛒 Shopping Cart Exercise</h1>
+        <p style="text-align: center; color: #666;">Build a shopping cart using computed properties and watchers! Follow the requirements below.</p>
+        
+        <div class="hints">
+            <h3>📋 Requirements:</h3>
+            <ol>
+                <li>Display a list of products with name, price, and quantity input</li>
+                <li>Use <strong>computed property</strong> to calculate total price (sum of all products: price × quantity)</li>
+                <li>Use <strong>computed property</strong> to show total items count (sum of all quantities)</li>
+                <li>Use <strong>watcher</strong> to show a warning message when total exceeds $100</li>
+                <li>Add a discount code input that applies 10% discount when code is "SAVE10" (use <strong>computed property</strong>)</li>
+                <li>Use <strong>computed property</strong> to calculate final price after discount</li>
+            </ol>
+            
+            <h3>💡 Hints:</h3>
+            <ul>
+                <li>Use <code>computed</code> option for calculations (totalPrice, itemCount, discount, finalPrice)</li>
+                <li>Use <code>watch</code> option to watch totalPrice and show warning when > $100</li>
+                <li>Use <code>reduce()</code> method to sum up values: <code>array.reduce((sum, item) => sum + item.value, 0)</code></li>
+                <li>Access computed properties in template without parentheses: <code>{{ totalPrice }}</code></li>
+                <li>Watcher receives new and old values: <code>watch: { totalPrice(newVal, oldVal) { } }</code></li>
+                <li>Use <code>v-model.number</code> for quantity inputs to get numbers instead of strings</li>
+                <li>Check discount code: <code>discountCode === 'SAVE10' ? 0.1 : 0</code></li>
+            </ul>
+        </div>
+
+        <!-- YOUR CODE STARTS HERE -->
+        <div id="app">
+            <h2 style="color: #42b983;">Shopping Cart</h2>
+            
+            <!-- TODO: Display products list -->
+            <!-- 
+            Steps:
+            1. Use v-for to loop through products
+            2. Display product name and price
+            3. Add input with v-model.number="product.quantity" and type="number"
+            4. Set min="0" on input
+            -->
+            <div class="todo">
+                TODO: Add product list with v-for
+                <div v-for="products in products" :key="products.id">
+                    <strong> {{ products.name }}</strong>- ${{ products.price.toFixed(2) }}
+                    <input type="number" v-model.number="products.quantity" min="0" style="width: 80px; margin-left: 10px;">
+                </div>
+            </div>
+            
+            <div class="cart-summary">
+                <h3>Cart Summary</h3>
+                
+                <!-- TODO: Display item count using computed property -->
+                <p><strong>Items:</strong> 
+                    <span class="todo">{{ itemCount }}</span>
+                </p>
+                
+                <!-- TODO: Display subtotal using computed property -->
+                <p><strong>Subtotal:</strong> $<span class="todo">{{ totalPrice.toFixed(2) }}</span></p>
+                
+                <!-- Discount code input -->
+                <input 
+                    v-model="discountCode" 
+                    placeholder="Enter discount code"
+                    type="text">
+                
+                <!-- TODO: Show discount message when code is "SAVE10" -->
+                 <p v-if="discount > 0" style="color: green;"><strong>Discount applied: 10%</strong></p>
+                
+                <!-- TODO: Display final price using computed property -->
+                <p><strong>Total:</strong> $<span class="todo"> {{ finalPrice.toFixed(2) }}</span></p>
+            </div>
+            
+            <!-- TODO: Warning message when total > $100 -->
+            <div class="warning-message" :class="{ show: false }">
+                <span class="todo">TODO: Show warning when showWarning is true</span>
+                ⚠️ Warning: Your total exceeds $100!
+            </div>
+        </div>
+        <!-- YOUR CODE ENDS HERE -->
+    </div>
+
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        createApp({
+            data() {
+                return {
+                    products: [
+                        { id: 1, name: 'Apple', price: 1.50, quantity: 0 },
+                        { id: 2, name: 'Banana', price: 0.80, quantity: 0 },
+                        { id: 3, name: 'Cherry', price: 3.00, quantity: 0 },
+                        { id: 4, name: 'Date', price: 2.50, quantity: 0 },
+                        { id: 5, name: 'Elderberry', price: 4.00, quantity: 0 }
+                    ],
+                    discountCode: '',
+                    showWarning: false
+                    // TODO: Add your data properties here
+                    // You'll need:
+                    // - products (already provided above)
+                    // - discountCode (already provided above)
+                    // - showWarning (already provided above) - use this to control warning message visibility
+                }
+            },
+            computed: {
+                totalPrice(){
+                    return this.products.reduce((sum, product) => sum + (product.price * product.quantity), 0);
+                },
+                itemCount(){
+                    return this.products.reduce((sum, product) => sum + product.quantity, 0);
+                },
+                discount(){
+                    return this.discountCode === 'SAVE10' ? 0.1 : 0;
+                },
+                finalPrice(){
+                    return this.totalPrice * (1-this.discount);
+                }
+                // TODO: Create totalPrice computed property
+                // It should sum up: product.price * product.quantity for all products
+                // Use reduce() method
+                // Example: return this.products.reduce((sum, product) => sum + (product.price * product.quantity), 0);
+                
+                // TODO: Create itemCount computed property
+                // It should sum up all product.quantity values
+                // Use reduce() method
+                
+                // TODO: Create discount computed property
+                // Return 0.1 if discountCode === 'SAVE10', otherwise return 0
+                
+                // TODO: Create finalPrice computed property
+                // Calculate: totalPrice * (1 - discount)
+                // This applies the discount to the total
+            },
+            watch: {
+                totalPrice(newVal) {
+                    if(newVal > 100 && !this.showWarning){
+                        alert('Total exceeds $100!');
+                        this.showWarning = true
+                    } else if (newVal <= 100){
+                        this.showWarning = false;
+                    }
+                }
+                // TODO: Watch totalPrice
+                // When totalPrice > 100, set showWarning to true
+                // When totalPrice <= 100, set showWarning to false
+                // Format: totalPrice(newVal, oldVal) { ... }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
+

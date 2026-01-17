@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ShopVue - Your one-stop ecommerce destination">
+    <title>ShopVue - Home</title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/css/main.css?v=6">
+</head>
+<body>
+    <!-- Vue App Mount Point -->
+    <div id="app">
+        <!-- Header Component -->
+        <header-component 
+            :cart-count="cartCount"
+            :current-page="currentPage"
+            :logo-image="logoImage"
+            :is-logged-in="isLoggedIn"
+            :user-email="userEmail"
+            :delivery-address="deliveryAddress"
+            @navigate="handleNavigate"
+            @search="handleSearch"
+            @login="handleLogin"
+            @logout="handleLogout"
+            @open-account="openAccountSidebar"
+            @change-address="handleChangeAddress"
+        ></header-component>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <h1 class="page-title">Welcome to ShopVue</h1>
+                <p class="page-subtitle">Discover amazing products across all categories</p>
+            </section>
+
+            <!-- Categories Section -->
+            <section class="categories-section">
+                <h2 class="section-title">Shop by Category</h2>
+                
+                <!-- Loading State -->
+                <div v-if="loading" class="loading">
+                    <p>Loading categories...</p>
+                </div>
+
+                <!-- Error State -->
+                <div v-if="error" class="error">
+                    <p>{{ error }}</p>
+                    <button @click="loadCategories" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #42b983; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                        Try Again
+                    </button>
+                </div>
+
+                <!-- Categories Grid -->
+                <div v-if="!loading && !error && categories.length > 0" class="categories-grid">
+                    <category-card
+                        v-for="category in categories"
+                        :key="category.id"
+                        :category="category"
+                        @category-click="handleCategoryClick"
+                    ></category-card>
+                </div>
+
+                <!-- Empty State -->
+                <div v-if="!loading && !error && categories.length === 0" class="loading">
+                    <p>No categories available at the moment.</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer Component -->
+        <footer-component 
+            @navigate="handleNavigate"
+            @social-click="handleSocialClick"
+        ></footer-component>
+
+        <!-- Account Sidebar -->
+        <account-sidebar
+            :show="showAccountSidebar"
+            :user-data="userData"
+            @close="closeAccountSidebar"
+            @navigate-account="handleNavigateAccount"
+            @logout="handleLogout"
+        ></account-sidebar>
+
+        <!-- Location Selection Modal -->
+        <location-selection-modal
+            :show="showLocationModal"
+            :saved-addresses="savedAddresses"
+            @location-selected="handleLocationSelected"
+            @add-new-address="handleAddNewAddress"
+            @close="closeLocationModal"
+        ></location-selection-modal>
+    </div>
+
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <!-- API Service (must load before components) -->
+    <script src="assets/js/services/api.js?v=3"></script>
+    
+    <!-- Google Maps API (for location selection) -->
+    <!-- Note: Replace YOUR_API_KEY in assets/js/config.js with your actual Google Maps API key -->
+    <script src="assets/js/config.js?v=1"></script>
+    <script>
+        // Load Google Maps API with key from config
+        (function() {
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${APP_CONFIG.GOOGLE_MAPS_API_KEY}&libraries=places`;
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        })();
+    </script>
+    
+    <!-- Components (must load before app.js) -->
+    <script src="assets/js/components/Header.js?v=6"></script>
+    <script src="assets/js/components/Footer.js?v=3"></script>
+    <script src="assets/js/components/CategoryCard.js?v=3"></script>
+    <script src="assets/js/components/AccountSidebar.js?v=1"></script>
+    <script src="assets/js/components/LocationSelectionModal.js?v=1"></script>
+    
+    <!-- Main App -->
+    <script src="assets/js/app.js?v=6"></script>
+</body>
+</html>
+

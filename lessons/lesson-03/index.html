@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 3: Directives</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .theory {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .exercise {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        button {
+            background: #42b983;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .demo-box {
+            border: 2px solid #42b983;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .item {
+            padding: 10px;
+            margin: 5px;
+            background: #f0f0f0;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Lesson 3: Directives</h1>
+    
+    <div class="theory">
+        <h2>🎓 Theory: What are Directives?</h2>
+        <p><strong>Directives</strong> are special attributes with the <code>v-</code> prefix that tell Vue to do something to the DOM element.</p>
+        
+        <h3>Common Directives:</h3>
+        <ul>
+            <li><strong>v-if / v-else-if / v-else</strong>: Conditionally render elements</li>
+            <li><strong>v-show</strong>: Toggle visibility (element always exists in DOM)</li>
+            <li><strong>v-for</strong>: Render lists</li>
+            <li><strong>v-bind</strong>: Bind attributes (shorthand: <code>:</code>)</li>
+            <li><strong>v-on</strong>: Listen to events (shorthand: <code>@</code>)</li>
+            <li><strong>v-model</strong>: Two-way data binding</li>
+        </ul>
+        
+        <h3>v-if vs v-show:</h3>
+        <ul>
+            <li><strong>v-if</strong>: Element is removed from DOM when false (better for expensive elements)</li>
+            <li><strong>v-show</strong>: Element stays in DOM, just hidden with CSS (better for frequent toggles)</li>
+        </ul>
+    </div>
+
+    <div class="practice">
+        <h2>💻 Practice: Directives in Action</h2>
+        
+        <div id="app">
+            <div class="demo-box">
+                <h3>1. v-if / v-else</h3>
+                <button @click="showMessage = !showMessage">Toggle Message</button>
+                <p v-if="showMessage">This message appears/disappears!</p>
+                <p v-else>Message is hidden!</p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>2. v-show</h3>
+                <button @click="isVisible = !isVisible">Toggle Visibility</button>
+                <p v-show="isVisible">This uses v-show (check DevTools - element stays in DOM!)</p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>3. v-for - Rendering Lists</h3>
+                <ul>
+                    <li v-for="item in items" :key="item.id" class="item">
+                        {{ item.name }} - {{ item.price }}
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="demo-box">
+                <h3>4. v-for with Index</h3>
+                <ul>
+                    <li v-for="(item, index) in items" :key="item.id">
+                        {{ index + 1 }}. {{ item.name }}
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="demo-box">
+                <h3>5. v-if with v-for (on different elements)</h3>
+                <template v-if="items.length > 0">
+                    <p>You have {{ items.length }} items:</p>
+                    <ul>
+                        <li v-for="item in items" :key="item.id">{{ item.name }}</li>
+                    </ul>
+                </template>
+                <p v-else>No items available</p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>6. v-bind with Dynamic Classes</h3>
+                <p :class="{ active: isActive, 'text-danger': hasError }">
+                    This paragraph has dynamic classes!
+                </p>
+                <button @click="isActive = !isActive">Toggle Active</button>
+                <button @click="hasError = !hasError">Toggle Error</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>✏️ Exercise</h2>
+        <p><strong>Task:</strong> Create a todo list that:</p>
+        <ol>
+            <li>Displays a list of todos using v-for</li>
+            <li>Shows "No todos" message when list is empty (v-if)</li>
+            <li>Each todo has a checkbox to mark as complete</li>
+            <li>Completed todos have a different style (use :class binding)</li>
+            <li>Add a button to add new todos</li>
+        </ol>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        createApp({
+            data() {
+                return {
+                    showMessage: true,
+                    isVisible: true,
+                    isActive: false,
+                    hasError: false,
+                    items: [
+                        { id: 1, name: 'Apple', price: '$1.00' },
+                        { id: 2, name: 'Banana', price: '$0.50' },
+                        { id: 3, name: 'Orange', price: '$1.50' }
+                    ]
+                }
+            }
+        }).mount('#app');
+    </script>
+    
+    <style>
+        .active {
+            color: green;
+            font-weight: bold;
+        }
+        .text-danger {
+            color: red;
+        }
+    </style>
+</body>
+</html>
+
+
+

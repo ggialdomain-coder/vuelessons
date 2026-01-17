@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 9: Slots & Composition</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .theory {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .exercise {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #f0f0f0;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        .demo-box {
+            border: 2px solid #42b983;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .link-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .link-box a {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link-box a:hover {
+            text-decoration: underline;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .card-header {
+            background: #42b983;
+            color: white;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+            margin: -20px -20px 15px -20px;
+        }
+        .card-footer {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 0 0 8px 8px;
+            margin: 15px -20px -20px -20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Lesson 9: Slots & Composition</h1>
+    
+    <div class="link-box">
+        <p><strong>📖 Tutorial:</strong> <a href="slots-tutorial.html">Step-by-step Slots Tutorial</a></p>
+        <p><strong>✏️ Exercise:</strong> <a href="slots-exercise.html">Build a Card Component with Slots</a></p>
+    </div>
+    
+    <div class="theory">
+        <h2>🎓 Theory: What are Slots?</h2>
+        
+        <h3>Why Slots?</h3>
+        <p>Slots allow you to pass HTML content to components, making them more flexible and reusable!</p>
+        
+        <h3>Slots vs Props:</h3>
+        <ul>
+            <li><strong>Props</strong>: Pass data (strings, numbers, objects)</li>
+            <li><strong>Slots</strong>: Pass HTML content (templates, components)</li>
+        </ul>
+        
+        <h3>Basic Slot Syntax:</h3>
+        <pre><code>// Component with slot
+app.component('Card', {
+    template: `
+        &lt;div class="card"&gt;
+            &lt;slot&gt;&lt;/slot&gt;
+        &lt;/div&gt;
+    `
+});
+
+// Use component with content
+&lt;card&gt;
+    &lt;h3&gt;My Title&lt;/h3&gt;
+    &lt;p&gt;My content goes here&lt;/p&gt;
+&lt;/card&gt;</code></pre>
+        
+        <h3>Named Slots:</h3>
+        <pre><code>// Component with named slots
+template: `
+    &lt;div class="card"&gt;
+        &lt;slot name="header"&gt;&lt;/slot&gt;
+        &lt;slot name="body"&gt;&lt;/slot&gt;
+        &lt;slot name="footer"&gt;&lt;/slot&gt;
+    &lt;/div&gt;
+`
+
+// Use with named slots
+&lt;card&gt;
+    &lt;template v-slot:header&gt;
+        &lt;h3&gt;Header Content&lt;/h3&gt;
+    &lt;/template&gt;
+    &lt;template v-slot:body&gt;
+        &lt;p&gt;Body Content&lt;/p&gt;
+    &lt;/template&gt;
+&lt;/card&gt;</code></pre>
+        
+        <h3>Slot Shorthand:</h3>
+        <ul>
+            <li><code>&lt;template v-slot:header&gt;</code> or <code>&lt;template #header&gt;</code></li>
+            <li><code>#</code> is shorthand for <code>v-slot:</code></li>
+        </ul>
+        
+        <h3>Default Content:</h3>
+        <pre><code>&lt;slot&gt;Default content if nothing is passed&lt;/slot&gt;</code></pre>
+    </div>
+
+    <div class="practice">
+        <h2>💻 Practice: Using Slots</h2>
+        
+        <div id="app">
+            <div class="demo-box">
+                <h3>1. Basic Slot</h3>
+                <card>
+                    <h3>Product Card</h3>
+                    <p>This content is passed via slot!</p>
+                </card>
+            </div>
+            
+            <div class="demo-box">
+                <h3>2. Named Slots</h3>
+                <product-card>
+                    <template #header>
+                        <h3>Vue.js Book</h3>
+                    </template>
+                    <template #body>
+                        <p>Learn Vue.js the easy way!</p>
+                        <p class="price">$29.99</p>
+                    </template>
+                    <template #footer>
+                        <button>Buy Now</button>
+                    </template>
+                </product-card>
+            </div>
+            
+            <div class="demo-box">
+                <h3>3. Default Slot Content</h3>
+                <card>
+                    <p>Custom content</p>
+                </card>
+                <card></card>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise">
+        <h2>✏️ Exercise</h2>
+        <p><strong>Task:</strong> Create a Card component with slots:</p>
+        <ol>
+            <li>Create a Card component with a default slot</li>
+            <li>Add named slots: <code>header</code>, <code>body</code>, and <code>footer</code></li>
+            <li>Style the slots appropriately (header with background, footer with border)</li>
+            <li>Use the component with different content</li>
+            <li>Add default content to slots (shown when no content is provided)</li>
+        </ol>
+        <p><strong>Hint:</strong> Use <code>&lt;slot name="header"&gt;&lt;/slot&gt;</code> for named slots and <code>&lt;template #header&gt;</code> to pass content!</p>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        const app = createApp({});
+        
+        // Basic Card component
+        app.component('Card', {
+            template: `
+                <div class="card">
+                    <slot></slot>
+                </div>
+            `
+        });
+        
+        // ProductCard with named slots
+        app.component('ProductCard', {
+            template: `
+                <div class="card">
+                    <div class="card-header">
+                        <slot name="header">Default Header</slot>
+                    </div>
+                    <div style="padding: 15px;">
+                        <slot name="body">Default Body</slot>
+                    </div>
+                    <div class="card-footer">
+                        <slot name="footer">Default Footer</slot>
+                    </div>
+                </div>
+            `
+        });
+        
+        app.mount('#app');
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
