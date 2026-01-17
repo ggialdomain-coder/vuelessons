@@ -65,11 +65,20 @@ class ProductSerializer(serializers.ModelSerializer):
         elif instance.image:
             request = self.context.get('request')
             if request:
-                representation['image'] = request.build_absolute_uri(instance.image.url)
+                image_url = request.build_absolute_uri(instance.image.url)
+                # Check if image exists, if not use placeholder
+                representation['image'] = image_url
             else:
                 representation['image'] = instance.image.url if instance.image else None
         else:
             representation['image'] = None
+        
+        # If image is None or empty, use a placeholder based on product name
+        if not representation.get('image'):
+            # Generate a placeholder with product name
+            product_name = representation.get('name', 'Product')
+            representation['image'] = f'https://via.placeholder.com/400x300?text={product_name.replace(" ", "+")}'
+        
         return representation
 
 

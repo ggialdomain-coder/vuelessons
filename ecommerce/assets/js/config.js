@@ -11,7 +11,17 @@ const APP_CONFIG = {
     GOOGLE_MAPS_API_KEY: 'YOUR_API_KEY',
     
     // Django Backend API Base URL
-    API_BASE_URL: 'http://localhost:8000/api'
+    // Auto-detect: use /api on Netlify (proxied), localhost for local dev
+    API_BASE_URL: (function() {
+        const hostname = window.location.hostname;
+        if (hostname.includes('netlify.app') || hostname.includes('netlify.com')) {
+            return '/api'; // Use Netlify proxy
+        }
+        if (hostname === 'localhost' || hostname === '127.0.0.1') {
+            return 'http://localhost:8000/api'; // Local development
+        }
+        return '/api'; // Default to proxy
+    })()
 };
 
 // Export for use in other scripts

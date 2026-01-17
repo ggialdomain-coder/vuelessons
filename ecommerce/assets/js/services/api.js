@@ -5,9 +5,24 @@
  */
 
 // Use /api on Netlify (proxied to Render backend); localhost for local dev
+// Check if we're on Netlify (any netlify.app domain) or localhost
+const isNetlify = window.location.hostname.includes('netlify.app') || 
+                  window.location.hostname.includes('netlify.com') ||
+                  window.location.hostname === 'vuelessons-learn.netlify.app';
+const isLocalhost = window.location.hostname === 'localhost' || 
+                    window.location.hostname === '127.0.0.1' ||
+                    window.location.protocol === 'file:';
+
 const API_BASE_URL = (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.API_BASE_URL)
   ? APP_CONFIG.API_BASE_URL
-  : (window.location.hostname === 'vuelessons-learn.netlify.app' ? '/api' : 'http://localhost:8000/api');
+  : (isNetlify ? '/api' : (isLocalhost ? 'http://localhost:8000/api' : '/api'));
+
+console.log('API_BASE_URL configured:', {
+  hostname: window.location.hostname,
+  isNetlify,
+  isLocalhost,
+  API_BASE_URL
+});
 
 // Helper function to get auth token
 function getAuthToken() {
@@ -25,19 +40,32 @@ function getAuthHeaders() {
 
 // Helper function to transform Django response to frontend format
 function transformProduct(product) {
-    return {
+    // Ensure image URL is valid - if image URL might 404, use placeholder
+    let imageUrl = product.image || product.image_url;
+    
+    // If no image or image is a Render media URL that might not exist, use placeholder
+    if (!imageUrl) {
+        imageUrl = `https://via.placeholder.com/400x300?text=${encodeURIComponent(product.name || 'Product')}`;
+    } else if (imageUrl.includes('shopvue-api.onrender.com/media/')) {
+        // For Render media URLs, we'll try to load it but handleImageError will catch 404s
+        // Keep the URL but ensure we have a fallback
+    }
+    
+    const transformed = {
         id: product.id,
-        name: product.name,
-        description: product.description,
-        image: product.image || 'https://via.placeholder.com/400x300?text=No+Image',
-        price: parseFloat(product.price),
+        name: product.name || '',
+        description: product.description || '',
+        image: imageUrl,
+        price: parseFloat(product.price) || 0,
         originalPrice: product.original_price ? parseFloat(product.original_price) : null,
         discount: product.discount || 0,
         rating: parseFloat(product.rating) || 0,
         reviews: product.reviews_count || 0,
-        category: product.category?.slug || product.category,
-        slug: product.slug
+        category: product.category?.slug || (typeof product.category === 'string' ? product.category : null),
+        slug: product.slug || (product.name ? product.name.toLowerCase().replace(/\s+/g, '-') : '')
     };
+    
+    return transformed;
 }
 
 function transformCategory(category) {
@@ -74,11 +102,36 @@ const apiService = {
      */
     async getProducts() {
         try {
-            const response = await fetch(`${API_BASE_URL}/products/`);
+            // Add cache-busting timestamp to ensure fresh data
+            const timestamp = new Date().getTime();
+            const response = await fetch(`${API_BASE_URL}/products/?_t=${timestamp}`, {
+                cache: 'no-cache',
+                headers: {
+                    'Cache-Control': 'no-cache'
+                }
+            });
             if (!response.ok) throw new Error('Failed to fetch products');
             const data = await response.json();
             const products = data.results ? data.results : data;
-            return products.map(transformProduct);
+            console.log(`Loaded ${products.length} products from API`);
+            console.log('Product names:', products.map(p => p.name));
+            
+            // Transform products and log any that fail
+            const transformed = products.map((product, index) => {
+                try {
+                    const transformed = transformProduct(product);
+                    if (product.name === 'tes1') {
+                        console.log('tes1 transformed:', transformed);
+                    }
+                    return transformed;
+                } catch (error) {
+                    console.error(`Error transforming product ${product.name}:`, error);
+                    return null;
+                }
+            }).filter(p => p !== null);
+            
+            console.log(`Transformed ${transformed.length} products`);
+            return transformed;
         } catch (error) {
             console.warn('API Error, using fallback data:', error);
             return this.getMockProducts();
